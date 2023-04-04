@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,14 +24,13 @@ package com.viglet.shio.webhook;
  */
 public class ShWebhook {
 
-	private String webhook;
+  private String webhook;
 
-	public String getWebhook() {
-		return webhook;
-	}
+  public String getWebhook() {
+    return webhook;
+  }
 
-	public void setWebhook(String webhook) {
-		this.webhook = webhook;
-	}
-
+  public void setWebhook(String webhook) {
+    this.webhook = webhook;
+  }
 }

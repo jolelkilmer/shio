@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,17 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.viglet.shio.website.utils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +36,15 @@ import com.viglet.shio.post.type.ShSystemPostTypeAttr;
 import com.viglet.shio.utils.ShPostUtils;
 import com.viglet.shio.website.ShSitesContextURL;
 import com.viglet.shio.website.ShSitesContextURLProcess;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Page Layout Utils.
@@ -56,191 +54,191 @@ import com.viglet.shio.website.ShSitesContextURLProcess;
  */
 @Component
 public class ShSitesPageLayoutUtils {
-	private static final Logger logger = LogManager.getLogger(ShSitesPageLayoutUtils.class);
-	private static final String DEFAULT_FORMAT = "default";
-	@Autowired
-	private ShSitesPostUtils shSitesPostUtils;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShPostUtils shPostUtils;
-	@Autowired
-	private ShSitesContextURLProcess shSitesContextURLProcess;
-	@Autowired
-	private ShObjectRepository shObjectRepository;
-	@Autowired
-	private ShSiteRepository shSiteRepository;
+  private static final Logger logger = LogManager.getLogger(ShSitesPageLayoutUtils.class);
+  private static final String DEFAULT_FORMAT = "default";
+  @Autowired private ShSitesPostUtils shSitesPostUtils;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShPostUtils shPostUtils;
+  @Autowired private ShSitesContextURLProcess shSitesContextURLProcess;
+  @Autowired private ShObjectRepository shObjectRepository;
+  @Autowired private ShSiteRepository shSiteRepository;
 
-	public ShPost fromURL(String url) {
-		ShSitesContextURL shSitesContextURL = new ShSitesContextURL();
+  public ShPost fromURL(String url) {
+    ShSitesContextURL shSitesContextURL = new ShSitesContextURL();
 
-		shSitesContextURLProcess.detectContextURL(url, shSitesContextURL);
+    shSitesContextURLProcess.detectContextURL(url, shSitesContextURL);
 
-		Optional<ShObject> shObject = shObjectRepository.findById(shSitesContextURL.getInfo().getObjectId());
+    Optional<ShObject> shObject =
+        shObjectRepository.findById(shSitesContextURL.getInfo().getObjectId());
 
-		Optional<ShSite> shSite = shSiteRepository.findById(shSitesContextURL.getInfo().getSiteId());
+    Optional<ShSite> shSite = shSiteRepository.findById(shSitesContextURL.getInfo().getSiteId());
 
-		String format = shSitesContextURL.getInfo().getShFormat();
+    String format = shSitesContextURL.getInfo().getShFormat();
 
-		if (shObject.isPresent() && shSite.isPresent()) {
-			if (shObject.get() instanceof ShFolder shFolder) {
-				return this.pageLayoutFromFolderAndFolderIndex(shFolder, shSite.get(), format);
-			} else if (shObject.get() instanceof ShPostImpl shPostImpl) {
-				if (shPostImpl.getShPostType().getName().equals(ShSystemPostType.FOLDER_INDEX)) {
-					return this.pageLayoutFromFolderAndFolderIndex(shPostImpl, shSite.get(), format);
-				} else {
-					return this.pageLayoutFromPost(shPostImpl, shSite.get(), format);
-				}
+    if (shObject.isPresent() && shSite.isPresent()) {
+      if (shObject.get() instanceof ShFolder shFolder) {
+        return this.pageLayoutFromFolderAndFolderIndex(shFolder, shSite.get(), format);
+      } else if (shObject.get() instanceof ShPostImpl shPostImpl) {
+        if (shPostImpl.getShPostType().getName().equals(ShSystemPostType.FOLDER_INDEX)) {
+          return this.pageLayoutFromFolderAndFolderIndex(shPostImpl, shSite.get(), format);
+        } else {
+          return this.pageLayoutFromPost(shPostImpl, shSite.get(), format);
+        }
+      }
+    }
+    return null;
+  }
 
-			}
-		}
-		return null;
-	}
+  public ShPost pageLayoutFromPost(ShPostImpl shPostItem, ShSite shSite, String format) {
+    JSONObject postTypeLayout = new JSONObject();
 
-	public ShPost pageLayoutFromPost(ShPostImpl shPostItem, ShSite shSite, String format) {
-		JSONObject postTypeLayout = new JSONObject();
+    if (shSite.getPostTypeLayout() != null)
+      postTypeLayout = new JSONObject(shSite.getPostTypeLayout());
 
-		if (shSite.getPostTypeLayout() != null)
-			postTypeLayout = new JSONObject(shSite.getPostTypeLayout());
+    String pageLayoutName = getPageLayoutNamePost(shPostItem, format, postTypeLayout);
+    List<ShPost> shPostPageLayouts = shPostRepository.findByTitle(pageLayoutName);
 
-		String pageLayoutName = getPageLayoutNamePost(shPostItem, format, postTypeLayout);
-		List<ShPost> shPostPageLayouts = shPostRepository.findByTitle(pageLayoutName);
+    ShPost shPostPageLayout = null;
+    if (shPostPageLayouts != null)
+      for (ShPost shPostPageLayoutItem : shPostPageLayouts)
+        if (shPostUtils.getSite(shPostPageLayoutItem).getId().equals(shSite.getId()))
+          shPostPageLayout = shPostPageLayoutItem;
 
-		ShPost shPostPageLayout = null;
-		if (shPostPageLayouts != null)
-			for (ShPost shPostPageLayoutItem : shPostPageLayouts)
-				if (shPostUtils.getSite(shPostPageLayoutItem).getId().equals(shSite.getId()))
-					shPostPageLayout = shPostPageLayoutItem;
+    return shPostPageLayout;
+  }
 
-		return shPostPageLayout;
-	}
+  private String getPageLayoutNamePost(
+      ShPostImpl shPostItem, String format, JSONObject postTypeLayout) {
+    ShSitePostTypeLayouts shSitePostTypeLayouts = null;
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      shSitePostTypeLayouts =
+          mapper.readValue(
+              postTypeLayout.get(shPostItem.getShPostType().getName()).toString(),
+              ShSitePostTypeLayouts.class);
+    } catch (JsonProcessingException | JSONException e) {
+      logger.error("pageLayoutFromPost Error", e);
+    }
 
-	private String getPageLayoutNamePost(ShPostImpl shPostItem, String format, JSONObject postTypeLayout) {
-		ShSitePostTypeLayouts shSitePostTypeLayouts = null;
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			shSitePostTypeLayouts = mapper.readValue(
-					postTypeLayout.get(shPostItem.getShPostType().getName()).toString(), ShSitePostTypeLayouts.class);
-		} catch (JsonProcessingException | JSONException e) {
-			logger.error("pageLayoutFromPost Error", e);
-		}
+    String pageLayoutName = null;
 
-		String pageLayoutName = null;
+    if (format == null) format = DEFAULT_FORMAT;
 
-		if (format == null)
-			format = DEFAULT_FORMAT;
+    pageLayoutName = getPageLayoutName(format, pageLayoutName, shSitePostTypeLayouts);
+    return pageLayoutName;
+  }
 
-		pageLayoutName = getPageLayoutName(format, pageLayoutName, shSitePostTypeLayouts);
-		return pageLayoutName;
-	}
+  public ShPost pageLayoutFromFolderAndFolderIndex(
+      ShObjectImpl shObjectItem, ShSite shSite, String format) {
+    ShPost shFolderPageLayout = null;
+    if (shObjectItem instanceof ShPostImpl shPostImpl) {
+      if (logger.isDebugEnabled()) logger.debug("isPost");
+      shFolderPageLayout = folderIndexPageLayout(shPostImpl, format, shFolderPageLayout);
+    } else if (shObjectItem instanceof ShFolder shFolder) {
+      if (logger.isDebugEnabled()) logger.debug("isFolder");
+      ShPost shFolderIndex = shPostRepository.findByShFolderAndFurl(shFolder, "index");
+      if (shFolderIndex != null) {
+        shFolderPageLayout = folderIndexPageLayout(shFolderIndex, format, shFolderPageLayout);
+      } else {
+        shFolderPageLayout = this.defaultFolderPageLayout(shSite, format, shFolderPageLayout);
+      }
+    } else {
+      logger.debug(
+          "Object not found because shObjectItem {}, Site Id: {}, Page Layout: {}",
+          shObjectItem,
+          shObjectItem.getId(),
+          shSite.getPostTypeLayout());
+    }
 
-	public ShPost pageLayoutFromFolderAndFolderIndex(ShObjectImpl shObjectItem, ShSite shSite, String format) {
-		ShPost shFolderPageLayout = null;
-		if (shObjectItem instanceof ShPostImpl shPostImpl) {
-			if (logger.isDebugEnabled())
-				logger.debug("isPost");
-			shFolderPageLayout = folderIndexPageLayout(shPostImpl, format, shFolderPageLayout);
-		} else if (shObjectItem instanceof ShFolder shFolder) {
-			if (logger.isDebugEnabled())
-				logger.debug("isFolder");
-			ShPost shFolderIndex = shPostRepository.findByShFolderAndFurl(shFolder, "index");
-			if (shFolderIndex != null) {
-				shFolderPageLayout = folderIndexPageLayout(shFolderIndex, format, shFolderPageLayout);
-			} else {
-				shFolderPageLayout = this.defaultFolderPageLayout(shSite, format, shFolderPageLayout);
-			}
-		} else {
-			logger.debug("Object not found because shObjectItem {}, Site Id: {}, Page Layout: {}",
-					shObjectItem, shObjectItem.getId(), shSite.getPostTypeLayout());
-		}
+    return shFolderPageLayout;
+  }
 
-		return shFolderPageLayout;
-	}
+  private ShPost folderIndexPageLayout(
+      ShObjectImpl shObjectItem, String format, ShPost shFolderPageLayout) {
 
-	private ShPost folderIndexPageLayout(ShObjectImpl shObjectItem, String format, ShPost shFolderPageLayout) {
+    ShPostImpl shSelectedPost = shSitesPostUtils.getPostByStage((ShPost) shObjectItem);
+    if (shSelectedPost != null) {
+      if (logger.isDebugEnabled()) logger.debug("Found Post of By Stage");
+      Map<String, ShPostAttr> shFolderIndexMap =
+          shSitesPostUtils.postToMap((ShPost) shSelectedPost);
+      String shPostFolderPageLayoutId =
+          shFolderIndexMap.get(ShSystemPostTypeAttr.PAGE_LAYOUT).getStrValue();
+      shPostFolderPageLayoutId =
+          pageLayoutFromFormat(format, shPostFolderPageLayoutId, shFolderIndexMap);
+      shFolderPageLayout = getFolderPageLayout(shFolderPageLayout, shPostFolderPageLayoutId);
+    } else {
+      if (logger.isDebugEnabled()) logger.debug("Not Found Post of By Stage");
+    }
+    return shFolderPageLayout;
+  }
 
-		ShPostImpl shSelectedPost = shSitesPostUtils.getPostByStage((ShPost) shObjectItem);
-		if (shSelectedPost != null) {
-			if (logger.isDebugEnabled())
-				logger.debug("Found Post of By Stage");
-			Map<String, ShPostAttr> shFolderIndexMap = shSitesPostUtils.postToMap((ShPost) shSelectedPost);
-			String shPostFolderPageLayoutId = shFolderIndexMap.get(ShSystemPostTypeAttr.PAGE_LAYOUT).getStrValue();
-			shPostFolderPageLayoutId = pageLayoutFromFormat(format, shPostFolderPageLayoutId, shFolderIndexMap);
-			shFolderPageLayout = getFolderPageLayout(shFolderPageLayout, shPostFolderPageLayoutId);
-		} else {
-			if (logger.isDebugEnabled())
-				logger.debug("Not Found Post of By Stage");
-		}
-		return shFolderPageLayout;
-	}
+  private ShPost getFolderPageLayout(ShPost shFolderPageLayout, String shPostFolderPageLayoutId) {
+    if (shPostFolderPageLayoutId != null) {
+      shFolderPageLayout = shPostRepository.findById(shPostFolderPageLayoutId).orElse(null);
+    }
+    return shFolderPageLayout;
+  }
 
-	private ShPost getFolderPageLayout(ShPost shFolderPageLayout, String shPostFolderPageLayoutId) {
-		if (shPostFolderPageLayoutId != null) {
-			shFolderPageLayout = shPostRepository.findById(shPostFolderPageLayoutId).orElse(null);
-		}
-		return shFolderPageLayout;
-	}
+  private String pageLayoutFromFormat(
+      String format, String shPostFolderPageLayoutId, Map<String, ShPostAttr> shFolderIndexMap) {
+    if (!format.equalsIgnoreCase(DEFAULT_FORMAT)) {
+      ShPostAttrImpl shPostAttrFormats = shFolderIndexMap.get("FORMATS");
+      List<Map<String, ShPostAttr>> shPostAttrFormatList =
+          shSitesPostUtils.relationToMap(shPostAttrFormats);
+      if (shPostAttrFormatList != null)
+        for (Map<String, ShPostAttr> shPostAttrFormat : shPostAttrFormatList)
+          if (shPostAttrFormat.get("NAME").getStrValue().equals(format))
+            shPostFolderPageLayoutId = shPostAttrFormat.get("PAGE_LAYOUT").getStrValue();
+    }
+    return shPostFolderPageLayoutId;
+  }
 
-	private String pageLayoutFromFormat(String format, String shPostFolderPageLayoutId,
-			Map<String, ShPostAttr> shFolderIndexMap) {
-		if (!format.equalsIgnoreCase(DEFAULT_FORMAT)) {
-			ShPostAttrImpl shPostAttrFormats = shFolderIndexMap.get("FORMATS");
-			List<Map<String, ShPostAttr>> shPostAttrFormatList = shSitesPostUtils.relationToMap(shPostAttrFormats);
-			if (shPostAttrFormatList != null)
-				for (Map<String, ShPostAttr> shPostAttrFormat : shPostAttrFormatList)
-					if (shPostAttrFormat.get("NAME").getStrValue().equals(format))
-						shPostFolderPageLayoutId = shPostAttrFormat.get("PAGE_LAYOUT").getStrValue();
+  private ShPost defaultFolderPageLayout(ShSite shSite, String format, ShPost shFolderPageLayout) {
+    JSONObject postTypeLayout = new JSONObject(shSite.getPostTypeLayout());
 
-		}
-		return shPostFolderPageLayoutId;
-	}
+    if (postTypeLayout.has("FOLDER")) {
+      String pageLayoutName = getPageLayoutNameFolder(postTypeLayout, format);
+      shFolderPageLayout = getFolderPageLayout(shSite, shFolderPageLayout, pageLayoutName);
+    }
+    return shFolderPageLayout;
+  }
 
-	private ShPost defaultFolderPageLayout(ShSite shSite, String format, ShPost shFolderPageLayout) {
-		JSONObject postTypeLayout = new JSONObject(shSite.getPostTypeLayout());
+  private ShPost getFolderPageLayout(
+      ShSite shSite, ShPost shFolderPageLayout, String pageLayoutName) {
+    List<ShPost> shPostPageLayouts = shPostRepository.findByTitle(pageLayoutName);
 
-		if (postTypeLayout.has("FOLDER")) {
-			String pageLayoutName = getPageLayoutNameFolder(postTypeLayout, format);
-			shFolderPageLayout = getFolderPageLayout(shSite, shFolderPageLayout, pageLayoutName);
-		}
-		return shFolderPageLayout;
-	}
+    if (shPostPageLayouts != null) {
+      for (ShPost shPostPageLayout : shPostPageLayouts) {
+        if (shPostUtils.getSite(shPostPageLayout).getId().equals(shSite.getId()))
+          shFolderPageLayout = shPostPageLayout;
+      }
+    }
+    return shFolderPageLayout;
+  }
 
-	private ShPost getFolderPageLayout(ShSite shSite, ShPost shFolderPageLayout, String pageLayoutName) {
-		List<ShPost> shPostPageLayouts = shPostRepository.findByTitle(pageLayoutName);
+  private String getPageLayoutNameFolder(JSONObject postTypeLayout, String format) {
+    String pageLayoutName = null;
+    ObjectMapper mapper = new ObjectMapper();
+    ShSitePostTypeLayouts shSitePostTypeLayouts;
+    try {
+      shSitePostTypeLayouts =
+          mapper.readValue(postTypeLayout.get("FOLDER").toString(), ShSitePostTypeLayouts.class);
+      if (format == null) format = DEFAULT_FORMAT;
 
-		if (shPostPageLayouts != null) {
-			for (ShPost shPostPageLayout : shPostPageLayouts) {
-				if (shPostUtils.getSite(shPostPageLayout).getId().equals(shSite.getId()))
-					shFolderPageLayout = shPostPageLayout;
-			}
-		}
-		return shFolderPageLayout;
-	}
+      pageLayoutName = getPageLayoutName(format, pageLayoutName, shSitePostTypeLayouts);
+    } catch (JsonProcessingException | JSONException e) {
+      logger.error(e);
+    }
 
-	private String getPageLayoutNameFolder(JSONObject postTypeLayout, String format) {
-		String pageLayoutName = null;
-		ObjectMapper mapper = new ObjectMapper();
-		ShSitePostTypeLayouts shSitePostTypeLayouts;
-		try {
-			shSitePostTypeLayouts = mapper.readValue(postTypeLayout.get("FOLDER").toString(),
-					ShSitePostTypeLayouts.class);
-			if (format == null)
-				format = DEFAULT_FORMAT;
+    return pageLayoutName;
+  }
 
-			pageLayoutName = getPageLayoutName(format, pageLayoutName, shSitePostTypeLayouts);
-		} catch (JsonProcessingException | JSONException e) {
-			logger.error(e);
-		}
-
-		return pageLayoutName;
-	}
-
-	private String getPageLayoutName(String format, String pageLayoutName,
-			ShSitePostTypeLayouts shSitePostTypeLayouts) {
-		for (ShSitePostTypeLayout shSitePostTypeLayout : shSitePostTypeLayouts) {
-			if (shSitePostTypeLayout.getFormat().equals(format))
-				pageLayoutName = shSitePostTypeLayout.getLayout();
-		}
-		return pageLayoutName;
-	}
+  private String getPageLayoutName(
+      String format, String pageLayoutName, ShSitePostTypeLayouts shSitePostTypeLayouts) {
+    for (ShSitePostTypeLayout shSitePostTypeLayout : shSitePostTypeLayouts) {
+      if (shSitePostTypeLayout.getFormat().equals(format))
+        pageLayoutName = shSitePostTypeLayout.getLayout();
+    }
+    return pageLayoutName;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,104 +26,103 @@ import java.util.List;
  */
 public class ShNodeJSConfigApp {
 
-	private int port;
+  private int port;
 
-	private String templatePath;
+  private String templatePath;
 
-	private List<String> sites;
+  private List<String> sites;
 
-	private String context;
+  private String context;
 
-	private String format;
+  private String format;
 
-	private String locale;
+  private String locale;
 
-	private boolean hasContext;
+  private boolean hasContext;
 
-	private boolean hasFormat;
+  private boolean hasFormat;
 
-	private boolean hasLocale;
+  private boolean hasLocale;
 
-	private boolean hasSiteName;
+  private boolean hasSiteName;
 
-	public int getPort() {
-		return port;
-	}
+  public int getPort() {
+    return port;
+  }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+  public void setPort(int port) {
+    this.port = port;
+  }
 
-	public String getTemplatePath() {
-		return templatePath;
-	}
+  public String getTemplatePath() {
+    return templatePath;
+  }
 
-	public void setTemplatePath(String templatePath) {
-		this.templatePath = templatePath;
-	}
+  public void setTemplatePath(String templatePath) {
+    this.templatePath = templatePath;
+  }
 
-	public List<String> getSites() {
-		return sites;
-	}
+  public List<String> getSites() {
+    return sites;
+  }
 
-	public void setSites(List<String> sites) {
-		this.sites = sites;
-	}
+  public void setSites(List<String> sites) {
+    this.sites = sites;
+  }
 
-	public String getContext() {
-		return context;
-	}
+  public String getContext() {
+    return context;
+  }
 
-	public void setContext(String context) {
-		this.context = context;
-	}
+  public void setContext(String context) {
+    this.context = context;
+  }
 
-	public String getFormat() {
-		return format;
-	}
+  public String getFormat() {
+    return format;
+  }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+  public void setFormat(String format) {
+    this.format = format;
+  }
 
-	public String getLocale() {
-		return locale;
-	}
+  public String getLocale() {
+    return locale;
+  }
 
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
+  public void setLocale(String locale) {
+    this.locale = locale;
+  }
 
-	public boolean isHasContext() {
-		return hasContext;
-	}
+  public boolean isHasContext() {
+    return hasContext;
+  }
 
-	public void setHasContext(boolean hasContext) {
-		this.hasContext = hasContext;
-	}
+  public void setHasContext(boolean hasContext) {
+    this.hasContext = hasContext;
+  }
 
-	public boolean isHasFormat() {
-		return hasFormat;
-	}
+  public boolean isHasFormat() {
+    return hasFormat;
+  }
 
-	public void setHasFormat(boolean hasFormat) {
-		this.hasFormat = hasFormat;
-	}
+  public void setHasFormat(boolean hasFormat) {
+    this.hasFormat = hasFormat;
+  }
 
-	public boolean isHasLocale() {
-		return hasLocale;
-	}
+  public boolean isHasLocale() {
+    return hasLocale;
+  }
 
-	public void setHasLocale(boolean hasLocale) {
-		this.hasLocale = hasLocale;
-	}
+  public void setHasLocale(boolean hasLocale) {
+    this.hasLocale = hasLocale;
+  }
 
-	public boolean isHasSiteName() {
-		return hasSiteName;
-	}
+  public boolean isHasSiteName() {
+    return hasSiteName;
+  }
 
-	public void setHasSiteName(boolean hasSiteName) {
-		this.hasSiteName = hasSiteName;
-	}
-
+  public void setHasSiteName(boolean hasSiteName) {
+    this.hasSiteName = hasSiteName;
+  }
 }

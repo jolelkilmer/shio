@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,29 +18,27 @@ package com.viglet.shio.provider.exchange.otcs.bean.link;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSLinksDataBean {
 
-	private ShOTCSLinksDataSelfBean self;
-	
-	private ShOTCSLinksDataSelfBean next;
+  private ShOTCSLinksDataSelfBean self;
 
-	public ShOTCSLinksDataSelfBean getSelf() {
-		return self;
-	}
+  private ShOTCSLinksDataSelfBean next;
 
-	public void setSelf(ShOTCSLinksDataSelfBean self) {
-		this.self = self;
-	}
+  public ShOTCSLinksDataSelfBean getSelf() {
+    return self;
+  }
 
-	public ShOTCSLinksDataSelfBean getNext() {
-		return next;
-	}
+  public void setSelf(ShOTCSLinksDataSelfBean self) {
+    this.self = self;
+  }
 
-	public void setNext(ShOTCSLinksDataSelfBean next) {
-		this.next = next;
-	}
+  public ShOTCSLinksDataSelfBean getNext() {
+    return next;
+  }
 
+  public void setNext(ShOTCSLinksDataSelfBean next) {
+    this.next = next;
+  }
 }

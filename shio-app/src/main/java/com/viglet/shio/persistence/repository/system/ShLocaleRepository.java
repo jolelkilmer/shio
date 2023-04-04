@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,9 +17,7 @@
 package com.viglet.shio.persistence.repository.system;
 
 import com.viglet.shio.persistence.model.system.ShLocale;
-
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -29,12 +27,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShLocaleRepository extends JpaRepository<ShLocale, String> {
 
-	List<ShLocale> findAll();
+  List<ShLocale> findAll();
 
-	ShLocale findByInitials(String initials);
+  ShLocale findByInitials(String initials);
 
-	@SuppressWarnings("unchecked")
-	ShLocale save(ShLocale turLocale);
+  @SuppressWarnings("unchecked")
+  ShLocale save(ShLocale turLocale);
 
-	void delete(ShLocale turConfigVar);
+  void delete(ShLocale turConfigVar);
 }

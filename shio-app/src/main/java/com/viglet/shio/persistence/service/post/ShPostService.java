@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,19 @@
  */
 package com.viglet.shio.persistence.service.post;
 
-import java.util.List;
-
 import com.viglet.shio.persistence.model.post.ShPost;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
  * @since 0.3.7
  */
 public interface ShPostService {
-	public List<ShPost> findByShPostTypeAndAttrNameAndAttrValueAndConditionAndSites(ShPostType shPostType,
-			String attrName, String attrValue, String condition, List<String> siteIds);
+  public List<ShPost> findByShPostTypeAndAttrNameAndAttrValueAndConditionAndSites(
+      ShPostType shPostType,
+      String attrName,
+      String attrValue,
+      String condition,
+      List<String> siteIds);
 }

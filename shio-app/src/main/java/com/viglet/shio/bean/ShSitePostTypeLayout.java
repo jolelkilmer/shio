@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,41 +20,40 @@ package com.viglet.shio.bean;
  * @author Alexandre Oliveira
  */
 public class ShSitePostTypeLayout {
-	private String format;
-	private String layout;
-	private String mimeType;
-	private Integer cacheTTL;
+  private String format;
+  private String layout;
+  private String mimeType;
+  private Integer cacheTTL;
 
-	public String getFormat() {
-		return format;
-	}
+  public String getFormat() {
+    return format;
+  }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+  public void setFormat(String format) {
+    this.format = format;
+  }
 
-	public String getLayout() {
-		return layout;
-	}
+  public String getLayout() {
+    return layout;
+  }
 
-	public void setLayout(String layout) {
-		this.layout = layout;
-	}
+  public void setLayout(String layout) {
+    this.layout = layout;
+  }
 
-	public String getMimeType() {
-		return mimeType;
-	}
+  public String getMimeType() {
+    return mimeType;
+  }
 
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
+  public void setMimeType(String mimeType) {
+    this.mimeType = mimeType;
+  }
 
-	public Integer getCacheTTL() {
-		return cacheTTL;
-	}
+  public Integer getCacheTTL() {
+    return cacheTTL;
+  }
 
-	public void setCacheTTL(Integer cacheTTL) {
-		this.cacheTTL = cacheTTL;
-	}
-
+  public void setCacheTTL(Integer cacheTTL) {
+    this.cacheTTL = cacheTTL;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -39,45 +39,59 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 @EnableWebSecurity
 @Profile("development")
 public class ShSecurityConfigDevelopment extends WebSecurityConfigurerAdapter {
-	private static final Logger logger = LogManager.getLogger(ShSecurityConfigDevelopment.class);
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.headers().frameOptions().disable().cacheControl().disable();
-		http.cors().disable();
-	}
+  private static final Logger logger = LogManager.getLogger(ShSecurityConfigDevelopment.class);
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.headers().frameOptions().disable().cacheControl().disable();
+    http.cors().disable();
+  }
 
-		super.configure(web);
-		web.ignoring().antMatchers("/thirdparty/**", "/js/**", "/css/**", "/template/**", "/img/**", "/sites/**",
-				"/swagger-resources/**", "/h2/**");
-		web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
-	}
+  @Override
+  public void configure(WebSecurity web) throws Exception {
 
-	// create two users, admin and user
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) {
+    super.configure(web);
+    web.ignoring()
+        .antMatchers(
+            "/thirdparty/**",
+            "/js/**",
+            "/css/**",
+            "/template/**",
+            "/img/**",
+            "/sites/**",
+            "/swagger-resources/**",
+            "/h2/**");
+    web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
+  }
 
-		try {
-			auth.inMemoryAuthentication().withUser("user").password("{noop}user").roles("USER").and().withUser("admin")
-					.password("{noop}admin").roles("ADMIN");
-		} catch (Exception e) {
-			logger.error(e);
-		}
+  // create two users, admin and user
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) {
 
-	}
+    try {
+      auth.inMemoryAuthentication()
+          .withUser("user")
+          .password("{noop}user")
+          .roles("USER")
+          .and()
+          .withUser("admin")
+          .password("{noop}admin")
+          .roles("ADMIN");
+    } catch (Exception e) {
+      logger.error(e);
+    }
+  }
 
-	@Bean(name = "passwordEncoder")
-	public PasswordEncoder passwordencoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
-		// Allow double slash in URL
-		StrictHttpFirewall firewall = new StrictHttpFirewall();
-		firewall.setAllowUrlEncodedSlash(true);
-		return firewall;
-	}
+  @Bean(name = "passwordEncoder")
+  public PasswordEncoder passwordencoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+    // Allow double slash in URL
+    StrictHttpFirewall firewall = new StrictHttpFirewall();
+    firewall.setAllowUrlEncodedSlash(true);
+    return firewall;
+  }
 }

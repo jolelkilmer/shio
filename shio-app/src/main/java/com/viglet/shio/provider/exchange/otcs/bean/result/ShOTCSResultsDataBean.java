@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,118 +16,114 @@
  */
 package com.viglet.shio.provider.exchange.otcs.bean.result;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSResultsDataBean {
 
-	private List<Map<String, Object>> categories;
+  private List<Map<String, Object>> categories;
 
-	@JsonProperty("categories_inheritance")
-	private List<Map<String, Boolean>> categoriesInheritance;
+  @JsonProperty("categories_inheritance")
+  private List<Map<String, Boolean>> categoriesInheritance;
 
-	private List<ShOTCSResultsDataColumnsBean> columns;
+  private List<ShOTCSResultsDataColumnsBean> columns;
 
-	private List<String> followups;
-	
-	private List<ShOTCSNicknameBean> nicknames;
+  private List<String> followups;
 
-	private List<ShOTCSPermissionsBean> permissions;
+  private List<ShOTCSNicknameBean> nicknames;
 
-	private ShOTCSPropertiesBean properties;
+  private List<ShOTCSPermissionsBean> permissions;
 
-	private ShOTCSRMIConsDataBean rmiconsdata;
+  private ShOTCSPropertiesBean properties;
 
-	private Map<String, String> systemattributes;
+  private ShOTCSRMIConsDataBean rmiconsdata;
 
-	private List<ShOTCSVersionsBean> versions;	
+  private Map<String, String> systemattributes;
 
+  private List<ShOTCSVersionsBean> versions;
 
-	public List<Map<String, Object>> getCategories() {
-		return categories;
-	}
+  public List<Map<String, Object>> getCategories() {
+    return categories;
+  }
 
-	public void setCategories(List<Map<String, Object>> categories) {
-		this.categories = categories;
-	}
+  public void setCategories(List<Map<String, Object>> categories) {
+    this.categories = categories;
+  }
 
-	public List<Map<String, Boolean>> getCategoriesInheritance() {
-		return categoriesInheritance;
-	}
+  public List<Map<String, Boolean>> getCategoriesInheritance() {
+    return categoriesInheritance;
+  }
 
-	public void setCategoriesInheritance(List<Map<String, Boolean>> categoriesInheritance) {
-		this.categoriesInheritance = categoriesInheritance;
-	}
+  public void setCategoriesInheritance(List<Map<String, Boolean>> categoriesInheritance) {
+    this.categoriesInheritance = categoriesInheritance;
+  }
 
-	public List<ShOTCSResultsDataColumnsBean> getColumns() {
-		return columns;
-	}
+  public List<ShOTCSResultsDataColumnsBean> getColumns() {
+    return columns;
+  }
 
-	public void setColumns(List<ShOTCSResultsDataColumnsBean> columns) {
-		this.columns = columns;
-	}
+  public void setColumns(List<ShOTCSResultsDataColumnsBean> columns) {
+    this.columns = columns;
+  }
 
-	public List<ShOTCSNicknameBean> getNicknames() {
-		return nicknames;
-	}
+  public List<ShOTCSNicknameBean> getNicknames() {
+    return nicknames;
+  }
 
-	public void setNicknames(List<ShOTCSNicknameBean> nicknames) {
-		this.nicknames = nicknames;
-	}
+  public void setNicknames(List<ShOTCSNicknameBean> nicknames) {
+    this.nicknames = nicknames;
+  }
 
-	public List<ShOTCSPermissionsBean> getPermissions() {
-		return permissions;
-	}
+  public List<ShOTCSPermissionsBean> getPermissions() {
+    return permissions;
+  }
 
-	public void setPermissions(List<ShOTCSPermissionsBean> permissions) {
-		this.permissions = permissions;
-	}
+  public void setPermissions(List<ShOTCSPermissionsBean> permissions) {
+    this.permissions = permissions;
+  }
 
-	public ShOTCSPropertiesBean getProperties() {
-		return properties;
-	}
+  public ShOTCSPropertiesBean getProperties() {
+    return properties;
+  }
 
-	public void setProperties(ShOTCSPropertiesBean properties) {
-		this.properties = properties;
-	}
+  public void setProperties(ShOTCSPropertiesBean properties) {
+    this.properties = properties;
+  }
 
-	public ShOTCSRMIConsDataBean getRmiconsdata() {
-		return rmiconsdata;
-	}
+  public ShOTCSRMIConsDataBean getRmiconsdata() {
+    return rmiconsdata;
+  }
 
-	public void setRmiconsdata(ShOTCSRMIConsDataBean rmiconsdata) {
-		this.rmiconsdata = rmiconsdata;
-	}
+  public void setRmiconsdata(ShOTCSRMIConsDataBean rmiconsdata) {
+    this.rmiconsdata = rmiconsdata;
+  }
 
-	public Map<String, String> getSystemattributes() {
-		return systemattributes;
-	}
+  public Map<String, String> getSystemattributes() {
+    return systemattributes;
+  }
 
-	public void setSystemattributes(Map<String, String> systemattributes) {
-		this.systemattributes = systemattributes;
-	}
+  public void setSystemattributes(Map<String, String> systemattributes) {
+    this.systemattributes = systemattributes;
+  }
 
-	public List<ShOTCSVersionsBean> getVersions() {
-		return versions;
-	}
+  public List<ShOTCSVersionsBean> getVersions() {
+    return versions;
+  }
 
-	public void setVersions(List<ShOTCSVersionsBean> versions) {
-		this.versions = versions;
-	}
+  public void setVersions(List<ShOTCSVersionsBean> versions) {
+    this.versions = versions;
+  }
 
-	public List<String> getFollowups() {
-		return followups;
-	}
+  public List<String> getFollowups() {
+    return followups;
+  }
 
-	public void setFollowups(List<String> followups) {
-		this.followups = followups;
-	}
-
+  public void setFollowups(List<String> followups) {
+    this.followups = followups;
+  }
 }

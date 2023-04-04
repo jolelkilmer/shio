@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,123 +16,119 @@
  */
 package com.viglet.shio.persistence.model.site;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Fetch;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.viglet.shio.object.ShObjectType;
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.object.ShObject;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
 
 /**
  * The persistent class for the ShSite database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @NamedQuery(name = "ShSite.findAll", query = "SELECT s FROM ShSite s")
-@JsonIgnoreProperties({ "shFolders", "shPosts", "shPostAttrRefs", "shGroups", "shWorkflowTasks" })
+@JsonIgnoreProperties({"shFolders", "shPosts", "shPostAttrRefs", "shGroups", "shWorkflowTasks"})
 @PrimaryKeyJoinColumn(name = "object_id")
 public class ShSite extends ShObject {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Column(unique=true)
-	private String name;
+  @Column(unique = true)
+  private String name;
 
-	private String description;
+  private String description;
 
-	private String url;
+  private String url;
 
-	@Column(name = "post_type_layout", length = 5 * 1024 * 1024) // 5Mb
-	private String postTypeLayout;
-	
-	@Column(name = "searchable_post_types", length = 5 * 1024 * 1024) // 5Mb
-	private String searchablePostTypes;
-	
-	@OneToMany(mappedBy = "shSite")
-	@Cascade({ CascadeType.ALL })
-	@Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
-	private Set<ShFolder> shFolders = new HashSet<>();
+  @Column(name = "post_type_layout", length = 5 * 1024 * 1024) // 5Mb
+  private String postTypeLayout;
 
-	private String formSuccess;
-	
-	public ShSite() {
-		this.setObjectType(ShObjectType.SITE);
-	}
+  @Column(name = "searchable_post_types", length = 5 * 1024 * 1024) // 5Mb
+  private String searchablePostTypes;
 
-	public String getDescription() {
-		return description;
-	}
+  @OneToMany(mappedBy = "shSite")
+  @Cascade({CascadeType.ALL})
+  @Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
+  private Set<ShFolder> shFolders = new HashSet<>();
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  private String formSuccess;
 
-	public String getUrl() {
-		return url;
-	}
+  public ShSite() {
+    this.setObjectType(ShObjectType.SITE);
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public String getName() {
-		return this.name;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public Set<ShFolder> getShFolders() {
-		return this.shFolders;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	public void setShFolders(Set<ShFolder> shFolders) {
-		this.shFolders.clear();
-		if (shFolders != null) {
-			this.shFolders.addAll(shFolders);
-		}
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	public String getPostTypeLayout() {
-		return postTypeLayout;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setPostTypeLayout(String postTypeLayout) {
-		this.postTypeLayout = postTypeLayout;
-	}
-	
-	@Override
-	public String getObjectType() {
-		return ShObjectType.SITE;
-	}
+  public Set<ShFolder> getShFolders() {
+    return this.shFolders;
+  }
 
-	@Override
-	public void setObjectType(String objectType) {		
-		super.setObjectType(ShObjectType.SITE);
-	}
+  public void setShFolders(Set<ShFolder> shFolders) {
+    this.shFolders.clear();
+    if (shFolders != null) {
+      this.shFolders.addAll(shFolders);
+    }
+  }
 
-	public String getSearchablePostTypes() {
-		return searchablePostTypes;
-	}
+  public String getPostTypeLayout() {
+    return postTypeLayout;
+  }
 
-	public void setSearchablePostTypes(String searchablePostTypes) {
-		this.searchablePostTypes = searchablePostTypes;
-	}
+  public void setPostTypeLayout(String postTypeLayout) {
+    this.postTypeLayout = postTypeLayout;
+  }
 
-	public String getFormSuccess() {
-		return formSuccess;
-	}
+  @Override
+  public String getObjectType() {
+    return ShObjectType.SITE;
+  }
 
-	public void setFormSuccess(String formSuccess) {
-		this.formSuccess = formSuccess;
-	}
-	
+  @Override
+  public void setObjectType(String objectType) {
+    super.setObjectType(ShObjectType.SITE);
+  }
+
+  public String getSearchablePostTypes() {
+    return searchablePostTypes;
+  }
+
+  public void setSearchablePostTypes(String searchablePostTypes) {
+    this.searchablePostTypes = searchablePostTypes;
+  }
+
+  public String getFormSuccess() {
+    return formSuccess;
+  }
+
+  public void setFormSuccess(String formSuccess) {
+    this.formSuccess = formSuccess;
+  }
 }

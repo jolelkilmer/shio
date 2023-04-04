@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,11 +16,16 @@
  */
 package com.viglet.shio.persistence.model.object;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.viglet.shio.persistence.model.object.impl.ShObjectImpl;
+import com.viglet.shio.persistence.model.post.ShPostAttr;
+import com.viglet.shio.persistence.model.post.ShPostDraftAttr;
+import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
+import com.viglet.shio.persistence.model.workflow.ShWorkflowTask;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -34,7 +39,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
@@ -42,302 +46,292 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.viglet.shio.persistence.model.object.impl.ShObjectImpl;
-import com.viglet.shio.persistence.model.post.ShPostAttr;
-import com.viglet.shio.persistence.model.post.ShPostDraftAttr;
-import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
-import com.viglet.shio.persistence.model.workflow.ShWorkflowTask;
-
 /**
  * The persistent class for the ShObject database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQuery(name = "ShObject.findAll", query = "SELECT o FROM ShObject o")
-@JsonIgnoreProperties({ "shPostAttrRefs", "shGroups", "shUsers", "summary", "shWorkflowTasks" })
+@JsonIgnoreProperties({"shPostAttrRefs", "shGroups", "shUsers", "summary", "shWorkflowTasks"})
 public class ShObject implements Serializable, ShObjectImpl {
 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
-	@GeneratedValue(generator = "UUID")
+  private static final long serialVersionUID = 1L;
 
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
+  @Id
+  @GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
+  @GeneratedValue(generator = "UUID")
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	// bi-directional many-to-one association to ShObject
-	@OneToMany(mappedBy = "referenceObject")
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@Cascade({ CascadeType.ALL })
-	private Set<ShPostAttr> shPostAttrRefs = new HashSet<>();
+  // bi-directional many-to-one association to ShObject
+  @OneToMany(mappedBy = "referenceObject")
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @Cascade({CascadeType.ALL})
+  private Set<ShPostAttr> shPostAttrRefs = new HashSet<>();
 
-	// bi-directional many-to-one association to ShObject
-	@OneToMany(mappedBy = "referenceObject")
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@Cascade({ CascadeType.ALL })
-	private Set<ShPostDraftAttr> shPostDraftAttrRefs = new HashSet<>();
+  // bi-directional many-to-one association to ShObject
+  @OneToMany(mappedBy = "referenceObject")
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @Cascade({CascadeType.ALL})
+  private Set<ShPostDraftAttr> shPostDraftAttrRefs = new HashSet<>();
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date date;
 
-	private String owner;
+  private String owner;
 
-	private String furl;
+  private String furl;
 
-	private String modifier;
+  private String modifier;
 
-	private String publisher;
+  private String publisher;
 
-	private Date modifiedDate;
+  private Date modifiedDate;
 
-	private Date publicationDate;
+  private Date publicationDate;
 
-	private int position;
+  private int position;
 
-	private String objectType;
+  private String objectType;
 
-	private boolean published;
+  private boolean published;
 
-	@ElementCollection
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@CollectionTable(name = "sh_object_groups")
-	@JoinColumn(name = "object_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<String> shGroups = new HashSet<>();
+  @ElementCollection
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @CollectionTable(name = "sh_object_groups")
+  @JoinColumn(name = "object_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<String> shGroups = new HashSet<>();
 
-	@ElementCollection
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@CollectionTable(name = "sh_object_users")
-	@JoinColumn(name = "object_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<String> shUsers = new HashSet<>();
+  @ElementCollection
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @CollectionTable(name = "sh_object_users")
+  @JoinColumn(name = "object_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<String> shUsers = new HashSet<>();
 
-	// bi-directional many-to-one association to shWorkflowTasks
-	@OneToMany(mappedBy = "shObject")
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@Cascade({ CascadeType.ALL })
-	private Set<ShWorkflowTask> shWorkflowTasks = new HashSet<>();
+  // bi-directional many-to-one association to shWorkflowTasks
+  @OneToMany(mappedBy = "shObject")
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @Cascade({CascadeType.ALL})
+  private Set<ShWorkflowTask> shWorkflowTasks = new HashSet<>();
 
-	private String publishStatus;
+  private String publishStatus;
 
-	private boolean pageAllowRegisterUser = false;
+  private boolean pageAllowRegisterUser = false;
 
-	private boolean pageAllowGuestUser = true;
+  private boolean pageAllowGuestUser = true;
 
-	@ElementCollection
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	@CollectionTable(name = "sh_object_page_groups")
-	@JoinColumn(name = "object_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Set<String> shPageGroups = new HashSet<>();
+  @ElementCollection
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  @CollectionTable(name = "sh_object_page_groups")
+  @JoinColumn(name = "object_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<String> shPageGroups = new HashSet<>();
 
-	@Override
-	public String getId() {
-		return this.id;
-	}
+  @Override
+  public String getId() {
+    return this.id;
+  }
 
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
+  @Override
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	@Override
-	public String getOwner() {
-		return owner;
-	}
+  @Override
+  public String getOwner() {
+    return owner;
+  }
 
-	@Override
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
+  @Override
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
 
-	@Override
-	public String getFurl() {
-		return furl;
-	}
+  @Override
+  public String getFurl() {
+    return furl;
+  }
 
-	@Override
-	public void setFurl(String furl) {
-		this.furl = furl;
-	}
+  @Override
+  public void setFurl(String furl) {
+    this.furl = furl;
+  }
 
-	@Override
-	public Date getDate() {
-		return this.date;
-	}
+  @Override
+  public Date getDate() {
+    return this.date;
+  }
 
-	@Override
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  @Override
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	@Override
-	public String getModifier() {
-		return modifier;
-	}
+  @Override
+  public String getModifier() {
+    return modifier;
+  }
 
-	@Override
-	public void setModifier(String modifier) {
-		this.modifier = modifier;
-	}
+  @Override
+  public void setModifier(String modifier) {
+    this.modifier = modifier;
+  }
 
-	@Override
-	public String getPublisher() {
-		return publisher;
-	}
+  @Override
+  public String getPublisher() {
+    return publisher;
+  }
 
-	@Override
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
+  @Override
+  public void setPublisher(String publisher) {
+    this.publisher = publisher;
+  }
 
-	@Override
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
+  @Override
+  public Date getModifiedDate() {
+    return modifiedDate;
+  }
 
-	@Override
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
+  @Override
+  public void setModifiedDate(Date modifiedDate) {
+    this.modifiedDate = modifiedDate;
+  }
 
-	@Override
-	public Date getPublicationDate() {
-		return publicationDate;
-	}
+  @Override
+  public Date getPublicationDate() {
+    return publicationDate;
+  }
 
-	@Override
-	public void setPublicationDate(Date publicationDate) {
-		this.publicationDate = publicationDate;
-	}
+  @Override
+  public void setPublicationDate(Date publicationDate) {
+    this.publicationDate = publicationDate;
+  }
 
-	@Override
-	public int getPosition() {
-		return position;
-	}
+  @Override
+  public int getPosition() {
+    return position;
+  }
 
-	@Override
-	public void setPosition(int position) {
-		this.position = position;
-	}
+  @Override
+  public void setPosition(int position) {
+    this.position = position;
+  }
 
-	@Override
-	public String getObjectType() {
-		return objectType;
-	}
+  @Override
+  public String getObjectType() {
+    return objectType;
+  }
 
-	@Override
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
+  @Override
+  public void setObjectType(String objectType) {
+    this.objectType = objectType;
+  }
 
-	@Override
-	public Set<ShPostAttr> getShPostAttrRefs() {
-		return shPostAttrRefs;
-	}
+  @Override
+  public Set<ShPostAttr> getShPostAttrRefs() {
+    return shPostAttrRefs;
+  }
 
-	@Override
-	public void setShPostAttrRefs(Set<? extends ShPostAttrImpl> shPostAttrRefs) {
-		this.shPostAttrRefs.clear();
-		if (shPostAttrRefs != null)
-			shPostAttrRefs.forEach(shPostAttrRef -> this.shPostAttrRefs.add((ShPostAttr) shPostAttrRef));		
-	}
+  @Override
+  public void setShPostAttrRefs(Set<? extends ShPostAttrImpl> shPostAttrRefs) {
+    this.shPostAttrRefs.clear();
+    if (shPostAttrRefs != null)
+      shPostAttrRefs.forEach(shPostAttrRef -> this.shPostAttrRefs.add((ShPostAttr) shPostAttrRef));
+  }
 
+  public Set<ShPostDraftAttr> getShPostDraftAttrRefs() {
+    return shPostDraftAttrRefs;
+  }
 
-	public Set<ShPostDraftAttr> getShPostDraftAttrRefs() {
-		return shPostDraftAttrRefs;
-	}
+  public void setShPostDraftAttrRefs(Set<ShPostDraftAttr> shPostDraftAttrRefs) {
+    this.shPostDraftAttrRefs.clear();
+    if (shPostDraftAttrRefs != null) {
+      this.shPostDraftAttrRefs.addAll(shPostDraftAttrRefs);
+    }
+  }
 
-	public void setShPostDraftAttrRefs(Set<ShPostDraftAttr> shPostDraftAttrRefs) {
-		this.shPostDraftAttrRefs.clear();
-		if (shPostDraftAttrRefs != null) {
-			this.shPostDraftAttrRefs.addAll(shPostDraftAttrRefs);
-		}
-	}
+  @Override
+  public boolean isPublished() {
+    return published;
+  }
 
-	@Override
-	public boolean isPublished() {
-		return published;
-	}
+  @Override
+  public void setPublished(boolean published) {
+    this.published = published;
+  }
 
-	@Override
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
+  @Override
+  public String getPublishStatus() {
+    return publishStatus;
+  }
 
-	@Override
-	public String getPublishStatus() {
-		return publishStatus;
-	}
+  @Override
+  public void setPublishStatus(String publishStatus) {
+    this.publishStatus = publishStatus;
+  }
 
-	@Override
-	public void setPublishStatus(String publishStatus) {
-		this.publishStatus = publishStatus;
-	}
+  public Set<ShWorkflowTask> getShWorkflowTasks() {
+    return this.shWorkflowTasks;
+  }
 
+  public void setShWorkflowTasks(Set<ShWorkflowTask> shWorkflowTasks) {
+    this.shWorkflowTasks.clear();
+    if (shWorkflowTasks != null) {
+      this.shWorkflowTasks.addAll(shWorkflowTasks);
+    }
+  }
 
-	public Set<ShWorkflowTask> getShWorkflowTasks() {
-		return this.shWorkflowTasks;
-	}
+  @Override
+  public Set<String> getShUsers() {
+    return shUsers;
+  }
 
-	public void setShWorkflowTasks(Set<ShWorkflowTask> shWorkflowTasks) {
-		this.shWorkflowTasks.clear();
-		if (shWorkflowTasks != null) {
-			this.shWorkflowTasks.addAll(shWorkflowTasks);
-		}
-	}
+  @Override
+  public void setShUsers(Set<String> shUsers) {
+    this.shUsers = shUsers;
+  }
 
-	@Override
-	public Set<String> getShUsers() {
-		return shUsers;
-	}
+  @Override
+  public Set<String> getShGroups() {
+    return shGroups;
+  }
 
-	@Override
-	public void setShUsers(Set<String> shUsers) {
-		this.shUsers = shUsers;
-	}
+  @Override
+  public void setShGroups(Set<String> shGroups) {
+    this.shGroups = shGroups;
+  }
 
-	@Override
-	public Set<String> getShGroups() {
-		return shGroups;
-	}
+  @Override
+  public boolean isPageAllowRegisterUser() {
+    return pageAllowRegisterUser;
+  }
 
-	@Override
-	public void setShGroups(Set<String> shGroups) {
-		this.shGroups = shGroups;
-	}
+  @Override
+  public void setPageAllowRegisterUser(boolean pageAllowRegisterUser) {
+    this.pageAllowRegisterUser = pageAllowRegisterUser;
+  }
 
-	@Override
-	public boolean isPageAllowRegisterUser() {
-		return pageAllowRegisterUser;
-	}
+  @Override
+  public boolean isPageAllowGuestUser() {
+    return pageAllowGuestUser;
+  }
 
-	@Override
-	public void setPageAllowRegisterUser(boolean pageAllowRegisterUser) {
-		this.pageAllowRegisterUser = pageAllowRegisterUser;
-	}
+  @Override
+  public void setPageAllowGuestUser(boolean pageAllowGuestUser) {
+    this.pageAllowGuestUser = pageAllowGuestUser;
+  }
 
-	@Override
-	public boolean isPageAllowGuestUser() {
-		return pageAllowGuestUser;
-	}
+  @Override
+  public Set<String> getShPageGroups() {
+    return shPageGroups;
+  }
 
-	@Override
-	public void setPageAllowGuestUser(boolean pageAllowGuestUser) {
-		this.pageAllowGuestUser = pageAllowGuestUser;
-	}
-
-	@Override
-	public Set<String> getShPageGroups() {
-		return shPageGroups;
-	}
-
-	@Override
-	public void setShPageGroups(Set<String> shPageGroups) {
-		this.shPageGroups = shPageGroups;
-	}
-
+  @Override
+  public void setShPageGroups(Set<String> shPageGroups) {
+    this.shPageGroups = shPageGroups;
+  }
 }

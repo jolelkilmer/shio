@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,41 +18,40 @@ package com.viglet.shio;
 
 import java.io.IOException;
 import java.security.Principal;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
 /**
  * @author Alexandre Oliveira
  */
 @Controller
 public class ShIndexContext {
 
-	@GetMapping("/")
-	public void index(HttpServletRequest request, HttpServletResponse response, final Principal principal)
-			throws IOException {
-		if (principal != null) {
-			response.sendRedirect("/content");
-		} else {
-			response.sendRedirect("/welcome");
-		}
+  @GetMapping("/")
+  public void index(
+      HttpServletRequest request, HttpServletResponse response, final Principal principal)
+      throws IOException {
+    if (principal != null) {
+      response.sendRedirect("/content");
+    } else {
+      response.sendRedirect("/welcome");
+    }
+  }
 
-	}
+  @GetMapping("/content")
+  public String content() {
+    return "content/content-index";
+  }
 
-	@GetMapping("/content")
-	public String content() {
-		return "content/content-index";
-	}
+  @GetMapping("/welcome")
+  public String welcome() {
+    return "welcome/welcome-index";
+  }
 
-	@GetMapping("/welcome")
-	public String welcome() {
-		return "welcome/welcome-index";
-	}
-
-	@GetMapping("/preview")
-	public String preview() {
-		return "preview/preview-index";
-	}
+  @GetMapping("/preview")
+  public String preview() {
+    return "preview/preview-index";
+  }
 }

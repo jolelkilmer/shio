@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,15 +17,14 @@
 package com.viglet.shio.graphql.playground.properties;
 
 /**
-* @author Alexandre Oliveira
-* @since 0.3.7
-*/
+ * @author Alexandre Oliveira
+ * @since 0.3.7
+ */
 public class Props {
 
-	private Variables variables = new Variables();
+  private Variables variables = new Variables();
 
-	public Variables getVariables() {
-		return variables;
-	}
-
+  public Variables getVariables() {
+    return variables;
+  }
 }

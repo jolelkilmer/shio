@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,28 +20,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.security.Principal;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
 import com.viglet.shio.api.ShJsonView;
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.post.ShPost;
@@ -56,123 +34,154 @@ import com.viglet.shio.persistence.repository.site.ShSiteRepository;
 import com.viglet.shio.post.type.ShSystemPostType;
 import com.viglet.shio.post.type.ShSystemPostTypeAttr;
 import com.viglet.shio.utils.ShUtils;
+import java.security.Principal;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestMethodOrder (MethodOrderer.MethodName.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class ShPostAPITest {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	@Autowired
-	private WebApplicationContext webApplicationContext;
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShPostTypeAttrRepository shPostTypeAttrRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShSiteRepository shSiteRepository;
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
+  @Autowired private WebApplicationContext webApplicationContext;
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShPostTypeAttrRepository shPostTypeAttrRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShSiteRepository shSiteRepository;
 
-	private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	private Principal mockPrincipal;
+  private Principal mockPrincipal;
 
-	private String newPostId = "553923c7-fda4-4a91-9700-eb9a549bb522";
+  private String newPostId = "553923c7-fda4-4a91-9700-eb9a549bb522";
 
-	@BeforeAll
-	void setup() {
-		log.debug("PostAPITest Setup");
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		mockPrincipal = Mockito.mock(Principal.class);
-		Mockito.when(mockPrincipal.getName()).thenReturn("admin");
-	}
+  @BeforeAll
+  void setup() {
+    log.debug("PostAPITest Setup");
+    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    mockPrincipal = Mockito.mock(Principal.class);
+    Mockito.when(mockPrincipal.getName()).thenReturn("admin");
+  }
 
-	@Test
-	void shPostList() throws Exception {
-		mockMvc.perform(get("/api/v2/post")).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
+  @Test
+  void shPostList() throws Exception {
+    mockMvc
+        .perform(get("/api/v2/post"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
 
-	}
+  @Test
+  void shPostAttrModel() throws Exception {
+    mockMvc
+        .perform(get("/api/v2/post/attr/model"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
 
-	@Test
-	void shPostAttrModel() throws Exception {
-		mockMvc.perform(get("/api/v2/post/attr/model")).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
+  @Test
+  void stage01ShPostAdd() throws Exception {
+    ShSite shSite = shSiteRepository.findByName("Viglet");
+    ShFolder shFolder = shFolderRepository.findByShSiteAndName(shSite, "Home");
+    ShPostType shPostType = shPostTypeRepository.findByName(ShSystemPostType.ARTICLE);
 
-	}
+    // Post
+    ShPost shPost = new ShPost();
+    shPost.setId(newPostId);
+    shPost.setShFolder(shFolder);
+    shPost.setShPostType(shPostType);
+    shPost.setShSite(shSite);
+    // Title Field
+    ShPostAttr shPostAttrTitle = new ShPostAttr();
+    shPostAttrTitle.setStrValue("Test Title Value");
+    shPostAttrTitle.setType(1);
+    shPostAttrTitle.setShPostTypeAttr(
+        shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, ShSystemPostTypeAttr.TITLE));
 
-	@Test
-	void stage01ShPostAdd() throws Exception {
-		ShSite shSite = shSiteRepository.findByName("Viglet");
-		ShFolder shFolder = shFolderRepository.findByShSiteAndName(shSite, "Home");
-		ShPostType shPostType = shPostTypeRepository.findByName(ShSystemPostType.ARTICLE);
+    shPost.getShPostAttrsNonDraft().add(shPostAttrTitle);
 
-		// Post
-		ShPost shPost = new ShPost();
-		shPost.setId(newPostId);
-		shPost.setShFolder(shFolder);
-		shPost.setShPostType(shPostType);
-		shPost.setShSite(shSite);
-		// Title Field
-		ShPostAttr shPostAttrTitle = new ShPostAttr();
-		shPostAttrTitle.setStrValue("Test Title Value");
-		shPostAttrTitle.setType(1);
-		shPostAttrTitle.setShPostTypeAttr(
-				shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, ShSystemPostTypeAttr.TITLE));
+    // Description Field
+    ShPostAttr shPostAttrDescription = new ShPostAttr();
+    shPostAttrDescription.setStrValue("Test Description Value");
+    shPostAttrDescription.setType(1);
+    shPostAttrDescription.setShPostTypeAttr(
+        shPostTypeAttrRepository.findByShPostTypeAndName(
+            shPostType, ShSystemPostTypeAttr.DESCRIPTION));
 
-		shPost.getShPostAttrsNonDraft().add(shPostAttrTitle);
+    shPost.getShPostAttrsNonDraft().add(shPostAttrDescription);
 
-		// Description Field
-		ShPostAttr shPostAttrDescription = new ShPostAttr();
-		shPostAttrDescription.setStrValue("Test Description Value");
-		shPostAttrDescription.setType(1);
-		shPostAttrDescription.setShPostTypeAttr(
-				shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, ShSystemPostTypeAttr.DESCRIPTION));
+    String postRequestBody = ShUtils.asJsonStringAndView(shPost, ShJsonView.ShJsonViewObject.class);
 
-		shPost.getShPostAttrsNonDraft().add(shPostAttrDescription);
+    RequestBuilder folderRequestBuilder =
+        MockMvcRequestBuilders.post("/api/v2/post")
+            .principal(mockPrincipal)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(postRequestBody)
+            .contentType("application/json");
 
-		String postRequestBody = ShUtils.asJsonStringAndView(shPost, ShJsonView.ShJsonViewObject.class);
+    mockMvc.perform(folderRequestBuilder).andExpect(status().isOk());
+  }
 
-		RequestBuilder folderRequestBuilder = MockMvcRequestBuilders.post("/api/v2/post").principal(mockPrincipal)
-				.accept(MediaType.APPLICATION_JSON).content(postRequestBody).contentType("application/json");
+  @Test
+  void stage02ShPostEdit() throws Exception {
+    mockMvc
+        .perform(get("/api/v2/post/" + newPostId))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
 
-		mockMvc.perform(folderRequestBuilder).andExpect(status().isOk());
-	}
+  @Test
+  void stage03ShPostUpdate() throws Exception {
 
-	@Test
-	void stage02ShPostEdit() throws Exception {
-		mockMvc.perform(get("/api/v2/post/" + newPostId)).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
-	}
+    ShPost shPost = shPostRepository.findById(newPostId).get();
 
-	@Test
-	void stage03ShPostUpdate() throws Exception {
+    for (ShPostAttr shPostAttr : shPost.getShPostAttrsNonDraft()) {
+      shPostAttr.setStrValue("Test Value was changed");
+    }
 
-		ShPost shPost = shPostRepository.findById(newPostId).get();
+    String postRequestBody = ShUtils.asJsonStringAndView(shPost, ShJsonView.ShJsonViewPost.class);
 
-		for (ShPostAttr shPostAttr : shPost.getShPostAttrsNonDraft()) {
-			shPostAttr.setStrValue("Test Value was changed");
-		}
+    RequestBuilder folderRequestBuilder =
+        MockMvcRequestBuilders.put("/api/v2/post/" + newPostId)
+            .principal(mockPrincipal)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(postRequestBody)
+            .contentType("application/json");
 
-		String postRequestBody = ShUtils.asJsonStringAndView(shPost, ShJsonView.ShJsonViewPost.class);
+    mockMvc.perform(folderRequestBuilder).andExpect(status().isOk());
+  }
 
-		RequestBuilder folderRequestBuilder = MockMvcRequestBuilders.put("/api/v2/post/" + newPostId)
-				.principal(mockPrincipal).accept(MediaType.APPLICATION_JSON).content(postRequestBody)
-				.contentType("application/json");
+  @Test
+  void stage04ShPostDelete() throws Exception {
 
-		mockMvc.perform(folderRequestBuilder).andExpect(status().isOk());
-	}
+    RequestBuilder folderRequestBuilder =
+        MockMvcRequestBuilders.delete("/api/v2/post/" + newPostId)
+            .principal(mockPrincipal)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType("application/json");
 
-	@Test
-	void stage04ShPostDelete() throws Exception {
-
-		RequestBuilder folderRequestBuilder = MockMvcRequestBuilders.delete("/api/v2/post/" + newPostId)
-				.principal(mockPrincipal).accept(MediaType.APPLICATION_JSON).contentType("application/json");
-
-		mockMvc.perform(folderRequestBuilder).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
-	}
+    mockMvc
+        .perform(folderRequestBuilder)
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
 }

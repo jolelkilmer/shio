@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,15 @@
  */
 package com.viglet.shio.persistence.repository.post.relator;
 
+import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
+import com.viglet.shio.persistence.model.post.relator.ShRelatorItem;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
-import com.viglet.shio.persistence.model.post.relator.ShRelatorItem;
 
 /**
  * @author Alexandre Oliveira
@@ -34,16 +32,16 @@ import com.viglet.shio.persistence.model.post.relator.ShRelatorItem;
 @Repository
 public interface ShRelatorItemRepository extends JpaRepository<ShRelatorItem, String> {
 
-	List<ShRelatorItem> findAll();
-	
-	Optional<ShRelatorItem> findById(String id);
-	
-	Set<ShRelatorItem> findByShParentPostAttr (ShPostAttrImpl shPostAttr);
-	
-	@SuppressWarnings("unchecked")
-	ShRelatorItem save(ShRelatorItem shRelatorItem);
+  List<ShRelatorItem> findAll();
 
-	@Modifying
-	@Query("delete from ShRelatorItem ri where ri.id = ?1")
-	void delete(String shRelatorItemId);
+  Optional<ShRelatorItem> findById(String id);
+
+  Set<ShRelatorItem> findByShParentPostAttr(ShPostAttrImpl shPostAttr);
+
+  @SuppressWarnings("unchecked")
+  ShRelatorItem save(ShRelatorItem shRelatorItem);
+
+  @Modifying
+  @Query("delete from ShRelatorItem ri where ri.id = ?1")
+  void delete(String shRelatorItemId);
 }

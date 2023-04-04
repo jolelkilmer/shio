@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,17 +22,17 @@ import java.io.Serializable;
  * @author Alexandre Oliveira
  */
 public class ShJsonView implements Serializable {
-	private static final long serialVersionUID = 3989499187492868996L;
+  private static final long serialVersionUID = 3989499187492868996L;
 
-	public static interface ShJsonViewGenericType {}
+  public static interface ShJsonViewGenericType {}
 
-	public static interface ShJsonViewObject extends ShJsonViewGenericType {}
+  public static interface ShJsonViewObject extends ShJsonViewGenericType {}
 
-	public static interface ShJsonViewReference extends ShJsonViewGenericType {}
+  public static interface ShJsonViewReference extends ShJsonViewGenericType {}
 
-	public static interface ShJsonViewPostType extends ShJsonViewGenericType {}
+  public static interface ShJsonViewPostType extends ShJsonViewGenericType {}
 
-	public static interface ShJsonViewPost extends ShJsonViewGenericType {}
+  public static interface ShJsonViewPost extends ShJsonViewGenericType {}
 
-	public static interface ShJsonViewPostTypeAttr extends ShJsonViewGenericType {}
+  public static interface ShJsonViewPostTypeAttr extends ShJsonViewGenericType {}
 }

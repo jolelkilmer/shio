@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,14 @@
  */
 package com.viglet.shio.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.viglet.shio.api.ShJsonView.ShJsonViewGenericType;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.viglet.shio.api.ShJsonView.ShJsonViewGenericType;
 
 /**
  * @author Alexandre Oliveira
@@ -32,43 +31,43 @@ import com.viglet.shio.api.ShJsonView.ShJsonViewGenericType;
 @Component
 public class ShUtils {
 
-	public String sanitizedString(String string) {
-		return (string != null) ? string.replaceAll("[\n\r\t]", "_") : null;
-	}
+  public String sanitizedString(String string) {
+    return (string != null) ? string.replaceAll("[\n\r\t]", "_") : null;
+  }
 
-	public static String asJsonString(final Object obj) throws ShUtilsException {
-		try {
-			return new ObjectMapper().writeValueAsString(obj);
-		} catch (Exception e) {
-			throw new ShUtilsException(e);
-		}
-	}
+  public static String asJsonString(final Object obj) throws ShUtilsException {
+    try {
+      return new ObjectMapper().writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new ShUtilsException(e);
+    }
+  }
 
-	public static String asJsonStringAndView(final Object obj, Class<? extends ShJsonViewGenericType> clazz)
-			throws ShUtilsException {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-			return mapper.writerWithView(clazz).writeValueAsString(obj);
-		} catch (Exception e) {
-			throw new ShUtilsException(e);
-		}
-	}
+  public static String asJsonStringAndView(
+      final Object obj, Class<? extends ShJsonViewGenericType> clazz) throws ShUtilsException {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+      return mapper.writerWithView(clazz).writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new ShUtilsException(e);
+    }
+  }
 
-	public boolean isJSONValid(String json) {
-		if (StringUtils.isBlank(json)) {
-			return false;
-		} else {
-			try {
-				new JSONObject(json);
-			} catch (JSONException ex) {
-				try {
-					new JSONArray(json);
-				} catch (JSONException ex1) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+  public boolean isJSONValid(String json) {
+    if (StringUtils.isBlank(json)) {
+      return false;
+    } else {
+      try {
+        new JSONObject(json);
+      } catch (JSONException ex) {
+        try {
+          new JSONArray(json);
+        } catch (JSONException ex1) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }

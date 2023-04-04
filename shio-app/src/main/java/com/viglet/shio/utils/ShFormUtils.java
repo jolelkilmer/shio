@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,24 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.viglet.shio.utils;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import com.viglet.shio.api.post.ShPostAPI;
 import com.viglet.shio.persistence.model.folder.ShFolder;
@@ -51,163 +33,196 @@ import com.viglet.shio.website.ShSitesContextURL;
 import com.viglet.shio.website.component.form.ShFormConfiguration;
 import com.viglet.shio.widget.ShSystemWidget;
 import com.viglet.shio.widget.ShWidgetImplementation;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import javax.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShFormUtils {
-	private static final Log logger = LogFactory.getLog(ShFormUtils.class);
-	@Resource
-	private ApplicationContext applicationContext;
-	@Autowired
-	private ShPostTypeAttrRepository shPostTypeAttrRepository;
-	@Autowired
-	private ShPostAPI shPostAPI;
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShObjectRepository shObjectRepository;
+  private static final Log logger = LogFactory.getLog(ShFormUtils.class);
+  @Resource private ApplicationContext applicationContext;
+  @Autowired private ShPostTypeAttrRepository shPostTypeAttrRepository;
+  @Autowired private ShPostAPI shPostAPI;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShObjectRepository shObjectRepository;
 
-	private static final String POST_TYPE_ATTR_PARAM = "__sh-post-type-attr-";
-	private static final String POST_TYPE_PARAM = "__sh-post-type";
+  private static final String POST_TYPE_ATTR_PARAM = "__sh-post-type-attr-";
+  private static final String POST_TYPE_PARAM = "__sh-post-type";
 
-	private ShPost createPost(ShSitesContextURL shSitesContextURL, ShFormConfiguration shFormConfiguration,
-			ShPostType shPostType) {
-		Enumeration<String> parameters = shSitesContextURL.getRequest().getParameterNames();
-		ShPost shPost = null;
-		ShObjectImpl shObject = shObjectRepository.findById(shSitesContextURL.getInfo().getObjectId()).orElse(null);
-		if (shFormConfiguration != null || shObject instanceof ShFolder
-				|| (shObject instanceof ShPost && ((ShPostImpl) shObject).getTitle().equals("index"))) {
-			ShFolder shFolder = null;
+  private ShPost createPost(
+      ShSitesContextURL shSitesContextURL,
+      ShFormConfiguration shFormConfiguration,
+      ShPostType shPostType) {
+    Enumeration<String> parameters = shSitesContextURL.getRequest().getParameterNames();
+    ShPost shPost = null;
+    ShObjectImpl shObject =
+        shObjectRepository.findById(shSitesContextURL.getInfo().getObjectId()).orElse(null);
+    if (shFormConfiguration != null
+        || shObject instanceof ShFolder
+        || (shObject instanceof ShPost && ((ShPostImpl) shObject).getTitle().equals("index"))) {
+      ShFolder shFolder = null;
 
-			if (shFormConfiguration != null && StringUtils.isNotBlank(shFormConfiguration.getFolder().toString())) {
-				shFolder = shFolderRepository.findById(shFormConfiguration.getFolder().toString()).orElse(null);
-			} else {
-				if (shObject instanceof ShFolder shFolderInst) {
-					shFolder = shFolderInst;
-				} else {
-					if (shObject != null)
-						shFolder = ((ShPostImpl) shObject).getShFolder();
-				}
-			}
+      if (shFormConfiguration != null
+          && StringUtils.isNotBlank(shFormConfiguration.getFolder().toString())) {
+        shFolder =
+            shFolderRepository.findById(shFormConfiguration.getFolder().toString()).orElse(null);
+      } else {
+        if (shObject instanceof ShFolder shFolderInst) {
+          shFolder = shFolderInst;
+        } else {
+          if (shObject != null) shFolder = ((ShPostImpl) shObject).getShFolder();
+        }
+      }
 
-			shPost = createPostObject(shSitesContextURL, parameters, shPost, shFolder, shPostType);
-		}
+      shPost = createPostObject(shSitesContextURL, parameters, shPost, shFolder, shPostType);
+    }
 
-		return shPost;
-	}
+    return shPost;
+  }
 
-	private ShPost createPostObject(ShSitesContextURL shSitesContextURL, Enumeration<String> parameters, ShPost shPost,
-			ShFolder shFolder, ShPostType shPostType) {
-		if (shPostType != null) {
-			shPost = new ShPost();
-			shPost.setDate(new Date());
-			shPost.setOwner("anonymous");
-			shPost.setShFolder(shFolder);
+  private ShPost createPostObject(
+      ShSitesContextURL shSitesContextURL,
+      Enumeration<String> parameters,
+      ShPost shPost,
+      ShFolder shFolder,
+      ShPostType shPostType) {
+    if (shPostType != null) {
+      shPost = new ShPost();
+      shPost.setDate(new Date());
+      shPost.setOwner("anonymous");
+      shPost.setShFolder(shFolder);
 
-			shPost.setShPostType(shPostType);
-			Set<ShPostAttr> shPostAttrs = getPostAttrs(shSitesContextURL, parameters, shPost, shPostType);
-			shPost.setShPostAttrs(shPostAttrs);
+      shPost.setShPostType(shPostType);
+      Set<ShPostAttr> shPostAttrs = getPostAttrs(shSitesContextURL, parameters, shPost, shPostType);
+      shPost.setShPostAttrs(shPostAttrs);
 
-			shPostAPI.postSave(shPost);
+      shPostAPI.postSave(shPost);
+    }
+    return shPost;
+  }
 
-		}
-		return shPost;
-	}
+  private Set<ShPostAttr> getPostAttrs(
+      ShSitesContextURL shSitesContextURL,
+      Enumeration<String> parameters,
+      ShPost shPost,
+      ShPostType shPostType) {
+    Set<ShPostAttr> shPostAttrs = new HashSet<>();
+    while (parameters.hasMoreElements()) {
+      String param = parameters.nextElement();
+      String paramValue = shSitesContextURL.getRequest().getParameter(param);
 
-	private Set<ShPostAttr> getPostAttrs(ShSitesContextURL shSitesContextURL, Enumeration<String> parameters,
-			ShPost shPost, ShPostType shPostType) {
-		Set<ShPostAttr> shPostAttrs = new HashSet<>();
-		while (parameters.hasMoreElements()) {
-			String param = parameters.nextElement();
-			String paramValue = shSitesContextURL.getRequest().getParameter(param);
+      if (param.startsWith(POST_TYPE_ATTR_PARAM)) {
+        String attribute =
+            param
+                .replaceFirst(POST_TYPE_ATTR_PARAM, StringUtils.EMPTY)
+                .replace("\\[\\]", StringUtils.EMPTY);
+        ShPostTypeAttr shPostTypeAttr =
+            shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, attribute);
 
-			if (param.startsWith(POST_TYPE_ATTR_PARAM)) {
-				String attribute = param.replaceFirst(POST_TYPE_ATTR_PARAM, StringUtils.EMPTY).replace("\\[\\]",
-						StringUtils.EMPTY);
-				ShPostTypeAttr shPostTypeAttr = shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, attribute);
+        getWidget(shPostTypeAttr);
 
-				getWidget(shPostTypeAttr);
+        ShPostAttr shPostAttr = new ShPostAttr();
+        shPostAttr.setShPost(shPost);
+        shPostAttr.setShPostTypeAttr(shPostTypeAttr);
 
-				ShPostAttr shPostAttr = new ShPostAttr();
-				shPostAttr.setShPost(shPost);
-				shPostAttr.setShPostTypeAttr(shPostTypeAttr);
+        if (shPostTypeAttr.getShWidget().getName().equals(ShSystemWidget.CHECK_BOX)) {
+          shPostAttr.setArrayValue(setPostAttrArrayValue(shSitesContextURL, param));
+        } else {
+          shPostAttr.setStrValue(paramValue);
+        }
 
-				if (shPostTypeAttr.getShWidget().getName().equals(ShSystemWidget.CHECK_BOX)) {
-					shPostAttr.setArrayValue(setPostAttrArrayValue(shSitesContextURL, param));
-				} else {
-					shPostAttr.setStrValue(paramValue);
-				}
+        shPostAttrs.add(shPostAttr);
+      }
+    }
+    return shPostAttrs;
+  }
 
-				shPostAttrs.add(shPostAttr);
-			}
+  private Set<String> setPostAttrArrayValue(ShSitesContextURL shSitesContextURL, String param) {
+    String[] paramArray = shSitesContextURL.getRequest().getParameterValues(param);
 
-		}
-		return shPostAttrs;
-	}
+    Set<String> arrayValue = new HashSet<>();
+    Collections.addAll(arrayValue, paramArray);
+    return arrayValue;
+  }
 
-	private Set<String> setPostAttrArrayValue(ShSitesContextURL shSitesContextURL, String param) {
-		String[] paramArray = shSitesContextURL.getRequest().getParameterValues(param);
+  private void getWidget(ShPostTypeAttr shPostTypeAttr) {
+    String className = shPostTypeAttr.getShWidget().getClassName();
+    ShWidgetImplementation object;
+    try {
+      object =
+          (ShWidgetImplementation) Class.forName(className).getDeclaredConstructor().newInstance();
+      applicationContext.getAutowireCapableBeanFactory().autowireBean(object);
+    } catch (InstantiationException
+        | IllegalAccessException
+        | IllegalArgumentException
+        | InvocationTargetException
+        | NoSuchMethodException
+        | SecurityException
+        | ClassNotFoundException e) {
+      logger.error(e);
+    }
+  }
 
-		Set<String> arrayValue = new HashSet<>();
-		Collections.addAll(arrayValue, paramArray);
-		return arrayValue;
+  public void execute(ShSitesContextURL shSitesContextURL) {
 
-	}
+    ShPostType shPostType =
+        shPostTypeRepository.findByName(
+            shSitesContextURL.getRequest().getParameter(POST_TYPE_PARAM));
+    ShFormConfiguration shFormConfiguration = getFormConfiguration(shPostType);
+    ShPost shPost = this.createPost(shSitesContextURL, shFormConfiguration, shPostType);
 
-	private void getWidget(ShPostTypeAttr shPostTypeAttr) {
-		String className = shPostTypeAttr.getShWidget().getClassName();
-		ShWidgetImplementation object;
-		try {
-			object = (ShWidgetImplementation) Class.forName(className).getDeclaredConstructor().newInstance();
-			applicationContext.getAutowireCapableBeanFactory().autowireBean(object);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-			logger.error(e);
-		}
-	}
+    for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
+      String className = shPostTypeAttr.getShWidget().getClassName();
+      ShWidgetImplementation object;
+      try {
+        object =
+            (ShWidgetImplementation)
+                Class.forName(className).getDeclaredConstructor().newInstance();
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(object);
+        object.postRender(shPost, shSitesContextURL);
+      } catch (InstantiationException
+          | IllegalAccessException
+          | IllegalArgumentException
+          | InvocationTargetException
+          | NoSuchMethodException
+          | SecurityException
+          | ClassNotFoundException
+          | IOException e) {
+        logger.error(e);
+      }
+    }
 
-	public void execute(ShSitesContextURL shSitesContextURL) {
+    if (shFormConfiguration != null && !shFormConfiguration.isCreatePost())
+      shPostRepository.delete(shPost);
+  }
 
-		ShPostType shPostType = shPostTypeRepository
-				.findByName(shSitesContextURL.getRequest().getParameter(POST_TYPE_PARAM));
-		ShFormConfiguration shFormConfiguration = getFormConfiguration(shPostType);
-		ShPost shPost = this.createPost(shSitesContextURL, shFormConfiguration, shPostType);
+  private ShFormConfiguration getFormConfiguration(ShPostType shPostType) {
+    ShFormConfiguration shFormConfiguration = null;
 
-		for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
-			String className = shPostTypeAttr.getShWidget().getClassName();
-			ShWidgetImplementation object;
-			try {
-				object = (ShWidgetImplementation) Class.forName(className).getDeclaredConstructor().newInstance();
-				applicationContext.getAutowireCapableBeanFactory().autowireBean(object);
-				object.postRender(shPost, shSitesContextURL);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException
-					| IOException e) {
-				logger.error(e);
-			}
+    for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
+      if (shPostTypeAttr.getShWidget().getName().equals(ShSystemWidget.FORM_CONFIGURATION)) {
+        JSONObject formConfiguration = new JSONObject(shPostTypeAttr.getWidgetSettings());
+        shFormConfiguration = new ShFormConfiguration(formConfiguration);
+      }
+    }
 
-		}
-
-		if (shFormConfiguration != null && !shFormConfiguration.isCreatePost())
-			shPostRepository.delete(shPost);
-	}
-
-	private ShFormConfiguration getFormConfiguration(ShPostType shPostType) {
-		ShFormConfiguration shFormConfiguration = null;
-
-		for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
-			if (shPostTypeAttr.getShWidget().getName().equals(ShSystemWidget.FORM_CONFIGURATION)) {
-				JSONObject formConfiguration = new JSONObject(shPostTypeAttr.getWidgetSettings());
-				shFormConfiguration = new ShFormConfiguration(formConfiguration);
-			}
-		}
-
-		return shFormConfiguration;
-	}
+    return shFormConfiguration;
+  }
 }

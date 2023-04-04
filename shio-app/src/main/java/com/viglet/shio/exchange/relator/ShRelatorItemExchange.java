@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,9 +16,8 @@
  */
 package com.viglet.shio.exchange.relator;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Map;
 
 /**
  * @author Alexandre Oliveira
@@ -26,25 +25,23 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShRelatorItemExchange {
 
-	private Map<String, Object> fields;
-	
-	private int position;
+  private Map<String, Object> fields;
 
-	public Map<String, Object> getFields() {
-		return fields;
-	}
+  private int position;
 
-	public void setFields(Map<String, Object> fields) {
-		this.fields = fields;
-	}
+  public Map<String, Object> getFields() {
+    return fields;
+  }
 
-	public int getPosition() {
-		return position;
-	}
+  public void setFields(Map<String, Object> fields) {
+    this.fields = fields;
+  }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
-	
-	
+  public int getPosition() {
+    return position;
+  }
+
+  public void setPosition(int position) {
+    this.position = position;
+  }
 }

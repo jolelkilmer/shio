@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,20 +16,17 @@
  */
 package com.viglet.shio.persistence.repository.post;
 
+import com.viglet.shio.persistence.model.post.ShPost;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
-
-import com.viglet.shio.persistence.model.post.ShPost;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Post Repository Implementation.
@@ -38,37 +35,43 @@ import com.viglet.shio.persistence.model.post.ShPost;
  * @since 0.3.0
  */
 public class ShPostRepositoryImpl implements ShPostRepositoryCustom {
-	private static final Log logger = LogFactory.getLog(ShPostRepositoryImpl.class);
-	@PersistenceContext
-	private EntityManager em;
+  private static final Log logger = LogFactory.getLog(ShPostRepositoryImpl.class);
+  @PersistenceContext private EntityManager em;
 
-	@Transactional
-	public boolean initializeHibernateSearch() {
-		boolean status = false;
-		try {
-			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-			fullTextEntityManager.createIndexer().startAndWait();
-			status = true;
-		} catch (InterruptedException e) {
-			logger.error("initializeHibernateSearchException", e);
-			// Restore interrupted state...
-		    Thread.currentThread().interrupt();
-		}
-		return status;
-	}
+  @Transactional
+  public boolean initializeHibernateSearch() {
+    boolean status = false;
+    try {
+      FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+      fullTextEntityManager.createIndexer().startAndWait();
+      status = true;
+    } catch (InterruptedException e) {
+      logger.error("initializeHibernateSearchException", e);
+      // Restore interrupted state...
+      Thread.currentThread().interrupt();
+    }
+    return status;
+  }
 
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public List<ShPost> fuzzySearch(String searchTerm) {
+  @SuppressWarnings("unchecked")
+  @Transactional
+  public List<ShPost> fuzzySearch(String searchTerm) {
 
-		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(ShPost.class).get();
-		Query luceneQuery = qb.keyword().fuzzy().withEditDistanceUpTo(1).withPrefixLength(1)
-				.onFields("title", "summary", "shPostAttrs.strValue").matching(searchTerm).createQuery();
+    FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+    QueryBuilder qb =
+        fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(ShPost.class).get();
+    Query luceneQuery =
+        qb.keyword()
+            .fuzzy()
+            .withEditDistanceUpTo(1)
+            .withPrefixLength(1)
+            .onFields("title", "summary", "shPostAttrs.strValue")
+            .matching(searchTerm)
+            .createQuery();
 
-		javax.persistence.Query jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, ShPost.class);
+    javax.persistence.Query jpaQuery =
+        fullTextEntityManager.createFullTextQuery(luceneQuery, ShPost.class);
 
-		return jpaQuery.getResultList();
-
-	}
+    return jpaQuery.getResultList();
+  }
 }

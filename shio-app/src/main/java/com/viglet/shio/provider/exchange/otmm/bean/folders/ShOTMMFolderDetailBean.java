@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,20 +20,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMFolderDetailBean {
 
-	@JsonProperty("folder_resource")
-	private ShOTMMFolderResourceBean folderResource;
+  @JsonProperty("folder_resource")
+  private ShOTMMFolderResourceBean folderResource;
 
-	public ShOTMMFolderResourceBean getFolderResource() {
-		return folderResource;
-	}
+  public ShOTMMFolderResourceBean getFolderResource() {
+    return folderResource;
+  }
 
-	public void setFolderResource(ShOTMMFolderResourceBean folderResource) {
-		this.folderResource = folderResource;
-	}
-
+  public void setFolderResource(ShOTMMFolderResourceBean folderResource) {
+    this.folderResource = folderResource;
+  }
 }

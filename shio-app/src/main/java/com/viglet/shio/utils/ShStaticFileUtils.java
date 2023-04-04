@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,6 @@
  */
 package com.viglet.shio.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.Principal;
-import java.util.Date;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.post.ShPost;
 import com.viglet.shio.persistence.model.post.ShPostAttr;
@@ -40,147 +29,154 @@ import com.viglet.shio.persistence.repository.post.type.ShPostTypeAttrRepository
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
 import com.viglet.shio.post.type.ShSystemPostType;
 import com.viglet.shio.post.type.ShSystemPostTypeAttr;
+import java.io.File;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.Date;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShStaticFileUtils {
-	private static final Log logger = LogFactory.getLog(ShStaticFileUtils.class);
-	@Autowired
-	private ShFolderUtils shFolderUtils;
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShPostTypeAttrRepository shPostTypeAttrRepository;
-	@Autowired
-	private ShPostAttrRepository shPostAttrRepository;
-	@Autowired
-	private ShHistoryUtils shHistoryUtils;
+  private static final Log logger = LogFactory.getLog(ShStaticFileUtils.class);
+  @Autowired private ShFolderUtils shFolderUtils;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShPostTypeAttrRepository shPostTypeAttrRepository;
+  @Autowired private ShPostAttrRepository shPostAttrRepository;
+  @Autowired private ShHistoryUtils shHistoryUtils;
 
-	private static final String FILE_SOURCE_BASE = File.separator + "store" + File.separator + "file_source";
-	private static final String TEMP_DIR = File.separator + "store" + File.separator + "tmp";
-	private static final String FILE_SOURCE_BASE_AS_LINK = "/store/file_source";
-	private static final String USER_DIR = "user.dir";
-	private File userDir = new File(System.getProperty(USER_DIR));
+  private static final String FILE_SOURCE_BASE =
+      File.separator + "store" + File.separator + "file_source";
+  private static final String TEMP_DIR = File.separator + "store" + File.separator + "tmp";
+  private static final String FILE_SOURCE_BASE_AS_LINK = "/store/file_source";
+  private static final String USER_DIR = "user.dir";
+  private File userDir = new File(System.getProperty(USER_DIR));
 
-	public File dirPath(ShFolder shFolder) {
-		File directoryPath = null;
-		ShSite shSite = shFolderUtils.getSite(shFolder);
-		String folderPath = shFolderUtils.directoryPath(shFolder, File.separator);
-		String folderPathFile = FILE_SOURCE_BASE.concat(File.separator + shSite.getName() + folderPath);
-		if (userDir.exists() && userDir.isDirectory())
-			directoryPath = new File(userDir.getAbsolutePath().concat(folderPathFile));
-		return directoryPath;
-	}
+  public File dirPath(ShFolder shFolder) {
+    File directoryPath = null;
+    ShSite shSite = shFolderUtils.getSite(shFolder);
+    String folderPath = shFolderUtils.directoryPath(shFolder, File.separator);
+    String folderPathFile = FILE_SOURCE_BASE.concat(File.separator + shSite.getName() + folderPath);
+    if (userDir.exists() && userDir.isDirectory())
+      directoryPath = new File(userDir.getAbsolutePath().concat(folderPathFile));
+    return directoryPath;
+  }
 
-	public boolean fileExists(ShFolder shFolder, String fileName) {
-		return shPostRepository.existsByShFolderAndTitle(shFolder, fileName);
-	}
+  public boolean fileExists(ShFolder shFolder, String fileName) {
+    return shPostRepository.existsByShFolderAndTitle(shFolder, fileName);
+  }
 
-	public File filePath(ShFolder shFolder, String fileName) {
-		File file = null;
-		File directoryPath = this.dirPath(shFolder);
+  public File filePath(ShFolder shFolder, String fileName) {
+    File file = null;
+    File directoryPath = this.dirPath(shFolder);
 
-		if (directoryPath != null)
-			file = new File(directoryPath.getAbsolutePath().concat(File.separator + fileName));
-		return file;
-	}
+    if (directoryPath != null)
+      file = new File(directoryPath.getAbsolutePath().concat(File.separator + fileName));
+    return file;
+  }
 
-	public File filePath(ShPostImpl shPost) {
-		File file = null;
-		if (shPost.getShPostType().getName().equals(ShSystemPostType.FILE)) {
-			File directoryPath = this.dirPath(shPost.getShFolder());
+  public File filePath(ShPostImpl shPost) {
+    File file = null;
+    if (shPost.getShPostType().getName().equals(ShSystemPostType.FILE)) {
+      File directoryPath = this.dirPath(shPost.getShFolder());
 
-			if (directoryPath != null)
-				file = new File(directoryPath.getAbsolutePath().concat(File.separator + shPost.getTitle()));
-		}
-		return file;
-	}
+      if (directoryPath != null)
+        file = new File(directoryPath.getAbsolutePath().concat(File.separator + shPost.getTitle()));
+    }
+    return file;
+  }
 
-	public File filePath(String url) {
-		File file = null;
-		String fileRelativePath = url.replace("/", File.separator);
+  public File filePath(String url) {
+    File file = null;
+    String fileRelativePath = url.replace("/", File.separator);
 
-		if (userDir.exists() && userDir.isDirectory()) {
-			String fileSource = userDir.getAbsolutePath().concat(FILE_SOURCE_BASE);
-			file = new File(fileSource.concat(fileRelativePath));
-		}
-		return file;
-	}
+    if (userDir.exists() && userDir.isDirectory()) {
+      String fileSource = userDir.getAbsolutePath().concat(FILE_SOURCE_BASE);
+      file = new File(fileSource.concat(fileRelativePath));
+    }
+    return file;
+  }
 
-	public File getFileSource() {
-		File file = null;
+  public File getFileSource() {
+    File file = null;
 
-		if (userDir.exists() && userDir.isDirectory()) {
-			String fileSource = userDir.getAbsolutePath().concat(FILE_SOURCE_BASE);
-			file = new File(fileSource);
-		}
-		return file;
-	}
+    if (userDir.exists() && userDir.isDirectory()) {
+      String fileSource = userDir.getAbsolutePath().concat(FILE_SOURCE_BASE);
+      file = new File(fileSource);
+    }
+    return file;
+  }
 
-	public File getTmpDir() {
-		File file = null;
+  public File getTmpDir() {
+    File file = null;
 
-		if (userDir.exists() && userDir.isDirectory()) {
-			String fileSource = userDir.getAbsolutePath().concat(TEMP_DIR);
-			file = new File(fileSource);
-		}
-		return file;
+    if (userDir.exists() && userDir.isDirectory()) {
+      String fileSource = userDir.getAbsolutePath().concat(TEMP_DIR);
+      file = new File(fileSource);
+    }
+    return file;
+  }
 
-	}
-	
-	public String getFileSourceBase(boolean isLink) {
-		return isLink ? FILE_SOURCE_BASE_AS_LINK : FILE_SOURCE_BASE;
-	}
+  public String getFileSourceBase(boolean isLink) {
+    return isLink ? FILE_SOURCE_BASE_AS_LINK : FILE_SOURCE_BASE;
+  }
 
-	public ShPost createFilePost(MultipartFile file, String fileName, ShFolder shFolder, Principal principal,
-			boolean createPost) {
-		File directoryPath = this.dirPath(shFolder);
-		ShPost shPost = new ShPost();
-		if (directoryPath != null) {
-			if (!directoryPath.exists())
-				directoryPath.mkdirs();
+  public ShPost createFilePost(
+      MultipartFile file,
+      String fileName,
+      ShFolder shFolder,
+      Principal principal,
+      boolean createPost) {
+    File directoryPath = this.dirPath(shFolder);
+    ShPost shPost = new ShPost();
+    if (directoryPath != null) {
+      if (!directoryPath.exists()) directoryPath.mkdirs();
 
-			try {
+      try {
 
-				String destFile = directoryPath.getAbsolutePath().concat("/" + fileName);
+        String destFile = directoryPath.getAbsolutePath().concat("/" + fileName);
 
-				file.transferTo(new File(destFile));
+        file.transferTo(new File(destFile));
 
-				if (createPost) {
-					// Post File
-					ShPostType shPostType = shPostTypeRepository.findByName(ShSystemPostType.FILE);
+        if (createPost) {
+          // Post File
+          ShPostType shPostType = shPostTypeRepository.findByName(ShSystemPostType.FILE);
 
-					shPost.setDate(new Date());
-					shPost.setShPostType(shPostType);
-					shPost.setSummary(null);
-					shPost.setTitle(fileName);
-					shPost.setShFolder(shFolder);
-					shPost.setPublished(true);
-					shPostRepository.save(shPost);
+          shPost.setDate(new Date());
+          shPost.setShPostType(shPostType);
+          shPost.setSummary(null);
+          shPost.setTitle(fileName);
+          shPost.setShFolder(shFolder);
+          shPost.setPublished(true);
+          shPostRepository.save(shPost);
 
-					ShPostTypeAttr shPostTypeAttr = shPostTypeAttrRepository.findByShPostTypeAndName(shPostType,
-							ShSystemPostTypeAttr.FILE);
+          ShPostTypeAttr shPostTypeAttr =
+              shPostTypeAttrRepository.findByShPostTypeAndName(
+                  shPostType, ShSystemPostTypeAttr.FILE);
 
-					ShPostAttr shPostAttr = new ShPostAttr();
-					shPostAttr.setShPost(shPost);
-					shPostAttr.setShPostTypeAttr(shPostTypeAttr);
-					shPostAttr.setStrValue(shPost.getTitle());
-					shPostAttr.setType(1);
+          ShPostAttr shPostAttr = new ShPostAttr();
+          shPostAttr.setShPost(shPost);
+          shPostAttr.setShPostTypeAttr(shPostTypeAttr);
+          shPostAttr.setStrValue(shPost.getTitle());
+          shPostAttr.setType(1);
 
-					shPostAttrRepository.save(shPostAttr);
+          shPostAttrRepository.save(shPostAttr);
 
-					shHistoryUtils.commit(shPost, principal, ShHistoryUtils.CREATE);
-				} else {
-					shPost.setTitle(fileName);
-				}
-			} catch (IOException e) {
-				logger.error("shStaticFileUploadException", e);
-			}
-		}
-		return shPost;
-	}
+          shHistoryUtils.commit(shPost, principal, ShHistoryUtils.CREATE);
+        } else {
+          shPost.setTitle(fileName);
+        }
+      } catch (IOException e) {
+        logger.error("shStaticFileUploadException", e);
+      }
+    }
+    return shPost;
+  }
 }

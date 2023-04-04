@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,83 +21,81 @@ import com.viglet.shio.provider.exchange.otcs.bean.link.ShOTCSLinksBean;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSPagingBean {
 
-	private int limit;
-	
-	private ShOTCSLinksBean links;
-	
-	private int page;
-	
-	@JsonProperty("page_total")
-	private int pageTotal;
-	
-	@JsonProperty("range_max")
-	private int rangeMax;
-	
-	@JsonProperty("range_min")
-	private int rangeMin;
-	
-	@JsonProperty("total_count")
-	private int totalCount;
+  private int limit;
 
-	public int getLimit() {
-		return limit;
-	}
+  private ShOTCSLinksBean links;
 
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
+  private int page;
 
-	public ShOTCSLinksBean getLinks() {
-		return links;
-	}
+  @JsonProperty("page_total")
+  private int pageTotal;
 
-	public void setLinks(ShOTCSLinksBean links) {
-		this.links = links;
-	}
+  @JsonProperty("range_max")
+  private int rangeMax;
 
-	public int getPage() {
-		return page;
-	}
+  @JsonProperty("range_min")
+  private int rangeMin;
 
-	public void setPage(int page) {
-		this.page = page;
-	}
+  @JsonProperty("total_count")
+  private int totalCount;
 
-	public int getPageTotal() {
-		return pageTotal;
-	}
+  public int getLimit() {
+    return limit;
+  }
 
-	public void setPageTotal(int pageTotal) {
-		this.pageTotal = pageTotal;
-	}
+  public void setLimit(int limit) {
+    this.limit = limit;
+  }
 
-	public int getRangeMax() {
-		return rangeMax;
-	}
+  public ShOTCSLinksBean getLinks() {
+    return links;
+  }
 
-	public void setRangeMax(int rangeMax) {
-		this.rangeMax = rangeMax;
-	}
+  public void setLinks(ShOTCSLinksBean links) {
+    this.links = links;
+  }
 
-	public int getRangeMin() {
-		return rangeMin;
-	}
+  public int getPage() {
+    return page;
+  }
 
-	public void setRangeMin(int rangeMin) {
-		this.rangeMin = rangeMin;
-	}
+  public void setPage(int page) {
+    this.page = page;
+  }
 
-	public int getTotalCount() {
-		return totalCount;
-	}
+  public int getPageTotal() {
+    return pageTotal;
+  }
 
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}	
-	
+  public void setPageTotal(int pageTotal) {
+    this.pageTotal = pageTotal;
+  }
+
+  public int getRangeMax() {
+    return rangeMax;
+  }
+
+  public void setRangeMax(int rangeMax) {
+    this.rangeMax = rangeMax;
+  }
+
+  public int getRangeMin() {
+    return rangeMin;
+  }
+
+  public void setRangeMin(int rangeMin) {
+    this.rangeMin = rangeMin;
+  }
+
+  public int getTotalCount() {
+    return totalCount;
+  }
+
+  public void setTotalCount(int totalCount) {
+    this.totalCount = totalCount;
+  }
 }

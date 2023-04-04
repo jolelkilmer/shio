@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,20 @@
  */
 package com.viglet.shio.api.stock;
 
+import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
+import com.viglet.shio.persistence.repository.post.ShPostRepository;
+import com.viglet.shio.stock.beans.ShSPhotoBean;
+import com.viglet.shio.stock.beans.ShSPhotoPreviewBean;
+import com.viglet.shio.utils.ShStaticFileUtils;
+import com.viglet.shio.website.utils.ShSitesPostUtils;
+import de.androidpit.colorthief.ColorThief;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,72 +39,80 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
-import com.viglet.shio.persistence.repository.post.ShPostRepository;
-import com.viglet.shio.stock.beans.ShSPhotoBean;
-import com.viglet.shio.stock.beans.ShSPhotoPreviewBean;
-import com.viglet.shio.utils.ShStaticFileUtils;
-import com.viglet.shio.website.utils.ShSitesPostUtils;
-
-import de.androidpit.colorthief.ColorThief;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 /**
  * @author Alexandre Oliveira
  * @since 0.3.7
  */
 @RestController
 @RequestMapping("/api/v2/stock/photos")
-@Tag( name = "Photos", description = "Photos")
+@Tag(name = "Photos", description = "Photos")
 public class ShSPhotoAPI {
-	private static final Logger logger = LogManager.getLogger(ShSPhotoAPI.class);
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShStaticFileUtils shStaticFileUtils;
-	@Autowired
-	private ShSitesPostUtils shSitesPostUtils;
+  private static final Logger logger = LogManager.getLogger(ShSPhotoAPI.class);
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShStaticFileUtils shStaticFileUtils;
+  @Autowired private ShSitesPostUtils shSitesPostUtils;
 
-	@GetMapping
-	public List<ShSPhotoBean> getPhotos(){
-		List<ShSPhotoBean> shSPhotoBeans = new ArrayList<>();
-		shFolderRepository.findById("39cef32e-e754-4f1a-991c-c45a1ecebe7c")
-				.ifPresent(shFolder -> shPostRepository.findByShFolderTiny(shFolder.getId()).forEach(
-						shPostTinyBean -> shPostRepository.findById(shPostTinyBean.getId()).ifPresent(shPost -> {
-							try {
-								File fileImage = shStaticFileUtils.filePath(shPost);
-								String imageURL = "http://localhost:2710" + shSitesPostUtils.generatePostLink(shPost);
-								BufferedImage image = ImageIO.read(FileUtils.openInputStream(fileImage));
-								int height = image.getHeight();
-								int width = image.getWidth();
+  @GetMapping
+  public List<ShSPhotoBean> getPhotos() {
+    List<ShSPhotoBean> shSPhotoBeans = new ArrayList<>();
+    shFolderRepository
+        .findById("39cef32e-e754-4f1a-991c-c45a1ecebe7c")
+        .ifPresent(
+            shFolder ->
+                shPostRepository
+                    .findByShFolderTiny(shFolder.getId())
+                    .forEach(
+                        shPostTinyBean ->
+                            shPostRepository
+                                .findById(shPostTinyBean.getId())
+                                .ifPresent(
+                                    shPost -> {
+                                      try {
+                                        File fileImage = shStaticFileUtils.filePath(shPost);
+                                        String imageURL =
+                                            "http://localhost:2710"
+                                                + shSitesPostUtils.generatePostLink(shPost);
+                                        BufferedImage image =
+                                            ImageIO.read(FileUtils.openInputStream(fileImage));
+                                        int height = image.getHeight();
+                                        int width = image.getWidth();
 
-								int[] rgbArray = ColorThief.getColor(image);
-								String rgb = String.format("rgb(%d,%d,%d)", rgbArray[0], rgbArray[1], rgbArray[2]);
+                                        int[] rgbArray = ColorThief.getColor(image);
+                                        String rgb =
+                                            String.format(
+                                                "rgb(%d,%d,%d)",
+                                                rgbArray[0], rgbArray[1], rgbArray[2]);
 
-								if (logger.isDebugEnabled())
-									logger.debug(String.format("%s %s", imageURL, rgb));
+                                        if (logger.isDebugEnabled())
+                                          logger.debug(String.format("%s %s", imageURL, rgb));
 
-								ShSPhotoBean shSPhotoBean = new ShSPhotoBean();
+                                        ShSPhotoBean shSPhotoBean = new ShSPhotoBean();
 
-								shSPhotoBean.setName(shPost.getTitle());
-								shSPhotoBean.setDate(shPost.getDate());
-								shSPhotoBean.setPreviewXXS(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setPreviewXS(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setPreviewS(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setPreviewM(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setPreviewL(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setPreviewXL(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setRaw(new ShSPhotoPreviewBean(imageURL, width, height));
-								shSPhotoBean.setDominantColor(rgb);
-								shSPhotoBeans.add(shSPhotoBean);
+                                        shSPhotoBean.setName(shPost.getTitle());
+                                        shSPhotoBean.setDate(shPost.getDate());
+                                        shSPhotoBean.setPreviewXXS(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setPreviewXS(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setPreviewS(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setPreviewM(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setPreviewL(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setPreviewXL(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setRaw(
+                                            new ShSPhotoPreviewBean(imageURL, width, height));
+                                        shSPhotoBean.setDominantColor(rgb);
+                                        shSPhotoBeans.add(shSPhotoBean);
 
-							} catch (JSONException | IOException e) {
-								logger.error(e);
-							}
-						})));
+                                      } catch (JSONException | IOException e) {
+                                        logger.error(e);
+                                      }
+                                    })));
 
-		return shSPhotoBeans;
-	}
+    return shSPhotoBeans;
+  }
 }

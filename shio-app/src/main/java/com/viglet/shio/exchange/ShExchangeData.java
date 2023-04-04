@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,36 +17,33 @@
 package com.viglet.shio.exchange;
 
 /**
- * Export Data includes Export and Info about Directory where is the static
- * files.
- * 
+ * Export Data includes Export and Info about Directory where is the static files.
+ *
  * @author Alexandre Oliveira
  * @since 0.3.4
- * 
  */
 public class ShExchangeData {
-	private ShExchange shExchange;
-	private ShExchangeFilesDirs shExchangeFilesDirs;
+  private ShExchange shExchange;
+  private ShExchangeFilesDirs shExchangeFilesDirs;
 
-	ShExchangeData(ShExchange shExchange, ShExchangeFilesDirs shExchangeFilesDirs) {
-		this.shExchange = shExchange;
-		this.shExchangeFilesDirs = shExchangeFilesDirs;
-	}
+  ShExchangeData(ShExchange shExchange, ShExchangeFilesDirs shExchangeFilesDirs) {
+    this.shExchange = shExchange;
+    this.shExchangeFilesDirs = shExchangeFilesDirs;
+  }
 
-	public ShExchange getShExchange() {
-		return shExchange;
-	}
+  public ShExchange getShExchange() {
+    return shExchange;
+  }
 
-	public void setShExchange(ShExchange shExchange) {
-		this.shExchange = shExchange;
-	}
+  public void setShExchange(ShExchange shExchange) {
+    this.shExchange = shExchange;
+  }
 
-	public ShExchangeFilesDirs getShExchangeFilesDirs() {
-		return shExchangeFilesDirs;
-	}
+  public ShExchangeFilesDirs getShExchangeFilesDirs() {
+    return shExchangeFilesDirs;
+  }
 
-	public void setShExchangeFilesDirs(ShExchangeFilesDirs shExchangeFilesDirs) {
-		this.shExchangeFilesDirs = shExchangeFilesDirs;
-	}
-
+  public void setShExchangeFilesDirs(ShExchangeFilesDirs shExchangeFilesDirs) {
+    this.shExchangeFilesDirs = shExchangeFilesDirs;
+  }
 }

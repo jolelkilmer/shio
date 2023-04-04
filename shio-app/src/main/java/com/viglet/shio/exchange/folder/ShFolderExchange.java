@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,27 +24,24 @@ import com.viglet.shio.exchange.object.ShObjectExchange;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShFolderExchange extends ShObjectExchange {
-	
 
-	private String name;
+  private String name;
 
-	private String parentFolder;
+  private String parentFolder;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getParentFolder() {
-		return parentFolder;
-	}
+  public String getParentFolder() {
+    return parentFolder;
+  }
 
-	public void setParentFolder(String parentFolder) {
-		this.parentFolder = parentFolder;
-	}
-
-
+  public void setParentFolder(String parentFolder) {
+    this.parentFolder = parentFolder;
+  }
 }

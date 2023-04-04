@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,15 +22,14 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
 
+import com.viglet.shio.graphql.ShGraphQLConstants;
+import com.viglet.shio.graphql.schema.query.type.sites.ShGraphQLQTObjectFromURL;
+import graphql.scalars.ExtendedScalars;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLObjectType.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.viglet.shio.graphql.ShGraphQLConstants;
-import com.viglet.shio.graphql.schema.query.type.sites.ShGraphQLQTObjectFromURL;
-
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLObjectType.Builder;
-import graphql.scalars.ExtendedScalars;
 /**
  * GraphQL Object From URL Object Type.
  *
@@ -40,46 +39,41 @@ import graphql.scalars.ExtendedScalars;
 @Component
 public class ShGraphQLOTObjectFromURL {
 
-	@Autowired
-	private ShGraphQLQTObjectFromURL shGraphQLQTObjectFromURL;
+  @Autowired private ShGraphQLQTObjectFromURL shGraphQLQTObjectFromURL;
 
-	
-	private GraphQLObjectType createWebSiteByURL() {
-		Builder builder = newObject().name("ObjectFromURL").description("Object from Site URL");
+  private GraphQLObjectType createWebSiteByURL() {
+    Builder builder = newObject().name("ObjectFromURL").description("Object from Site URL");
 
-		this.createSiteURLObjectTypeFields(builder);
+    this.createSiteURLObjectTypeFields(builder);
 
-		return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
-	}
-	
-	private void createSiteURLObjectTypeFields(Builder builder) {
-		builder.field(newFieldDefinition().name(ShGraphQLConstants.ID).description("Identifier").type(GraphQLID));
-		builder.field(
-				newFieldDefinition().name("type").description("Object Type").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name("format").description("Format").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name("locale").description("Locale").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name("siteId").description("Site Id").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name("siteName").description("Site Name").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name("context").description("Context").type(GraphQLString));	
-		builder.field(
-				newFieldDefinition().name("content").description("Content").type(ExtendedScalars.Object));	
-		builder.field(
-				newFieldDefinition().name("pageLayout").description("Page Layout Name").type(GraphQLString));	
-		
+    return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
+  }
 
-	}
+  private void createSiteURLObjectTypeFields(Builder builder) {
+    builder.field(
+        newFieldDefinition().name(ShGraphQLConstants.ID).description("Identifier").type(GraphQLID));
+    builder.field(newFieldDefinition().name("type").description("Object Type").type(GraphQLString));
+    builder.field(newFieldDefinition().name("format").description("Format").type(GraphQLString));
+    builder.field(newFieldDefinition().name("locale").description("Locale").type(GraphQLString));
+    builder.field(newFieldDefinition().name("siteId").description("Site Id").type(GraphQLString));
+    builder.field(
+        newFieldDefinition().name("siteName").description("Site Name").type(GraphQLString));
+    builder.field(newFieldDefinition().name("context").description("Context").type(GraphQLString));
+    builder.field(
+        newFieldDefinition().name("content").description("Content").type(ExtendedScalars.Object));
+    builder.field(
+        newFieldDefinition()
+            .name("pageLayout")
+            .description("Page Layout Name")
+            .type(GraphQLString));
+  }
 
-	public void createObjectType(Builder queryTypeBuilder,
-			graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder) {
-		
-		GraphQLObjectType graphQLObjectType = this.createWebSiteByURL();
+  public void createObjectType(
+      Builder queryTypeBuilder, graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-		shGraphQLQTObjectFromURL.createQueryType(queryTypeBuilder, codeRegistryBuilder, graphQLObjectType);
-	}
+    GraphQLObjectType graphQLObjectType = this.createWebSiteByURL();
 
+    shGraphQLQTObjectFromURL.createQueryType(
+        queryTypeBuilder, codeRegistryBuilder, graphQLObjectType);
+  }
 }

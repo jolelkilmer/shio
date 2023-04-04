@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,11 +16,10 @@
  */
 package com.viglet.shio.exchange.post.type;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.util.Map;
 
 /**
  * @author Alexandre Oliveira
@@ -28,105 +27,104 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShPostTypeFieldExchange {
 
-	private String id;
+  private String id;
 
-	private String label;
+  private String label;
 
-	private String description;
+  private String description;
 
-	private boolean isSummary;
+  private boolean isSummary;
 
-	private boolean isTitle;
+  private boolean isTitle;
 
-	private boolean isRequired;
+  private boolean isRequired;
 
-	private int ordinal;
+  private int ordinal;
 
-	@JsonInclude(Include.NON_NULL)
-	private Map<String, ShPostTypeFieldExchange> fields;
+  @JsonInclude(Include.NON_NULL)
+  private Map<String, ShPostTypeFieldExchange> fields;
 
-	private String widget;
+  private String widget;
 
-	private String widgetSettings;
-	
-	public String getId() {
-		return id;
-	}
+  private String widgetSettings;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public String getLabel() {
-		return label;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+  public String getLabel() {
+    return label;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setLabel(String label) {
+    this.label = label;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public boolean isSummary() {
-		return isSummary;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setSummary(boolean isSummary) {
-		this.isSummary = isSummary;
-	}
+  public boolean isSummary() {
+    return isSummary;
+  }
 
-	public boolean isTitle() {
-		return isTitle;
-	}
+  public void setSummary(boolean isSummary) {
+    this.isSummary = isSummary;
+  }
 
-	public void setTitle(boolean isTitle) {
-		this.isTitle = isTitle;
-	}
+  public boolean isTitle() {
+    return isTitle;
+  }
 
-	public boolean isRequired() {
-		return isRequired;
-	}
+  public void setTitle(boolean isTitle) {
+    this.isTitle = isTitle;
+  }
 
-	public void setRequired(boolean isRequired) {
-		this.isRequired = isRequired;
-	}
+  public boolean isRequired() {
+    return isRequired;
+  }
 
-	public int getOrdinal() {
-		return ordinal;
-	}
+  public void setRequired(boolean isRequired) {
+    this.isRequired = isRequired;
+  }
 
-	public void setOrdinal(int ordinal) {
-		this.ordinal = ordinal;
-	}
+  public int getOrdinal() {
+    return ordinal;
+  }
 
-	public Map<String, ShPostTypeFieldExchange> getFields() {
-		return fields;
-	}
+  public void setOrdinal(int ordinal) {
+    this.ordinal = ordinal;
+  }
 
-	public void setFields(Map<String, ShPostTypeFieldExchange> fields) {
-		this.fields = fields;
-	}
+  public Map<String, ShPostTypeFieldExchange> getFields() {
+    return fields;
+  }
 
-	public String getWidget() {
-		return widget;
-	}
+  public void setFields(Map<String, ShPostTypeFieldExchange> fields) {
+    this.fields = fields;
+  }
 
-	public void setWidget(String widget) {
-		this.widget = widget;
-	}
+  public String getWidget() {
+    return widget;
+  }
 
-	public String getWidgetSettings() {
-		return widgetSettings;
-	}
+  public void setWidget(String widget) {
+    this.widget = widget;
+  }
 
-	public void setWidgetSettings(String widgetSettings) {
-		this.widgetSettings = widgetSettings;
-	}
+  public String getWidgetSettings() {
+    return widgetSettings;
+  }
 
+  public void setWidgetSettings(String widgetSettings) {
+    this.widgetSettings = widgetSettings;
+  }
 }

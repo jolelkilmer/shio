@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,59 +20,57 @@ import java.util.Date;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShExchangeProviderPost {
 
-	private String id;
+  private String id;
 
-	private String title;
+  private String title;
 
-	private Date date;
+  private Date date;
 
-	private String type;
-	
-	private String parentId;
-	
-	public String getId() {
-		return id;
-	}
+  private String type;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  private String parentId;
 
-	public String getTitle() {
-		return title;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Date getDate() {
-		return date;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public String getParentId() {
-		return parentId;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
 
+  public String getParentId() {
+    return parentId;
+  }
+
+  public void setParentId(String parentId) {
+    this.parentId = parentId;
+  }
 }

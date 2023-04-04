@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,19 +21,17 @@ import java.util.Map;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public interface ShExchangeProvider {
 
-	public void init(Map<String, String> variables);
+  public void init(Map<String, String> variables);
 
-	public ShExchangeProviderFolder getRootFolder();
+  public ShExchangeProviderFolder getRootFolder();
 
-	public ShExchangeProviderPost getObject(String id, boolean isFolder);
+  public ShExchangeProviderPost getObject(String id, boolean isFolder);
 
-	public ShExchangeProviderFolder getFolder(String id);
+  public ShExchangeProviderFolder getFolder(String id);
 
-	public InputStream getDownload(String id);
-
+  public InputStream getDownload(String id);
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com> 
- * 
+ * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,13 +17,14 @@
 
 package com.viglet.shio.persistence.repository.post;
 
+import com.viglet.shio.persistence.model.post.ShPost;
 import java.util.List;
 
-import com.viglet.shio.persistence.model.post.ShPost;
 /**
  * @author Alexandre Oliveira
  */
 interface ShPostRepositoryCustom {
-	public boolean initializeHibernateSearch();
-	public List<ShPost> fuzzySearch(String searchTerm);
+  public boolean initializeHibernateSearch();
+
+  public List<ShPost> fuzzySearch(String searchTerm);
 }

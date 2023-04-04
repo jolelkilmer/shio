@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,83 +16,79 @@
  */
 package com.viglet.shio.post.type;
 
-import java.util.Date;
-
 import com.viglet.shio.exchange.post.ShPostExchange;
 import com.viglet.shio.url.ShURLFormatter;
-
+import java.util.Date;
 
 /**
- * Abstract Post Type 
- * 
+ * Abstract Post Type
+ *
  * @author Alexandre Oliveira
  * @since 0.3.4
- * 
  */
 public class ShAbstractPostType {
 
-	private String id;
-	
-	private String furl;
-	
-	private Date date;
-	
-	private String owner;
-	
-	private String folder;
+  private String id;
 
-	public String getId() {
-		return id;
-	}
+  private String furl;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  private Date date;
 
-	public String getFurl() {
-		return furl;
-	}
+  private String owner;
 
-	public void setFurl(String furl) {
-		this.furl = furl;
-	}
+  private String folder;
 
-	public Date getDate() {
-		return date;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public String getOwner() {
-		return owner;
-	}
+  public String getFurl() {
+    return furl;
+  }
 
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
+  public void setFurl(String furl) {
+    this.furl = furl;
+  }
 
-	public String getFolder() {
-		return folder;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public void setFolder(String folder) {
-		this.folder = folder;
-	}
-	
-	public ShPostExchange getShPostExchange() {
-		
-		ShPostExchange shPostExchange = new ShPostExchange();
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-		shPostExchange.setId(this.getId());
-		shPostExchange.setOwner(this.getOwner());
-		shPostExchange.setDate(this.getDate());
-		shPostExchange.setPostType(ShSystemPostType.TEXT);
-		shPostExchange.setFurl(ShURLFormatter.format(this.getFurl()));
-		shPostExchange.setFolder(this.getFolder());
+  public String getOwner() {
+    return owner;
+  }
 
-		return shPostExchange;
-	}
-	
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  public String getFolder() {
+    return folder;
+  }
+
+  public void setFolder(String folder) {
+    this.folder = folder;
+  }
+
+  public ShPostExchange getShPostExchange() {
+
+    ShPostExchange shPostExchange = new ShPostExchange();
+
+    shPostExchange.setId(this.getId());
+    shPostExchange.setOwner(this.getOwner());
+    shPostExchange.setDate(this.getDate());
+    shPostExchange.setPostType(ShSystemPostType.TEXT);
+    shPostExchange.setFurl(ShURLFormatter.format(this.getFurl()));
+    shPostExchange.setFolder(this.getFolder());
+
+    return shPostExchange;
+  }
 }

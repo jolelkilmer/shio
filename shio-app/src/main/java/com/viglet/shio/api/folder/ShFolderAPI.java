@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,22 @@
  */
 package com.viglet.shio.api.folder;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.viglet.shio.api.ShJsonView;
+import com.viglet.shio.exchange.folder.ShFolderExport;
+import com.viglet.shio.persistence.model.folder.ShFolder;
+import com.viglet.shio.persistence.model.object.ShObject;
+import com.viglet.shio.persistence.model.site.ShSite;
+import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
+import com.viglet.shio.persistence.repository.object.ShObjectRepository;
+import com.viglet.shio.spreedsheet.ShSpreadsheet;
+import com.viglet.shio.turing.ShTuringIntegration;
+import com.viglet.shio.url.ShURLFormatter;
+import com.viglet.shio.utils.ShFolderUtils;
+import com.viglet.shio.utils.ShHistoryUtils;
+import com.viglet.shio.utils.ShObjectUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -23,9 +39,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,220 +57,199 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.viglet.shio.api.ShJsonView;
-import com.viglet.shio.exchange.folder.ShFolderExport;
-import com.viglet.shio.persistence.model.folder.ShFolder;
-import com.viglet.shio.persistence.model.object.ShObject;
-import com.viglet.shio.persistence.model.site.ShSite;
-import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
-import com.viglet.shio.persistence.repository.object.ShObjectRepository;
-import com.viglet.shio.spreedsheet.ShSpreadsheet;
-import com.viglet.shio.turing.ShTuringIntegration;
-import com.viglet.shio.url.ShURLFormatter;
-import com.viglet.shio.utils.ShFolderUtils;
-import com.viglet.shio.utils.ShHistoryUtils;
-import com.viglet.shio.utils.ShObjectUtils;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 /**
  * @author Alexandre Oliveira
  */
 @RestController
 @RequestMapping("/api/v2/folder")
-@Tag( name = "Folder", description = "Search API")
+@Tag(name = "Folder", description = "Search API")
 public class ShFolderAPI {
-	private static final Logger logger = LogManager.getLogger(ShFolderAPI.class);
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShFolderUtils shFolderUtils;
-	@Autowired
-	private ShObjectRepository shObjectRepository;
-	@Autowired
-	private ShObjectUtils shObjectUtils;
-	@Autowired
-	private ShTuringIntegration shTuringIntegration;
-	@Autowired
-	private ShSpreadsheet shSpreadsheet;
-	@Autowired
-	private ShHistoryUtils shHistoryUtils;
-	@Autowired
-	private ShFolderExport shFolderExport;
-	
-	@Operation(summary = "Folder list")
-	@GetMapping
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public List<ShFolder> shFolderList() {
-		return shFolderRepository.findAll();
-	}
+  private static final Logger logger = LogManager.getLogger(ShFolderAPI.class);
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShFolderUtils shFolderUtils;
+  @Autowired private ShObjectRepository shObjectRepository;
+  @Autowired private ShObjectUtils shObjectUtils;
+  @Autowired private ShTuringIntegration shTuringIntegration;
+  @Autowired private ShSpreadsheet shSpreadsheet;
+  @Autowired private ShHistoryUtils shHistoryUtils;
+  @Autowired private ShFolderExport shFolderExport;
 
-	@Operation(summary = "Show a folder")
-	@GetMapping("/{id}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ResponseEntity<ShFolder> shFolderGet(@PathVariable String id, Principal principal) {
-		if (shObjectUtils.canAccess(principal, id)) {
-			return new ResponseEntity<>(shFolderRepository.findById(id).orElse(null), HttpStatus.OK);
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-	}
+  @Operation(summary = "Folder list")
+  @GetMapping
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public List<ShFolder> shFolderList() {
+    return shFolderRepository.findAll();
+  }
 
-	@Operation(summary = "Update a folder")
-	@PutMapping("/{id}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ResponseEntity<ShFolder> shFolderUpdate(@PathVariable String id, @RequestBody ShFolder shFolder,
-			Principal principal) {
-		if (shObjectUtils.canAccess(principal, id)) {
-			Optional<ShFolder> shFolderOptional = shFolderRepository.findById(id);
-			if (shFolderOptional.isPresent()) {
-				ShFolder shFolderEdit = shFolderOptional.get();
+  @Operation(summary = "Show a folder")
+  @GetMapping("/{id}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ResponseEntity<ShFolder> shFolderGet(@PathVariable String id, Principal principal) {
+    if (shObjectUtils.canAccess(principal, id)) {
+      return new ResponseEntity<>(shFolderRepository.findById(id).orElse(null), HttpStatus.OK);
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
 
-				shFolderEdit.setDate(new Date());
-				shFolderEdit.setName(shFolder.getName());
-				shFolderEdit.setParentFolder(shFolder.getParentFolder());
-				shFolderEdit.setShSite(shFolder.getShSite());
-				shFolderEdit.setFurl(ShURLFormatter.format(shFolderEdit.getName()));
-				shFolderRepository.saveAndFlush(shFolderEdit);
+  @Operation(summary = "Update a folder")
+  @PutMapping("/{id}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ResponseEntity<ShFolder> shFolderUpdate(
+      @PathVariable String id, @RequestBody ShFolder shFolder, Principal principal) {
+    if (shObjectUtils.canAccess(principal, id)) {
+      Optional<ShFolder> shFolderOptional = shFolderRepository.findById(id);
+      if (shFolderOptional.isPresent()) {
+        ShFolder shFolderEdit = shFolderOptional.get();
 
-				shTuringIntegration.indexObject(shFolderEdit);
+        shFolderEdit.setDate(new Date());
+        shFolderEdit.setName(shFolder.getName());
+        shFolderEdit.setParentFolder(shFolder.getParentFolder());
+        shFolderEdit.setShSite(shFolder.getShSite());
+        shFolderEdit.setFurl(ShURLFormatter.format(shFolderEdit.getName()));
+        shFolderRepository.saveAndFlush(shFolderEdit);
 
-				shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.UPDATE);
+        shTuringIntegration.indexObject(shFolderEdit);
 
-				return new ResponseEntity<>(shFolderEdit, HttpStatus.OK);
-			}
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.UPDATE);
 
-	}
+        return new ResponseEntity<>(shFolderEdit, HttpStatus.OK);
+      }
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
 
-	@Transactional
-	@Operation(summary = "Delete a folder")
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> shFolderDelete(@PathVariable String id, Principal principal) {
-		if (shObjectUtils.canAccess(principal, id)) {
-			shFolderRepository.findById(id).ifPresent(shFolder -> {
-				try {
-					shFolderUtils.deleteFolder(shFolder);
-					shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.DELETE);
-				} catch (IOException e) {
-					logger.error("FolderDeleteException", e);
-				}
-			});
+  @Transactional
+  @Operation(summary = "Delete a folder")
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Boolean> shFolderDelete(@PathVariable String id, Principal principal) {
+    if (shObjectUtils.canAccess(principal, id)) {
+      shFolderRepository
+          .findById(id)
+          .ifPresent(
+              shFolder -> {
+                try {
+                  shFolderUtils.deleteFolder(shFolder);
+                  shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.DELETE);
+                } catch (IOException e) {
+                  logger.error("FolderDeleteException", e);
+                }
+              });
 
-			return new ResponseEntity<>(true, HttpStatus.OK);
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-	}
+      return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
 
-	@Operation(summary = "Create a folder")
-	@PostMapping
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ResponseEntity<ShFolder> shFolderAdd(@RequestBody ShFolder shFolder, Principal principal) {
-		ShObject shParentObject = null;
-		if (shFolder != null) {
-			if (shFolder.getRootFolder() == 1 && shFolder.getShSite() != null && shFolder.getShSite().getId() != null)
-				shParentObject = shFolder.getShSite();
-			else if (shFolder.getParentFolder() != null && shFolder.getParentFolder().getId() != null)
-				shParentObject = shFolder.getParentFolder();
+  @Operation(summary = "Create a folder")
+  @PostMapping
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ResponseEntity<ShFolder> shFolderAdd(@RequestBody ShFolder shFolder, Principal principal) {
+    ShObject shParentObject = null;
+    if (shFolder != null) {
+      if (shFolder.getRootFolder() == 1
+          && shFolder.getShSite() != null
+          && shFolder.getShSite().getId() != null) shParentObject = shFolder.getShSite();
+      else if (shFolder.getParentFolder() != null && shFolder.getParentFolder().getId() != null)
+        shParentObject = shFolder.getParentFolder();
 
-			if (shParentObject != null && shObjectUtils.canAccess(principal, shParentObject.getId())) {
-				List<ShObject> shObjects = new ArrayList<>();
-				shObjects.add(shParentObject);
+      if (shParentObject != null && shObjectUtils.canAccess(principal, shParentObject.getId())) {
+        List<ShObject> shObjects = new ArrayList<>();
+        shObjects.add(shParentObject);
 
-				shObjectRepository.findById(shParentObject.getId()).ifPresent(shObject -> {
-					shFolder.setDate(new Date());
-					shFolder.setFurl(ShURLFormatter.format(shFolder.getName()));
-					shFolder.setShGroups(new HashSet<>(shObject.getShGroups()));
-					shFolder.setShUsers(new HashSet<>(shObject.getShUsers()));
-					shFolderRepository.saveAndFlush(shFolder);
+        shObjectRepository
+            .findById(shParentObject.getId())
+            .ifPresent(
+                shObject -> {
+                  shFolder.setDate(new Date());
+                  shFolder.setFurl(ShURLFormatter.format(shFolder.getName()));
+                  shFolder.setShGroups(new HashSet<>(shObject.getShGroups()));
+                  shFolder.setShUsers(new HashSet<>(shObject.getShUsers()));
+                  shFolderRepository.saveAndFlush(shFolder);
 
-					shTuringIntegration.indexObject(shFolder);
+                  shTuringIntegration.indexObject(shFolder);
 
-					shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.CREATE);
+                  shHistoryUtils.commit(shFolder, principal, ShHistoryUtils.CREATE);
+                });
+        return new ResponseEntity<>(shFolder, HttpStatus.OK);
+      }
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
 
-				});
-				return new ResponseEntity<>(shFolder, HttpStatus.OK);
+  @Operation(summary = "Create a folder from Parent Object")
+  @PostMapping("/object/{objectId}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ResponseEntity<ShFolder> shFolderAddFromParentObject(
+      @RequestBody ShFolder shFolder, @PathVariable String objectId, Principal principal) {
+    if (shObjectUtils.canAccess(principal, objectId)) {
 
-			}
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      shObjectRepository
+          .findById(objectId)
+          .ifPresent(
+              shObject -> {
+                List<ShObject> shObjects = new ArrayList<>();
+                shObjects.add(shObject);
 
-	}
+                ShFolder shNewFolder = new ShFolder();
+                shNewFolder.setDate(new Date());
+                shNewFolder.setName(shFolder.getName());
+                shNewFolder.setShGroups(new HashSet<>(shObject.getShGroups()));
+                shNewFolder.setShUsers(new HashSet<>(shObject.getShUsers()));
+                shNewFolder.setFurl(ShURLFormatter.format(shNewFolder.getName()));
 
-	@Operation(summary = "Create a folder from Parent Object")
-	@PostMapping("/object/{objectId}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ResponseEntity<ShFolder> shFolderAddFromParentObject(@RequestBody ShFolder shFolder,
-			@PathVariable String objectId, Principal principal) {
-		if (shObjectUtils.canAccess(principal, objectId)) {
+                ShObject shParentObject = shObjectRepository.findById(objectId).orElse(null);
+                if (shParentObject instanceof ShFolder shParentFolder) {
+                  shNewFolder.setParentFolder(shParentFolder);
+                  shNewFolder.setRootFolder((byte) 0);
+                  shNewFolder.setShSite(null);
 
-			shObjectRepository.findById(objectId).ifPresent(shObject -> {
-				List<ShObject> shObjects = new ArrayList<>();
-				shObjects.add(shObject);
+                } else if (shParentObject instanceof ShSite shSite) {
+                  shNewFolder.setParentFolder(null);
+                  shNewFolder.setRootFolder((byte) 1);
+                  shNewFolder.setShSite(shSite);
+                }
 
-				ShFolder shNewFolder = new ShFolder();
-				shNewFolder.setDate(new Date());
-				shNewFolder.setName(shFolder.getName());
-				shNewFolder.setShGroups(new HashSet<>(shObject.getShGroups()));
-				shNewFolder.setShUsers(new HashSet<>(shObject.getShUsers()));
-				shNewFolder.setFurl(ShURLFormatter.format(shNewFolder.getName()));
+                shFolderRepository.save(shNewFolder);
 
-				ShObject shParentObject = shObjectRepository.findById(objectId).orElse(null);
-				if (shParentObject instanceof ShFolder shParentFolder) {	
-					shNewFolder.setParentFolder(shParentFolder);
-					shNewFolder.setRootFolder((byte) 0);
-					shNewFolder.setShSite(null);
+                shHistoryUtils.commit(shNewFolder, principal, ShHistoryUtils.CREATE);
+              });
 
-				} else if (shParentObject instanceof ShSite shSite) {
-					shNewFolder.setParentFolder(null);
-					shNewFolder.setRootFolder((byte) 1);
-					shNewFolder.setShSite(shSite);
-				}
+      return new ResponseEntity<>(shFolder, HttpStatus.OK);
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
 
-				shFolderRepository.save(shNewFolder);
+  @Operation(summary = "Folder path")
+  @GetMapping("/{id}/path")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShFolderPath shFolderPath(@PathVariable String id) {
+    return shObjectUtils.objectPath(id);
+  }
 
-				shHistoryUtils.commit(shNewFolder, principal, ShHistoryUtils.CREATE);
-			});
+  @Operation(summary = "Folder model")
+  @GetMapping("/model")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShFolder shFolderStructure() {
+    return new ShFolder();
+  }
 
-			return new ResponseEntity<>(shFolder, HttpStatus.OK);
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-	}
+  @Operation(summary = "Export SpreadSheet from Folder")
+  @GetMapping("/{id}/spreadsheet")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public void shFolderSpreadSheet(@PathVariable String id, HttpServletResponse response) {
+    ShFolder shFolder = shFolderRepository.findById(id).orElse(null);
+    if (shFolder != null) shSpreadsheet.generate(shFolder, response);
+  }
 
-	@Operation(summary = "Folder path")
-	@GetMapping("/{id}/path")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShFolderPath shFolderPath(@PathVariable String id) {
-		return shObjectUtils.objectPath(id);
-	}
-
-	@Operation(summary = "Folder model")
-	@GetMapping("/model")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShFolder shFolderStructure() {
-		return new ShFolder();
-
-	}
-
-	@Operation(summary = "Export SpreadSheet from Folder")
-	@GetMapping("/{id}/spreadsheet")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public void shFolderSpreadSheet(@PathVariable String id, HttpServletResponse response) {
-		ShFolder shFolder = shFolderRepository.findById(id).orElse(null);
-		if (shFolder != null)
-			shSpreadsheet.generate(shFolder, response);
-	}
-	@ResponseBody
-	@GetMapping(value = "/{id}/export", produces = "application/zip")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ResponseEntity<StreamingResponseBody> shPostExport(@PathVariable String id, Principal principal,
-			HttpServletResponse response) {
-		if (shObjectUtils.canAccess(principal, id)) {
-			return new ResponseEntity<>(shFolderExport.exportObject(response, id), HttpStatus.OK);
-		} else {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		}	
-	}
+  @ResponseBody
+  @GetMapping(value = "/{id}/export", produces = "application/zip")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ResponseEntity<StreamingResponseBody> shPostExport(
+      @PathVariable String id, Principal principal, HttpServletResponse response) {
+    if (shObjectUtils.canAccess(principal, id)) {
+      return new ResponseEntity<>(shFolderExport.exportObject(response, id), HttpStatus.OK);
+    } else {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+  }
 }

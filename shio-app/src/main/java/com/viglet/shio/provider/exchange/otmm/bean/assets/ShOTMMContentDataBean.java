@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,32 +20,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMContentDataBean {
 
-	@JsonProperty("data_source")
-	private String dataSource;
+  @JsonProperty("data_source")
+  private String dataSource;
 
-	@JsonProperty("temp_file")
-	private boolean tempFile;
+  @JsonProperty("temp_file")
+  private boolean tempFile;
 
-	public String getDataSource() {
-		return dataSource;
-	}
+  public String getDataSource() {
+    return dataSource;
+  }
 
-	public void setDataSource(String dataSource) {
-		this.dataSource = dataSource;
-	}
+  public void setDataSource(String dataSource) {
+    this.dataSource = dataSource;
+  }
 
-	public boolean isTempFile() {
-		return tempFile;
-	}
+  public boolean isTempFile() {
+    return tempFile;
+  }
 
-	public void setTempFile(boolean tempFile) {
-		this.tempFile = tempFile;
-	}
-
-	
+  public void setTempFile(boolean tempFile) {
+    this.tempFile = tempFile;
+  }
 }

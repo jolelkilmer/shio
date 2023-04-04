@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,120 +16,118 @@
  */
 package com.viglet.shio.bean;
 
-import java.util.Date;
-
 import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
+import java.util.Date;
 
 /**
  * @author Alexandre Oliveira
  */
 public class ShPostTinyBean {
 
-	private String id;
+  private String id;
 
-	private String title;
+  private String title;
 
-	private String summary;
+  private String summary;
 
-	private int position;
+  private int position;
 
-	private Date date;
+  private Date date;
 
-	private ShPostType shPostType;
+  private ShPostType shPostType;
 
-	private String objectType;
+  private String objectType;
 
-	private String publishStatus;
+  private String publishStatus;
 
-	private boolean published;
+  private boolean published;
 
-	public ShPostTinyBean(ShPostImpl shPost) {
-		this.id = shPost.getId();
-		this.title = shPost.getTitle();
-		this.summary = shPost.getSummary();
-		this.position = shPost.getPosition();
-		this.date = shPost.getDate();
-		this.objectType = shPost.getObjectType();
-		this.publishStatus = shPost.getPublishStatus();
-		this.published = shPost.isPublished();
+  public ShPostTinyBean(ShPostImpl shPost) {
+    this.id = shPost.getId();
+    this.title = shPost.getTitle();
+    this.summary = shPost.getSummary();
+    this.position = shPost.getPosition();
+    this.date = shPost.getDate();
+    this.objectType = shPost.getObjectType();
+    this.publishStatus = shPost.getPublishStatus();
+    this.published = shPost.isPublished();
 
-		this.shPostType = new ShPostType();
-		this.shPostType.setId(shPost.getShPostType().getId());
-		this.shPostType.setName(shPost.getShPostType().getName());
-		this.shPostType.setTitle(shPost.getShPostType().getTitle());
-	}
-	
-	public String getId() {
-		return id;
-	}
+    this.shPostType = new ShPostType();
+    this.shPostType.setId(shPost.getShPostType().getId());
+    this.shPostType.setName(shPost.getShPostType().getName());
+    this.shPostType.setTitle(shPost.getShPostType().getTitle());
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public String getObjectType() {
-		return objectType;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
+  public String getObjectType() {
+    return objectType;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public void setObjectType(String objectType) {
+    this.objectType = objectType;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public int getPosition() {
-		return position;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
+  public int getPosition() {
+    return position;
+  }
 
-	public Date getDate() {
-		return date;
-	}
+  public void setPosition(int position) {
+    this.position = position;
+  }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public String getSummary() {
-		return summary;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+  public String getSummary() {
+    return summary;
+  }
 
-	public ShPostType getShPostType() {
-		return shPostType;
-	}
+  public void setSummary(String summary) {
+    this.summary = summary;
+  }
 
-	public void setShPostType(ShPostType shPostType) {
-		this.shPostType = shPostType;
-	}
+  public ShPostType getShPostType() {
+    return shPostType;
+  }
 
-	public String getPublishStatus() {
-		return publishStatus;
-	}
+  public void setShPostType(ShPostType shPostType) {
+    this.shPostType = shPostType;
+  }
 
-	public void setPublishStatus(String publishStatus) {
-		this.publishStatus = publishStatus;
-	}
+  public String getPublishStatus() {
+    return publishStatus;
+  }
 
-	public boolean isPublished() {
-		return published;
-	}
+  public void setPublishStatus(String publishStatus) {
+    this.publishStatus = publishStatus;
+  }
 
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
+  public boolean isPublished() {
+    return published;
+  }
 
+  public void setPublished(boolean published) {
+    this.published = published;
+  }
 }

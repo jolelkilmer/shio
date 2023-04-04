@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,18 +22,16 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.graphql.ShGraphQLConstants;
 import com.viglet.shio.graphql.ShGraphQLUtils;
 import com.viglet.shio.graphql.schema.query.type.ShGraphQLQTPlural;
 import com.viglet.shio.graphql.schema.query.type.ShGraphQLQTUnique;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
 import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
-
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLObjectType.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * GraphQL Object Type.
@@ -44,53 +42,81 @@ import graphql.schema.GraphQLObjectType.Builder;
 @Component
 public class ShGraphQLOTPostType {
 
-	@Autowired
-	private ShGraphQLUtils shGraphQLUtils;
-	@Autowired
-	private ShGraphQLQTUnique shGraphQLQTUnique;
-	@Autowired
-	private ShGraphQLQTPlural shGraphQLQTPlural;
-	
-	private GraphQLObjectType createObjectType(ShPostType shPostType) {
-		Builder builder = newObject().name(shPostType.getName().replace("-", "_")).description(shPostType.getDescription());
+  @Autowired private ShGraphQLUtils shGraphQLUtils;
+  @Autowired private ShGraphQLQTUnique shGraphQLQTUnique;
+  @Autowired private ShGraphQLQTPlural shGraphQLQTPlural;
 
-		this.createObjectTypeFields(shPostType, builder);
+  private GraphQLObjectType createObjectType(ShPostType shPostType) {
+    Builder builder =
+        newObject()
+            .name(shPostType.getName().replace("-", "_"))
+            .description(shPostType.getDescription());
 
-		return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
-	}
+    this.createObjectTypeFields(shPostType, builder);
 
-	private void createObjectTypeFields(ShPostType shPostType, Builder builder) {
-		builder.field(newFieldDefinition().name(ShGraphQLConstants.ID).description("Identifier").type(GraphQLID));
-		builder.field(newFieldDefinition().name(ShGraphQLConstants.TITLE).description("System Title").type(GraphQLString));
-		builder.field(newFieldDefinition().name(ShGraphQLConstants.DESCRIPTION).description("System Description")
-				.type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name(ShGraphQLConstants.FURL).description("Friendly URL").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name(ShGraphQLConstants.MODIFIER).description("Modifier").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name(ShGraphQLConstants.PUBLISHER).description("Publisher").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name(ShGraphQLConstants.FOLDER).description("Folder Name").type(GraphQLString));
-		builder.field(
-				newFieldDefinition().name(ShGraphQLConstants.SITE).description("Site Name").type(GraphQLString));
-		
-		for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
-			String postTypeAttrName = shGraphQLUtils.normalizedField(shPostTypeAttr.getName());
-			builder.field(newFieldDefinition().name(postTypeAttrName).description(shPostTypeAttr.getDescription())
-					.type(GraphQLString));
-		}
-	}
-	
-	public void createObjectTypes(Builder queryTypeBuilder,
-			graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder, ShPostType shPostType) {
+    return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
+  }
 
-		GraphQLObjectType graphQLObjectType = this.createObjectType(shPostType);
-		
-		shGraphQLQTUnique.createQueryTypeUnique(queryTypeBuilder, codeRegistryBuilder, shPostType, graphQLObjectType);
+  private void createObjectTypeFields(ShPostType shPostType, Builder builder) {
+    builder.field(
+        newFieldDefinition().name(ShGraphQLConstants.ID).description("Identifier").type(GraphQLID));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.TITLE)
+            .description("System Title")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.DESCRIPTION)
+            .description("System Description")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.FURL)
+            .description("Friendly URL")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.MODIFIER)
+            .description("Modifier")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.PUBLISHER)
+            .description("Publisher")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.FOLDER)
+            .description("Folder Name")
+            .type(GraphQLString));
+    builder.field(
+        newFieldDefinition()
+            .name(ShGraphQLConstants.SITE)
+            .description("Site Name")
+            .type(GraphQLString));
 
-		shGraphQLQTPlural.createQueryTypePlural(queryTypeBuilder, codeRegistryBuilder, shPostType, graphQLObjectType);
+    for (ShPostTypeAttr shPostTypeAttr : shPostType.getShPostTypeAttrs()) {
+      String postTypeAttrName = shGraphQLUtils.normalizedField(shPostTypeAttr.getName());
+      builder.field(
+          newFieldDefinition()
+              .name(postTypeAttrName)
+              .description(shPostTypeAttr.getDescription())
+              .type(GraphQLString));
+    }
+  }
 
-	}
+  public void createObjectTypes(
+      Builder queryTypeBuilder,
+      graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder,
+      ShPostType shPostType) {
 
+    GraphQLObjectType graphQLObjectType = this.createObjectType(shPostType);
+
+    shGraphQLQTUnique.createQueryTypeUnique(
+        queryTypeBuilder, codeRegistryBuilder, shPostType, graphQLObjectType);
+
+    shGraphQLQTPlural.createQueryTypePlural(
+        queryTypeBuilder, codeRegistryBuilder, shPostType, graphQLObjectType);
+  }
 }

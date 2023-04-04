@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,15 @@
  */
 package com.viglet.shio.onstartup.post.type;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viglet.shio.exchange.ShExchange;
 import com.viglet.shio.exchange.post.type.ShPostTypeImport;
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
@@ -34,26 +32,22 @@ import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
 @Component
 public class ShPostTypeOnStartup {
 
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ResourceLoader resourceloader;
-	@Autowired
-	private ShPostTypeImport shPostTypeImport;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ResourceLoader resourceloader;
+  @Autowired private ShPostTypeImport shPostTypeImport;
 
-	public void createDefaultRows() throws IOException {
+  public void createDefaultRows() throws IOException {
 
-		if (shPostTypeRepository.findAll().isEmpty()) {
+    if (shPostTypeRepository.findAll().isEmpty()) {
 
-			InputStreamReader isr = new InputStreamReader(
-					resourceloader.getResource("classpath:/import/post-types.json").getInputStream());
+      InputStreamReader isr =
+          new InputStreamReader(
+              resourceloader.getResource("classpath:/import/post-types.json").getInputStream());
 
-			ObjectMapper mapper = new ObjectMapper();
+      ObjectMapper mapper = new ObjectMapper();
 
-			ShExchange shExchange = mapper.readValue(isr, ShExchange.class);
-			shPostTypeImport.importPostType(shExchange, false);
-
-		}
-
-	}
+      ShExchange shExchange = mapper.readValue(isr, ShExchange.class);
+      shPostTypeImport.importPostType(shExchange, false);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,48 +16,43 @@
  */
 package com.viglet.shio.exchange.post;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.viglet.shio.exchange.object.ShObjectExchange;
+import java.util.Map;
 
 /**
  * @author Alexandre Oliveira
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShPostExchange extends ShObjectExchange {
-	
-	private String folder;
 
-	private String postType;
+  private String folder;
 
-	private Map<String, Object> fields;
+  private String postType;
 
-	public String getFolder() {
-		return folder;
-	}
+  private Map<String, Object> fields;
 
-	public void setFolder(String folder) {
-		this.folder = folder;
-	}
+  public String getFolder() {
+    return folder;
+  }
 
-	public String getPostType() {
-		return postType;
-	}
+  public void setFolder(String folder) {
+    this.folder = folder;
+  }
 
-	public void setPostType(String postType) {
-		this.postType = postType;
-	}
+  public String getPostType() {
+    return postType;
+  }
 
-	public Map<String, Object> getFields() {
-		return fields;
-	}
+  public void setPostType(String postType) {
+    this.postType = postType;
+  }
 
-	public void setFields(Map<String, Object> fields) {
-		this.fields = fields;
-	}
+  public Map<String, Object> getFields() {
+    return fields;
+  }
 
-	
-
-	
+  public void setFields(Map<String, Object> fields) {
+    this.fields = fields;
+  }
 }

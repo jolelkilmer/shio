@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -23,24 +23,23 @@ import java.util.Set;
  */
 public class ShConsoleSecurityBean {
 
-	private Set<String> shUsers;
-	
-	private Set<String> shGroups;
+  private Set<String> shUsers;
 
-	public Set<String> getShUsers() {
-		return shUsers;
-	}
+  private Set<String> shGroups;
 
-	public void setShUsers(Set<String> shUsers) {
-		this.shUsers = shUsers;
-	}
+  public Set<String> getShUsers() {
+    return shUsers;
+  }
 
-	public Set<String> getShGroups() {
-		return shGroups;
-	}
+  public void setShUsers(Set<String> shUsers) {
+    this.shUsers = shUsers;
+  }
 
-	public void setShGroups(Set<String> shGroups) {
-		this.shGroups = shGroups;
-	}
+  public Set<String> getShGroups() {
+    return shGroups;
+  }
 
+  public void setShGroups(Set<String> shGroups) {
+    this.shGroups = shGroups;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,6 @@
  */
 package com.viglet.shio.website.component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.post.ShPost;
 import com.viglet.shio.persistence.model.post.ShPostAttr;
@@ -33,6 +25,12 @@ import com.viglet.shio.persistence.repository.post.ShPostAttrRepository;
 import com.viglet.shio.persistence.repository.post.ShPostRepository;
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
 import com.viglet.shio.website.utils.ShSitesPostUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
@@ -40,63 +38,61 @@ import com.viglet.shio.website.utils.ShSitesPostUtils;
 @Component
 public class ShQueryComponent {
 
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShPostAttrRepository shPostAttrRepository;
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShSitesPostUtils shSitesPostUtils;
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShPostAttrRepository shPostAttrRepository;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShSitesPostUtils shSitesPostUtils;
 
-	public List<Map<String, ShPostAttr>> findByFolderName(String folderId, String postTypeName) {
+  public List<Map<String, ShPostAttr>> findByFolderName(String folderId, String postTypeName) {
 
-		ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
-		ShFolder shFolder = shFolderRepository.findById(folderId).orElse(null);
-		List<ShPost> shPostList = shSitesPostUtils
-				.getPostsByStage(shPostRepository.findByShFolderAndShPostTypeOrderByPositionAsc(shFolder, shPostType));
+    ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
+    ShFolder shFolder = shFolderRepository.findById(folderId).orElse(null);
+    List<ShPost> shPostList =
+        shSitesPostUtils.getPostsByStage(
+            shPostRepository.findByShFolderAndShPostTypeOrderByPositionAsc(shFolder, shPostType));
 
-		List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
-		for (ShPost shPost : shPostList) {
-			Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
-			shPosts.add(shPostObject);
-		}
+    List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
+    for (ShPost shPost : shPostList) {
+      Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
+      shPosts.add(shPostObject);
+    }
 
-		return shPosts;
-	}
+    return shPosts;
+  }
 
-	public List<Map<String, ShPostAttr>> findByPostTypeName(String postTypeName) {
+  public List<Map<String, ShPostAttr>> findByPostTypeName(String postTypeName) {
 
-		ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
-		List<ShPost> shPostList = shPostRepository.findByShPostType(shPostType);
+    ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
+    List<ShPost> shPostList = shPostRepository.findByShPostType(shPostType);
 
-		List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
-		for (ShPost shPost : shPostList) {
-			Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
-			shPosts.add(shPostObject);
-		}
+    List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
+    for (ShPost shPost : shPostList) {
+      Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
+      shPosts.add(shPostObject);
+    }
 
-		return shPosts;
-	}
+    return shPosts;
+  }
 
-	public List<Map<String, ShPostAttr>> findByPostTypeNameIn(String postTypeName, Set<String> arrayValue) {
+  public List<Map<String, ShPostAttr>> findByPostTypeNameIn(
+      String postTypeName, Set<String> arrayValue) {
 
-		ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
-		Set<ShPostAttr> shPostAttrs = shPostAttrRepository.findByArrayValueIn(arrayValue);
+    ShPostType shPostType = shPostTypeRepository.findByName(postTypeName);
+    Set<ShPostAttr> shPostAttrs = shPostAttrRepository.findByArrayValueIn(arrayValue);
 
-		List<ShPostAttr> shPostAttrList = new ArrayList<>();
-		shPostAttrList.addAll(shPostAttrs);
+    List<ShPostAttr> shPostAttrList = new ArrayList<>();
+    shPostAttrList.addAll(shPostAttrs);
 
-		Set<ShPost> shPostList = shPostRepository.findByShPostTypeAndShPostAttrsIn(shPostType, shPostAttrList);
+    Set<ShPost> shPostList =
+        shPostRepository.findByShPostTypeAndShPostAttrsIn(shPostType, shPostAttrList);
 
-		List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
-		for (ShPost shPost : shPostList) {
-			Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
-			shPosts.add(shPostObject);
-		}
+    List<Map<String, ShPostAttr>> shPosts = new ArrayList<>();
+    for (ShPost shPost : shPostList) {
+      Map<String, ShPostAttr> shPostObject = shSitesPostUtils.postToMap(shPost);
+      shPosts.add(shPostObject);
+    }
 
-		return shPosts;
-	}
+    return shPosts;
+  }
 }

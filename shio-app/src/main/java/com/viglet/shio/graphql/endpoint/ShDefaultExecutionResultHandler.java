@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,19 +19,17 @@ package com.viglet.shio.graphql.endpoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.ExecutionResult;
 import graphql.spring.web.servlet.ExecutionResultHandler;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class ShDefaultExecutionResultHandler implements ExecutionResultHandler {
 
-    @Autowired
-    ObjectMapper objectMapper;
+  @Autowired ObjectMapper objectMapper;
 
-    @Override
-    public Object handleExecutionResult(CompletableFuture<ExecutionResult> executionResultCF) {
-        return executionResultCF.thenApply(ExecutionResult::toSpecification);
-    }
+  @Override
+  public Object handleExecutionResult(CompletableFuture<ExecutionResult> executionResultCF) {
+    return executionResultCF.thenApply(ExecutionResult::toSpecification);
+  }
 }

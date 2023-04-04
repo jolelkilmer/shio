@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,34 +16,32 @@
  */
 package com.viglet.shio.exchange.file;
 
-import java.io.File;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.File;
 
 /**
  * @author Alexandre Oliveira
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShFileExchange {
-	
-	private String id;
 
-	private File file;
+  private String id;
 
-	public String getId() {
-		return id;
-	}
+  private File file;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public File getFile() {
-		return file;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setFile(File file) {
-		this.file = file;
-	}
+  public File getFile() {
+    return file;
+  }
 
+  public void setFile(File file) {
+    this.file = file;
+  }
 }

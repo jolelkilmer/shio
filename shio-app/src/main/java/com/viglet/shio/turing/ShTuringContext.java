@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,9 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,71 +46,78 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/__tur/sn/{siteName}")
 public class ShTuringContext {
-	private static final Log logger = LogFactory.getLog(ShTuringContext.class);
-	private static final String TURING_ENDPOINT = "http://localhost:2700/api/sn/";
+  private static final Log logger = LogFactory.getLog(ShTuringContext.class);
+  private static final String TURING_ENDPOINT = "http://localhost:2700/api/sn/";
 
-	@GetMapping("/search")
-	public ResponseEntity<Object> turSNSiteSearchSelect(@PathVariable String siteName,
-			@RequestParam(required = false, name = "q") String q,
-			@RequestParam(required = false, name = "p") String strCurrentPage,
-			@RequestParam(required = false, name = "fq[]") List<String> fq,
-			@RequestParam(required = false, name = "sort") String sort, HttpServletRequest request) {
+  @GetMapping("/search")
+  public ResponseEntity<Object> turSNSiteSearchSelect(
+      @PathVariable String siteName,
+      @RequestParam(required = false, name = "q") String q,
+      @RequestParam(required = false, name = "p") String strCurrentPage,
+      @RequestParam(required = false, name = "fq[]") List<String> fq,
+      @RequestParam(required = false, name = "sort") String sort,
+      HttpServletRequest request) {
 
-		URIBuilder turingURL = null;
-		try {
-			turingURL = new URIBuilder(TURING_ENDPOINT + siteName + "/search").addParameter("q", q)
-					.addParameter("p", strCurrentPage).addParameter("sort", sort);
+    URIBuilder turingURL = null;
+    try {
+      turingURL =
+          new URIBuilder(TURING_ENDPOINT + siteName + "/search")
+              .addParameter("q", q)
+              .addParameter("p", strCurrentPage)
+              .addParameter("sort", sort);
 
-			if (turingURL != null) {
-				if (fq != null) {
-					for (String fqItem : fq) {
-						turingURL.addParameter("fq[]", fqItem);
-					}
-				}
+      if (turingURL != null) {
+        if (fq != null) {
+          for (String fqItem : fq) {
+            turingURL.addParameter("fq[]", fqItem);
+          }
+        }
 
-				final HttpHeaders httpHeaders = new HttpHeaders();
-				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        final HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-				return new ResponseEntity<>(this.getResults(turingURL.build().toString()), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(
+            this.getResults(turingURL.build().toString()), httpHeaders, HttpStatus.OK);
+      }
+    } catch (URISyntaxException e) {
+      logger.error(e);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
 
-			}
-		} catch (URISyntaxException e) {
-			logger.error(e);
+  @GetMapping("/ac")
+  public ResponseEntity<Object> turSNSiteAutoComplete(
+      @PathVariable String siteName,
+      @RequestParam(required = false, name = "q") String q,
+      HttpServletRequest request) {
+    URIBuilder turingURL;
+    try {
+      turingURL = new URIBuilder(TURING_ENDPOINT + siteName + "/ac").addParameter("q", q);
+      final HttpHeaders httpHeaders = new HttpHeaders();
+      httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+      return new ResponseEntity<>(
+          this.getResults(turingURL.build().toString()), httpHeaders, HttpStatus.OK);
+    } catch (URISyntaxException e) {
+      logger.error(e);
+    }
 
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
 
-	@GetMapping("/ac")
-	public ResponseEntity<Object> turSNSiteAutoComplete(@PathVariable String siteName,
-			@RequestParam(required = false, name = "q") String q, HttpServletRequest request) {
-		URIBuilder turingURL;
-		try {
-			turingURL = new URIBuilder(TURING_ENDPOINT + siteName + "/ac").addParameter("q", q);
-			final HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			return new ResponseEntity<>(this.getResults(turingURL.build().toString()), httpHeaders, HttpStatus.OK);
-		} catch (URISyntaxException e) {
-			logger.error(e);
-		}
-
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
-	private String getResults(String url) {
-		StringBuilder result = new StringBuilder();
-		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			HttpResponse response = client.execute(new HttpGet(url));
-			if (response != null) {
-				try (BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-					String line = StringUtils.EMPTY;
-					while (StringUtils.isNotEmpty((line = rd.readLine())))
-						result.append(line);
-				}
-			}
-		} catch (IOException e) {
-			logger.error(e);
-		}
-		return result.toString();
-	}
+  private String getResults(String url) {
+    StringBuilder result = new StringBuilder();
+    try (CloseableHttpClient client = HttpClients.createDefault()) {
+      HttpResponse response = client.execute(new HttpGet(url));
+      if (response != null) {
+        try (BufferedReader rd =
+            new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+          String line = StringUtils.EMPTY;
+          while (StringUtils.isNotEmpty((line = rd.readLine()))) result.append(line);
+        }
+      }
+    } catch (IOException e) {
+      logger.error(e);
+    }
+    return result.toString();
+  }
 }

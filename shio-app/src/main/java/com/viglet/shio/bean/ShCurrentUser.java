@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,43 +21,43 @@ package com.viglet.shio.bean;
  */
 public class ShCurrentUser {
 
-	private String username;
-	
-	private String firstName;
-	
-	private String lastName;
-	
-	private boolean admin;
+  private String username;
 
-	public String getUsername() {
-		return username;
-	}
+  private String firstName;
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  private String lastName;
 
-	public String getFirstName() {
-		return firstName;
-	}
+  private boolean admin;
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public String getLastName() {
-		return lastName;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public String getFirstName() {
+    return firstName;
+  }
 
-	public boolean isAdmin() {
-		return admin;
-	}
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}	
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public boolean isAdmin() {
+    return admin;
+  }
+
+  public void setAdmin(boolean admin) {
+    this.admin = admin;
+  }
 }

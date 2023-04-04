@@ -1,115 +1,112 @@
 package com.viglet.shio.stock.beans;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class ShSPhotoBean {
-	private String name;
-	
-	private Date date;
-	
-	@JsonProperty("preview_xxs")
-	private ShSPhotoPreviewBean previewXXS;
+  private String name;
 
-	@JsonProperty("preview_xs")
-	private ShSPhotoPreviewBean previewXS;
+  private Date date;
 
-	@JsonProperty("preview_s")
-	private ShSPhotoPreviewBean previewS;
-	
-	@JsonProperty("preview_m")
-	private ShSPhotoPreviewBean previewM;
-	
-	@JsonProperty("preview_l")
-	private ShSPhotoPreviewBean previewL;
-	
-	@JsonProperty("preview_xl")
-	private ShSPhotoPreviewBean previewXL;
-	
-	private ShSPhotoPreviewBean raw;
+  @JsonProperty("preview_xxs")
+  private ShSPhotoPreviewBean previewXXS;
 
-	private String dominantColor;
+  @JsonProperty("preview_xs")
+  private ShSPhotoPreviewBean previewXS;
 
-	public String getName() {
-		return name;
-	}
+  @JsonProperty("preview_s")
+  private ShSPhotoPreviewBean previewS;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  @JsonProperty("preview_m")
+  private ShSPhotoPreviewBean previewM;
 
-	public Date getDate() {
-		return date;
-	}
+  @JsonProperty("preview_l")
+  private ShSPhotoPreviewBean previewL;
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  @JsonProperty("preview_xl")
+  private ShSPhotoPreviewBean previewXL;
 
-	public ShSPhotoPreviewBean getPreviewXXS() {
-		return previewXXS;
-	}
+  private ShSPhotoPreviewBean raw;
 
-	public void setPreviewXXS(ShSPhotoPreviewBean previewXXS) {
-		this.previewXXS = previewXXS;
-	}
+  private String dominantColor;
 
-	public ShSPhotoPreviewBean getPreviewXS() {
-		return previewXS;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setPreviewXS(ShSPhotoPreviewBean previewXS) {
-		this.previewXS = previewXS;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public ShSPhotoPreviewBean getPreviewS() {
-		return previewS;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public void setPreviewS(ShSPhotoPreviewBean previewS) {
-		this.previewS = previewS;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public ShSPhotoPreviewBean getPreviewM() {
-		return previewM;
-	}
+  public ShSPhotoPreviewBean getPreviewXXS() {
+    return previewXXS;
+  }
 
-	public void setPreviewM(ShSPhotoPreviewBean previewM) {
-		this.previewM = previewM;
-	}
+  public void setPreviewXXS(ShSPhotoPreviewBean previewXXS) {
+    this.previewXXS = previewXXS;
+  }
 
-	public ShSPhotoPreviewBean getPreviewL() {
-		return previewL;
-	}
+  public ShSPhotoPreviewBean getPreviewXS() {
+    return previewXS;
+  }
 
-	public void setPreviewL(ShSPhotoPreviewBean previewL) {
-		this.previewL = previewL;
-	}
+  public void setPreviewXS(ShSPhotoPreviewBean previewXS) {
+    this.previewXS = previewXS;
+  }
 
-	public ShSPhotoPreviewBean getPreviewXL() {
-		return previewXL;
-	}
+  public ShSPhotoPreviewBean getPreviewS() {
+    return previewS;
+  }
 
-	public void setPreviewXL(ShSPhotoPreviewBean previewXL) {
-		this.previewXL = previewXL;
-	}
+  public void setPreviewS(ShSPhotoPreviewBean previewS) {
+    this.previewS = previewS;
+  }
 
-	public ShSPhotoPreviewBean getRaw() {
-		return raw;
-	}
+  public ShSPhotoPreviewBean getPreviewM() {
+    return previewM;
+  }
 
-	public void setRaw(ShSPhotoPreviewBean raw) {
-		this.raw = raw;
-	}
+  public void setPreviewM(ShSPhotoPreviewBean previewM) {
+    this.previewM = previewM;
+  }
 
-	public String getDominantColor() {
-		return dominantColor;
-	}
+  public ShSPhotoPreviewBean getPreviewL() {
+    return previewL;
+  }
 
-	public void setDominantColor(String dominantColor) {
-		this.dominantColor = dominantColor;
-	}
+  public void setPreviewL(ShSPhotoPreviewBean previewL) {
+    this.previewL = previewL;
+  }
 
-	
+  public ShSPhotoPreviewBean getPreviewXL() {
+    return previewXL;
+  }
+
+  public void setPreviewXL(ShSPhotoPreviewBean previewXL) {
+    this.previewXL = previewXL;
+  }
+
+  public ShSPhotoPreviewBean getRaw() {
+    return raw;
+  }
+
+  public void setRaw(ShSPhotoPreviewBean raw) {
+    this.raw = raw;
+  }
+
+  public String getDominantColor() {
+    return dominantColor;
+  }
+
+  public void setDominantColor(String dominantColor) {
+    this.dominantColor = dominantColor;
+  }
 }

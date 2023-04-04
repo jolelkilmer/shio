@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,20 +20,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMAssetDetailBean {
 
-	@JsonProperty("asset_resource")
-	private ShOTMMAssetResourceBean assetResource;
+  @JsonProperty("asset_resource")
+  private ShOTMMAssetResourceBean assetResource;
 
-	public ShOTMMAssetResourceBean getAssetResource() {
-		return assetResource;
-	}
+  public ShOTMMAssetResourceBean getAssetResource() {
+    return assetResource;
+  }
 
-	public void setAssetResource(ShOTMMAssetResourceBean assetResource) {
-		this.assetResource = assetResource;
-	}
-
+  public void setAssetResource(ShOTMMAssetResourceBean assetResource) {
+    this.assetResource = assetResource;
+  }
 }

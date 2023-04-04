@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,11 +21,11 @@ package com.viglet.shio.object;
  */
 public class ShObjectPublishStatus {
 
-	private ShObjectPublishStatus() {
-		throw new IllegalStateException("Object Publish Status Constants class");
-	}
+  private ShObjectPublishStatus() {
+    throw new IllegalStateException("Object Publish Status Constants class");
+  }
 
-	public static final String PUBLISH = "PUBLISH";
-	public static final String UNPUBLISH = "UNPUBLISH";
-	public static final String DRAFT = "DRAFT";
+  public static final String PUBLISH = "PUBLISH";
+  public static final String UNPUBLISH = "UNPUBLISH";
+  public static final String DRAFT = "DRAFT";
 }

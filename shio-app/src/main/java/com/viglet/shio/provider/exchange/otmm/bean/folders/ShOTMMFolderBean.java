@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,27 +21,25 @@ import com.viglet.shio.provider.exchange.otmm.bean.object.ShOTMMObjectBean;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMFolderBean extends ShOTMMObjectBean {
 
-	@JsonProperty("data_type")
-	private String dataType;
+  @JsonProperty("data_type")
+  private String dataType;
 
-	@JsonProperty("container_child_counts")
-	private ShOTMMContainerChildCountsBean containerChildCounts;
+  @JsonProperty("container_child_counts")
+  private ShOTMMContainerChildCountsBean containerChildCounts;
 
-	@JsonProperty("container_id")
-	private String containerId;
+  @JsonProperty("container_id")
+  private String containerId;
 
-	@JsonProperty("container_type_id")
-	private String containerTypeId;
+  @JsonProperty("container_type_id")
+  private String containerTypeId;
 
-	@JsonProperty("container_type_name")
-	private String containerTypeName;
+  @JsonProperty("container_type_name")
+  private String containerTypeName;
 
-	@JsonProperty("in_review")
-	private boolean inReview;
-
+  @JsonProperty("in_review")
+  private boolean inReview;
 }

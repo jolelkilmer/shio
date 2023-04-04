@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,23 +21,23 @@ package com.viglet.shio.provider.auth.otds.bean;
  */
 public class ShOTDSValuesBean {
 
-	private String name;
-	
-	private Object[] values;
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  private Object[] values;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public Object[] getValues() {
-		return values;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setValues(Object[] values) {
-		this.values = values;
-	}
+  public Object[] getValues() {
+    return values;
+  }
+
+  public void setValues(Object[] values) {
+    this.values = values;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,21 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.viglet.shio.exchange.folder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.viglet.shio.exchange.ShExchange;
 import com.viglet.shio.exchange.ShExchangeFilesDirs;
@@ -46,130 +31,141 @@ import com.viglet.shio.persistence.model.site.ShSite;
 import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
 import com.viglet.shio.persistence.repository.post.ShPostRepository;
 import com.viglet.shio.utils.ShFolderUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShFolderExport {
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShPostExport shPostExport;
-	@Autowired
-	private ShPostTypeExport shPostTypeExport;
-	@Autowired
-	private ShExchangeUtils shExchangeUtils;
-	@Autowired
-	private ShFolderUtils shFolderUtils;
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShPostExport shPostExport;
+  @Autowired private ShPostTypeExport shPostTypeExport;
+  @Autowired private ShExchangeUtils shExchangeUtils;
+  @Autowired private ShFolderUtils shFolderUtils;
 
-	public ShExchange shFolderExchangeIterate(Set<ShFolder> shFolders) {
-		ShExchange shExchange = new ShExchange();
-		List<ShFolderExchange> shFolderExchanges = new ArrayList<>();
-		List<ShPostExchange> shPostExchanges = new ArrayList<>();
-		List<ShFileExchange> files = new ArrayList<>();
-		Map<String, ShPostTypeExchange> shPostTypeExchanges = new HashMap<>();
-		for (ShFolder shFolder : shFolders) {
+  public ShExchange shFolderExchangeIterate(Set<ShFolder> shFolders) {
+    ShExchange shExchange = new ShExchange();
+    List<ShFolderExchange> shFolderExchanges = new ArrayList<>();
+    List<ShPostExchange> shPostExchanges = new ArrayList<>();
+    List<ShFileExchange> files = new ArrayList<>();
+    Map<String, ShPostTypeExchange> shPostTypeExchanges = new HashMap<>();
+    for (ShFolder shFolder : shFolders) {
 
-			for (ShPost shPost : shPostRepository.findByShFolder(shFolder)) {
-				ShPostExchange shPostExchange = exportShPost(files, shPostTypeExchanges, shPost);
+      for (ShPost shPost : shPostRepository.findByShFolder(shFolder)) {
+        ShPostExchange shPostExchange = exportShPost(files, shPostTypeExchanges, shPost);
 
-				shPostExchanges.add(shPostExchange);
-			}
-			ShFolderExchange shFolderExchangeChild = new ShFolderExchange();
-			shFolderExchangeChild.setId(shFolder.getId());
-			shFolderExchangeChild.setDate(shFolder.getDate());
-			shFolderExchangeChild.setName(shFolder.getName());
-			shFolderExchangeChild.setOwner(shFolder.getOwner());
-			shFolderExchangeChild.setFurl(shFolder.getFurl());
-			shFolderExchangeChild.setPosition(shFolder.getPosition());
-			
-			if (shFolder.getParentFolder() != null) {
-				shFolderExchangeChild.setParentFolder(shFolder.getParentFolder().getId());
-			}
-			shFolderExchanges.add(shFolderExchangeChild);
-			ShExchange shExchangeChild = this.shFolderExchangeNested(shFolder);
-			shFolderExchanges.addAll(shExchangeChild.getFolders());
-			shPostExchanges.addAll(shExchangeChild.getPosts());
+        shPostExchanges.add(shPostExchange);
+      }
+      ShFolderExchange shFolderExchangeChild = new ShFolderExchange();
+      shFolderExchangeChild.setId(shFolder.getId());
+      shFolderExchangeChild.setDate(shFolder.getDate());
+      shFolderExchangeChild.setName(shFolder.getName());
+      shFolderExchangeChild.setOwner(shFolder.getOwner());
+      shFolderExchangeChild.setFurl(shFolder.getFurl());
+      shFolderExchangeChild.setPosition(shFolder.getPosition());
 
-			for (ShPostTypeExchange shPostTypeExchange : shExchangeChild.getPostTypes()) {
-				if (!shPostTypeExchanges.containsKey(shPostTypeExchange.getName())) {
-					shPostTypeExchanges.put(shPostTypeExchange.getName(), shPostTypeExchange);
-				}
+      if (shFolder.getParentFolder() != null) {
+        shFolderExchangeChild.setParentFolder(shFolder.getParentFolder().getId());
+      }
+      shFolderExchanges.add(shFolderExchangeChild);
+      ShExchange shExchangeChild = this.shFolderExchangeNested(shFolder);
+      shFolderExchanges.addAll(shExchangeChild.getFolders());
+      shPostExchanges.addAll(shExchangeChild.getPosts());
 
-			}
-			files.addAll(shExchangeChild.getFiles());
-		}
-		shExchange.setFolders(shFolderExchanges);
-		shExchange.setPosts(shPostExchanges);
-		shExchange.setFiles(files);
-		shExchange.setPostTypes(new ArrayList<>(shPostTypeExchanges.values()));
-		return shExchange;
-	}
+      for (ShPostTypeExchange shPostTypeExchange : shExchangeChild.getPostTypes()) {
+        if (!shPostTypeExchanges.containsKey(shPostTypeExchange.getName())) {
+          shPostTypeExchanges.put(shPostTypeExchange.getName(), shPostTypeExchange);
+        }
+      }
+      files.addAll(shExchangeChild.getFiles());
+    }
+    shExchange.setFolders(shFolderExchanges);
+    shExchange.setPosts(shPostExchanges);
+    shExchange.setFiles(files);
+    shExchange.setPostTypes(new ArrayList<>(shPostTypeExchanges.values()));
+    return shExchange;
+  }
 
-	private ShPostExchange exportShPost(List<ShFileExchange> files, Map<String, ShPostTypeExchange> shPostTypeExchanges,
-			ShPost shPost) {
-		ShPostExchange shPostExchange = new ShPostExchange();
-		shPostExchange.setId(shPost.getId());
-		shPostExchange.setFolder(shPost.getShFolder().getId());
-		shPostExchange.setDate(shPost.getDate());
-		shPostExchange.setPostType(shPost.getShPostType().getName());
-		shPostExchange.setOwner(shPost.getOwner());
-		shPostExchange.setFurl(shPost.getFurl());
-		shPostExchange.setPosition(shPost.getPosition());
+  private ShPostExchange exportShPost(
+      List<ShFileExchange> files,
+      Map<String, ShPostTypeExchange> shPostTypeExchanges,
+      ShPost shPost) {
+    ShPostExchange shPostExchange = new ShPostExchange();
+    shPostExchange.setId(shPost.getId());
+    shPostExchange.setFolder(shPost.getShFolder().getId());
+    shPostExchange.setDate(shPost.getDate());
+    shPostExchange.setPostType(shPost.getShPostType().getName());
+    shPostExchange.setOwner(shPost.getOwner());
+    shPostExchange.setFurl(shPost.getFurl());
+    shPostExchange.setPosition(shPost.getPosition());
 
-		if (!shPostTypeExchanges.containsKey(shPost.getShPostType().getName())) {
-			shPostTypeExchanges.put(shPost.getShPostType().getName(),
-					shPostTypeExport.exportPostType(shPost.getShPostType()));
-		}
-		Map<String, Object> fields = new HashMap<>();
+    if (!shPostTypeExchanges.containsKey(shPost.getShPostType().getName())) {
+      shPostTypeExchanges.put(
+          shPost.getShPostType().getName(),
+          shPostTypeExport.exportPostType(shPost.getShPostType()));
+    }
+    Map<String, Object> fields = new HashMap<>();
 
-		shPostExport.shPostAttrExchangeIterate(shPost, fields, files);
+    shPostExport.shPostAttrExchangeIterate(shPost, fields, files);
 
-		shPostExchange.setFields(fields);
-		return shPostExchange;
-	}
+    shPostExchange.setFields(fields);
+    return shPostExchange;
+  }
 
-	public ShExchange shFolderExchangeNested(ShFolder shFolder) {
-		Set<ShFolder> childFolders = shFolderRepository.findByParentFolder(shFolder);
-		return this.shFolderExchangeIterate(childFolders);
-	}
+  public ShExchange shFolderExchangeNested(ShFolder shFolder) {
+    Set<ShFolder> childFolders = shFolderRepository.findByParentFolder(shFolder);
+    return this.shFolderExchangeIterate(childFolders);
+  }
 
-	public StreamingResponseBody exportObject(HttpServletResponse response, String id) {
-		Optional<ShFolder> shFolder = shFolderRepository.findById(id);
-		if (shFolder.isPresent()) {
-			
-			ShExchangeFilesDirs shExchangeFilesDirs = new ShExchangeFilesDirs();
-			if (shExchangeFilesDirs.generate()) {
-				Set<ShFolder> folders = new HashSet<>();
-				folders.add(shFolder.get());
-				ShExchange shExchange = this.shFolderExchangeIterate(folders);
-				if (shFolder.get().getParentFolder() == null) {
-					ShSite shSite = shFolderUtils.getSite(shFolder.get());
-					ShSiteExchange shSiteExchange = new ShSiteExchange();
-					shSiteExchange.setId(shSite.getId());
-					shSiteExchange.setName(shSite.getName());
-					shSiteExchange.setUrl(shSite.getUrl());
-					shSiteExchange.setDescription(shSite.getDescription());
-					shSiteExchange.setPostTypeLayout(shSite.getPostTypeLayout());
-					shSiteExchange.setSearchablePostTypes(shSite.getSearchablePostTypes());
-					shSiteExchange.setDate(shSite.getDate());
-					shSiteExchange.setRootFolders(Arrays.asList(shFolder.get().getId()));
-					shSiteExchange.setOwner(shSite.getOwner());
-					shSiteExchange.setFurl(shSite.getFurl());
+  public StreamingResponseBody exportObject(HttpServletResponse response, String id) {
+    Optional<ShFolder> shFolder = shFolderRepository.findById(id);
+    if (shFolder.isPresent()) {
 
-					List<ShSiteExchange> shSiteExchanges = new ArrayList<>();
-					shSiteExchanges.add(shSiteExchange);
-					shExchange.setSites(shSiteExchanges);
-				}
-				
-				return shExchangeUtils.downloadZipFile(String.format("%s_folder", shFolder.get().getFurl()), response,
-						shExchange, shExchangeFilesDirs);
-			}
-		}
+      ShExchangeFilesDirs shExchangeFilesDirs = new ShExchangeFilesDirs();
+      if (shExchangeFilesDirs.generate()) {
+        Set<ShFolder> folders = new HashSet<>();
+        folders.add(shFolder.get());
+        ShExchange shExchange = this.shFolderExchangeIterate(folders);
+        if (shFolder.get().getParentFolder() == null) {
+          ShSite shSite = shFolderUtils.getSite(shFolder.get());
+          ShSiteExchange shSiteExchange = new ShSiteExchange();
+          shSiteExchange.setId(shSite.getId());
+          shSiteExchange.setName(shSite.getName());
+          shSiteExchange.setUrl(shSite.getUrl());
+          shSiteExchange.setDescription(shSite.getDescription());
+          shSiteExchange.setPostTypeLayout(shSite.getPostTypeLayout());
+          shSiteExchange.setSearchablePostTypes(shSite.getSearchablePostTypes());
+          shSiteExchange.setDate(shSite.getDate());
+          shSiteExchange.setRootFolders(Arrays.asList(shFolder.get().getId()));
+          shSiteExchange.setOwner(shSite.getOwner());
+          shSiteExchange.setFurl(shSite.getFurl());
 
-		return null;
-	}
+          List<ShSiteExchange> shSiteExchanges = new ArrayList<>();
+          shSiteExchanges.add(shSiteExchange);
+          shExchange.setSites(shSiteExchanges);
+        }
+
+        return shExchangeUtils.downloadZipFile(
+            String.format("%s_folder", shFolder.get().getFurl()),
+            response,
+            shExchange,
+            shExchangeFilesDirs);
+      }
+    }
+
+    return null;
+  }
 }

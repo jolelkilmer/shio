@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,18 +18,16 @@ package com.viglet.shio.provider.exchange.otcs.bean.result;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSMultilingualBean {
-	private String en;
+  private String en;
 
-	public String getEn() {
-		return en;
-	}
+  public String getEn() {
+    return en;
+  }
 
-	public void setEn(String en) {
-		this.en = en;
-	}
-	
+  public void setEn(String en) {
+    this.en = en;
+  }
 }

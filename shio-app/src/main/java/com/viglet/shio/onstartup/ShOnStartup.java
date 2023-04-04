@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,13 +16,6 @@
  */
 package com.viglet.shio.onstartup;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.onstartup.post.type.ShPostTypeOnStartup;
 import com.viglet.shio.onstartup.provider.auth.ShAuthProviderInstanceOnStartup;
 import com.viglet.shio.onstartup.provider.auth.ShAuthProviderVendorOnStartup;
@@ -36,63 +29,54 @@ import com.viglet.shio.onstartup.user.ShUserOnStartup;
 import com.viglet.shio.onstartup.widget.ShWidgetOnStartup;
 import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
 import com.viglet.shio.property.ShConfigProperties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShOnStartup implements ApplicationRunner {
-	private static final Logger logger = LogManager.getLogger(ShOnStartup.class);
-	@Autowired
-	private ShConfigProperties shConfigProperties;
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
-	@Autowired
-	private ShLocaleOnStartup shLocaleOnStartup;
-	@Autowired
-	private ShWidgetOnStartup shWidgetOnStartup;
-	@Autowired
-	private ShPostTypeOnStartup shPostTypeOnStartup;
-	@Autowired
-	private ShConfigVarOnStartup shConfigVarOnStartup;
-	@Autowired
-	private ShSiteOnStartup shSiteOnStartup;
-	@Autowired
-	private ShGroupOnStartup shGroupOnStartup;
-	@Autowired
-	private ShUserOnStartup shUserOnStartup;
-	@Autowired
-	private ShAuthProviderVendorOnStartup shAuthProviderVendorOnStartup;
-	@Autowired
-	private ShAuthProviderInstanceOnStartup shAuthProviderInstanceOnStartup;
-	@Autowired
-	private ShExchangeProviderVendorOnStartup shExchangeProviderVendorOnStartup;
-	@Autowired
-	private ShExchangeProviderInstanceOnStartup shExchangeProviderInstanceOnStartup;
+  private static final Logger logger = LogManager.getLogger(ShOnStartup.class);
+  @Autowired private ShConfigProperties shConfigProperties;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
+  @Autowired private ShLocaleOnStartup shLocaleOnStartup;
+  @Autowired private ShWidgetOnStartup shWidgetOnStartup;
+  @Autowired private ShPostTypeOnStartup shPostTypeOnStartup;
+  @Autowired private ShConfigVarOnStartup shConfigVarOnStartup;
+  @Autowired private ShSiteOnStartup shSiteOnStartup;
+  @Autowired private ShGroupOnStartup shGroupOnStartup;
+  @Autowired private ShUserOnStartup shUserOnStartup;
+  @Autowired private ShAuthProviderVendorOnStartup shAuthProviderVendorOnStartup;
+  @Autowired private ShAuthProviderInstanceOnStartup shAuthProviderInstanceOnStartup;
+  @Autowired private ShExchangeProviderVendorOnStartup shExchangeProviderVendorOnStartup;
+  @Autowired private ShExchangeProviderInstanceOnStartup shExchangeProviderInstanceOnStartup;
 
-	@Override
-	public void run(ApplicationArguments arg0) throws Exception {
+  @Override
+  public void run(ApplicationArguments arg0) throws Exception {
 
-		if (!shConfigVarRepository.existsByPathAndName(shConfigProperties.getSystem(),
-				ShConfigVarOnStartup.FIRST_TIME_NAME)) {
+    if (!shConfigVarRepository.existsByPathAndName(
+        shConfigProperties.getSystem(), ShConfigVarOnStartup.FIRST_TIME_NAME)) {
 
-			logger.info("First Time Configuration ...");
+      logger.info("First Time Configuration ...");
 
-			shLocaleOnStartup.createDefaultRows();
-			shWidgetOnStartup.createDefaultRows();
-			shPostTypeOnStartup.createDefaultRows();
-			shGroupOnStartup.createDefaultRows();
-			shUserOnStartup.createDefaultRows();
-			shAuthProviderVendorOnStartup.createDefaultRows();
-			shAuthProviderInstanceOnStartup.createDefaultRows();
-			shExchangeProviderVendorOnStartup.createDefaultRows();
-			shExchangeProviderInstanceOnStartup.createDefaultRows();
-			shConfigVarOnStartup.createDefaultRows();
-			shSiteOnStartup.createDefaultRows();
+      shLocaleOnStartup.createDefaultRows();
+      shWidgetOnStartup.createDefaultRows();
+      shPostTypeOnStartup.createDefaultRows();
+      shGroupOnStartup.createDefaultRows();
+      shUserOnStartup.createDefaultRows();
+      shAuthProviderVendorOnStartup.createDefaultRows();
+      shAuthProviderInstanceOnStartup.createDefaultRows();
+      shExchangeProviderVendorOnStartup.createDefaultRows();
+      shExchangeProviderInstanceOnStartup.createDefaultRows();
+      shConfigVarOnStartup.createDefaultRows();
+      shSiteOnStartup.createDefaultRows();
 
-			logger.info("Configuration finished.");
-		}
-
-	}
-
+      logger.info("Configuration finished.");
+    }
+  }
 }

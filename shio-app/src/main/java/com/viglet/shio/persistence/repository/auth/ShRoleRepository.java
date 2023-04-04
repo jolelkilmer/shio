@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,27 +16,24 @@
  */
 package com.viglet.shio.persistence.repository.auth;
 
+import com.viglet.shio.persistence.model.auth.ShGroup;
+import com.viglet.shio.persistence.model.auth.ShRole;
 import java.util.Collection;
 import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.auth.ShGroup;
-import com.viglet.shio.persistence.model.auth.ShRole;
-
 
 /**
  * @author Alexandre Oliveira
  */
 @Repository
 public interface ShRoleRepository extends JpaRepository<ShRole, String> {
-	
-	Set<ShRole> findByShGroupsIn(Collection<ShGroup> shGroup);
-	
-	@Modifying
-	@Query("delete from ShRole r where r.id = ?1")
-	void delete(String id);
+
+  Set<ShRole> findByShGroupsIn(Collection<ShGroup> shGroup);
+
+  @Modifying
+  @Query("delete from ShRole r where r.id = ?1")
+  void delete(String id);
 }

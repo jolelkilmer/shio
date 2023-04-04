@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,91 +16,87 @@
  */
 package com.viglet.shio.persistence.model.object.impl;
 
-
+import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
 import java.util.Date;
 import java.util.Set;
 
-import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
-
 /**
  * The interface class for the ShObject.
- * 
+ *
  * @author Alexandre Oliveira
  * @since 0.3.7
- * 
  */
 public interface ShObjectImpl {
 
-	String getId();
+  String getId();
 
-	void setId(String id);
+  void setId(String id);
 
-	String getOwner();
+  String getOwner();
 
-	void setOwner(String owner);
+  void setOwner(String owner);
 
-	String getFurl();
+  String getFurl();
 
-	void setFurl(String furl);
+  void setFurl(String furl);
 
-	Date getDate();
+  Date getDate();
 
-	void setDate(Date date);
+  void setDate(Date date);
 
-	String getModifier();
+  String getModifier();
 
-	void setModifier(String modifier);
+  void setModifier(String modifier);
 
-	String getPublisher();
+  String getPublisher();
 
-	void setPublisher(String publisher);
+  void setPublisher(String publisher);
 
-	Date getModifiedDate();
+  Date getModifiedDate();
 
-	void setModifiedDate(Date modifiedDate);
+  void setModifiedDate(Date modifiedDate);
 
-	Date getPublicationDate();
+  Date getPublicationDate();
 
-	void setPublicationDate(Date publicationDate);
+  void setPublicationDate(Date publicationDate);
 
-	int getPosition();
+  int getPosition();
 
-	void setPosition(int position);
+  void setPosition(int position);
 
-	String getObjectType();
+  String getObjectType();
 
-	void setObjectType(String objectType);
+  void setObjectType(String objectType);
 
-	Set<? extends ShPostAttrImpl> getShPostAttrRefs(); //NOSONAR
+  Set<? extends ShPostAttrImpl> getShPostAttrRefs(); // NOSONAR
 
-	void setShPostAttrRefs(Set<? extends ShPostAttrImpl> shPostAttrRefs);
+  void setShPostAttrRefs(Set<? extends ShPostAttrImpl> shPostAttrRefs);
 
-	boolean isPublished();
+  boolean isPublished();
 
-	void setPublished(boolean published);
+  void setPublished(boolean published);
 
-	String getPublishStatus();
+  String getPublishStatus();
 
-	void setPublishStatus(String publishStatus);
+  void setPublishStatus(String publishStatus);
 
-	Set<String> getShUsers();
+  Set<String> getShUsers();
 
-	void setShUsers(Set<String> shUsers);
+  void setShUsers(Set<String> shUsers);
 
-	Set<String> getShGroups();
+  Set<String> getShGroups();
 
-	void setShGroups(Set<String> shGroups);
+  void setShGroups(Set<String> shGroups);
 
-	boolean isPageAllowRegisterUser();
+  boolean isPageAllowRegisterUser();
 
-	void setPageAllowRegisterUser(boolean pageAllowRegisterUser);
+  void setPageAllowRegisterUser(boolean pageAllowRegisterUser);
 
-	boolean isPageAllowGuestUser();
+  boolean isPageAllowGuestUser();
 
-	void setPageAllowGuestUser(boolean pageAllowGuestUser);
+  void setPageAllowGuestUser(boolean pageAllowGuestUser);
 
-	Set<String> getShPageGroups();
+  Set<String> getShPageGroups();
 
-	void setShPageGroups(Set<String> shPageGroups);
-
+  void setShPageGroups(Set<String> shPageGroups);
 }

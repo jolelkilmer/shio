@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,67 +16,65 @@
  */
 package com.viglet.shio.api.folder;
 
-import java.util.List;
-import java.util.Set;
-
 import com.viglet.shio.bean.ShFolderTinyBean;
 import com.viglet.shio.bean.ShPostTinyBean;
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.site.ShSite;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Alexandre Oliveira
  */
 public class ShFolderList {
 
-	private Set<ShFolderTinyBean> shFolders;
+  private Set<ShFolderTinyBean> shFolders;
 
-	private List<ShPostTinyBean> shPosts;
-	
-	private String folderPath;
-	
-	private List<ShFolder> breadcrumb;
-	
-	private ShSite shSite;
-	
-	public Set<ShFolderTinyBean> getShFolders() {
-		return shFolders;
-	}
+  private List<ShPostTinyBean> shPosts;
 
-	public void setShFolders(Set<ShFolderTinyBean> shFolders) {
-		this.shFolders = shFolders;
-	}
+  private String folderPath;
 
-	public List<ShPostTinyBean> getShPosts() {
-		return shPosts;
-	}
+  private List<ShFolder> breadcrumb;
 
-	public void setShPosts(List<ShPostTinyBean> shPosts) {
-		this.shPosts = shPosts;
-	}
+  private ShSite shSite;
 
-	public String getFolderPath() {
-		return folderPath;
-	}
+  public Set<ShFolderTinyBean> getShFolders() {
+    return shFolders;
+  }
 
-	public void setFolderPath(String folderPath) {
-		this.folderPath = folderPath;
-	}
+  public void setShFolders(Set<ShFolderTinyBean> shFolders) {
+    this.shFolders = shFolders;
+  }
 
-	public List<ShFolder> getBreadcrumb() {
-		return breadcrumb;
-	}
+  public List<ShPostTinyBean> getShPosts() {
+    return shPosts;
+  }
 
-	public void setBreadcrumb(List<ShFolder> breadcrumb) {
-		this.breadcrumb = breadcrumb;
-	}
+  public void setShPosts(List<ShPostTinyBean> shPosts) {
+    this.shPosts = shPosts;
+  }
 
-	public ShSite getShSite() {
-		return shSite;
-	}
+  public String getFolderPath() {
+    return folderPath;
+  }
 
-	public void setShSite(ShSite shSite) {
-		this.shSite = shSite;
-	}
+  public void setFolderPath(String folderPath) {
+    this.folderPath = folderPath;
+  }
 
+  public List<ShFolder> getBreadcrumb() {
+    return breadcrumb;
+  }
+
+  public void setBreadcrumb(List<ShFolder> breadcrumb) {
+    this.breadcrumb = breadcrumb;
+  }
+
+  public ShSite getShSite() {
+    return shSite;
+  }
+
+  public void setShSite(ShSite shSite) {
+    this.shSite = shSite;
+  }
 }

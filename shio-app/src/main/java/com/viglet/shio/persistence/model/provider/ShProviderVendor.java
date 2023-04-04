@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,8 +16,8 @@
  */
 package com.viglet.shio.persistence.model.provider;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,83 +26,80 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 /**
  * The persistent class for the ShProviderVendor database table.
- * 
+ *
  * @author Alexandre Oliveira
  * @since 0.3.6
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQuery(name = "ShProviderVendor.findAll", query = "SELECT pv FROM ShProviderVendor pv")
-@JsonIgnoreProperties({ "instances" })
+@JsonIgnoreProperties({"instances"})
 public class ShProviderVendor {
 
-	@Id
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
+  @Id
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	private String name;
+  private String name;
 
-	@Column(name = "class_name")
-	private String className;
+  @Column(name = "class_name")
+  private String className;
 
-	private String description;
+  private String description;
 
-	@Column(name = "configurationPage")
-	private String configurationPage;
+  @Column(name = "configurationPage")
+  private String configurationPage;
 
-	@OneToMany(mappedBy = "vendor")
-	private List<ShProviderInstance> instances;
+  @OneToMany(mappedBy = "vendor")
+  private List<ShProviderInstance> instances;
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getClassName() {
-		return className;
-	}
+  public String getClassName() {
+    return className;
+  }
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+  public void setClassName(String className) {
+    this.className = className;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public String getConfigurationPage() {
-		return configurationPage;
-	}
+  public String getConfigurationPage() {
+    return configurationPage;
+  }
 
-	public void setConfigurationPage(String configurationPage) {
-		this.configurationPage = configurationPage;
-	}
+  public void setConfigurationPage(String configurationPage) {
+    this.configurationPage = configurationPage;
+  }
 
-	public List<ShProviderInstance> getInstances() {
-		return instances;
-	}
+  public List<ShProviderInstance> getInstances() {
+    return instances;
+  }
 
-	public void setInstances(List<ShProviderInstance> instances) {
-		this.instances = instances;
-	}
-
+  public void setInstances(List<ShProviderInstance> instances) {
+    this.instances = instances;
+  }
 }

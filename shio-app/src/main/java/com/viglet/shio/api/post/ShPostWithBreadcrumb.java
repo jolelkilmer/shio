@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,47 +16,43 @@
  */
 package com.viglet.shio.api.post;
 
-import java.util.List;
-
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
 import com.viglet.shio.persistence.model.site.ShSite;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
  */
 public class ShPostWithBreadcrumb {
 
-	private ShPostImpl shPost;
-	
-	private List<ShFolder> breadcrumb;
-	
-	private ShSite shSite;
+  private ShPostImpl shPost;
 
-	public ShPostImpl getShPost() {
-		return shPost;
-	}
+  private List<ShFolder> breadcrumb;
 
-	public void setShPost(ShPostImpl shPost) {
-		this.shPost = shPost;
-	}
+  private ShSite shSite;
 
-	public List<ShFolder> getBreadcrumb() {
-		return breadcrumb;
-	}
+  public ShPostImpl getShPost() {
+    return shPost;
+  }
 
-	public void setBreadcrumb(List<ShFolder> breadcrumb) {
-		this.breadcrumb = breadcrumb;
-	}
+  public void setShPost(ShPostImpl shPost) {
+    this.shPost = shPost;
+  }
 
-	public ShSite getShSite() {
-		return shSite;
-	}
+  public List<ShFolder> getBreadcrumb() {
+    return breadcrumb;
+  }
 
-	public void setShSite(ShSite shSite) {
-		this.shSite = shSite;
-	}
+  public void setBreadcrumb(List<ShFolder> breadcrumb) {
+    this.breadcrumb = breadcrumb;
+  }
 
-	
-	
+  public ShSite getShSite() {
+    return shSite;
+  }
+
+  public void setShSite(ShSite shSite) {
+    this.shSite = shSite;
+  }
 }

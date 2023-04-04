@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,32 +24,32 @@ import java.util.Date;
  */
 public class ShCachePageBean implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private String body;
-	private String contentType;
-	private Date expirationDate;
+  private static final long serialVersionUID = 1L;
+  private String body;
+  private String contentType;
+  private Date expirationDate;
 
-	public String getBody() {
-		return body;
-	}
+  public String getBody() {
+    return body;
+  }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+  public void setBody(String body) {
+    this.body = body;
+  }
 
-	public String getContentType() {
-		return contentType;
-	}
+  public String getContentType() {
+    return contentType;
+  }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
 
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
+  public Date getExpirationDate() {
+    return expirationDate;
+  }
 
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
+  public void setExpirationDate(Date expirationDate) {
+    this.expirationDate = expirationDate;
+  }
 }

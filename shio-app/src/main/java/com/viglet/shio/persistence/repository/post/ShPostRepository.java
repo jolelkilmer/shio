@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,6 @@
  */
 package com.viglet.shio.persistence.repository.post;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-
 import com.viglet.shio.bean.IShPostTypeCount;
 import com.viglet.shio.bean.ShPostTinyBean;
 import com.viglet.shio.persistence.model.folder.ShFolder;
@@ -34,71 +23,92 @@ import com.viglet.shio.persistence.model.post.ShPost;
 import com.viglet.shio.persistence.model.post.ShPostAttr;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
 import com.viglet.shio.persistence.model.site.ShSite;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Alexandre Oliveira
  */
 @Repository
-public interface ShPostRepository extends JpaRepository<ShPost, String>, ShPostRepositoryCustom, JpaSpecificationExecutor<ShPost> {
+public interface ShPostRepository
+    extends JpaRepository<ShPost, String>,
+        ShPostRepositoryCustom,
+        JpaSpecificationExecutor<ShPost> {
 
-	Set<ShPost> findByShPostTypeAndShPostAttrsIn(ShPostType shPostType, Collection<ShPostAttr> postAttrs);
-	
-	List<ShPost> findAll();
+  Set<ShPost> findByShPostTypeAndShPostAttrsIn(
+      ShPostType shPostType, Collection<ShPostAttr> postAttrs);
 
-	List<ShPost> findByShFolder(ShFolder shFolder);
-	
-	List<ShPost> findByShFolderOrderByShPostType(ShFolder shFolder);
+  List<ShPost> findAll();
 
-	@Query("select new com.viglet.shio.bean.ShPostTinyBean(p) from ShPost p where p.shFolder.id = ?1")
-	List<ShPostTinyBean> findByShFolderTiny(String shFolderId);
-	
-	@Query("select new com.viglet.shio.bean.ShPostTinyBean(p) from ShPost p where p.shFolder.id = ?1 and p.shPostType.id = ?2")
-	List<ShPostTinyBean> findByShFolderAndShPostTypeTiny(String shFolderId, String shPostTypeId);
-		
-	List<ShPost> findByShFolderAndShPostType(ShFolder shFolder, ShPostType shPostType);
-	
-	List<ShPost> findByShPostType(ShPostType shPostType);
-		
-	@Query("SELECT p.shPostType AS shPostType, COUNT(p.shPostType) AS totalPostType FROM ShPost AS p WHERE p.shSite = ?1 GROUP BY p.shPostType")
-	List<IShPostTypeCount> counShPostTypeByShSite(ShSite shSite);
-	
-	List<ShPost> findByShSite_IdIn(Collection<String> shSiteId); //NOSONAR
-	
-	List<ShPost> findByShSite_IdInAndShPostType(Collection<String> shSiteId, ShPostType shPostType); //NOSONAR
-	
-	List<ShPost> findByShFolderAndShPostTypeOrderByPositionAsc(ShFolder shFolder, ShPostType shPostType);
+  List<ShPost> findByShFolder(ShFolder shFolder);
 
-	@Query("select p from ShPost p JOIN FETCH p.shPostType JOIN FETCH p.shFolder JOIN FETCH p.shPostAttrs where p.id = ?1")
-	Optional<ShPost> findByIdFull(String id);
-	
-	Optional<ShPost> findById(String id);
+  List<ShPost> findByShFolderOrderByShPostType(ShFolder shFolder);
 
-	List<ShPost> findByTitle(String title);
-	
-	List<ShPost> findBySummary(String summary);
-	
-	List<ShPost> findByFurl(String furl);
-	
-	List<ShPost> findByModifier(String modifier);
-	
-	List<ShPost> findByPublisher(String publisher);
-	
-	List<ShPost> findByShFolder_Name(String folderName); //NOSONAR
-	
-	List<ShPost> findByShPostAttrsIn(Collection<ShPostAttr> shPostAttr);
-	
-	ShPost findByShFolderAndTitle(ShFolder shFolder, String title);
+  @Query("select new com.viglet.shio.bean.ShPostTinyBean(p) from ShPost p where p.shFolder.id = ?1")
+  List<ShPostTinyBean> findByShFolderTiny(String shFolderId);
 
-	ShPost findByShFolderAndFurl(ShFolder shFolder, String furl);
-	
-	boolean existsByShFolderAndTitle(ShFolder shFolder, String title);
-	
-	boolean existsByShFolderAndFurl(ShFolder shFolder, String furl);
+  @Query(
+      "select new com.viglet.shio.bean.ShPostTinyBean(p) from ShPost p where p.shFolder.id = ?1 and"
+          + " p.shPostType.id = ?2")
+  List<ShPostTinyBean> findByShFolderAndShPostTypeTiny(String shFolderId, String shPostTypeId);
 
-	@SuppressWarnings("unchecked")
-	ShPost save(ShPost shPost);
+  List<ShPost> findByShFolderAndShPostType(ShFolder shFolder, ShPostType shPostType);
 
-	@Modifying
-	@Query("delete from ShPost p where p.id = ?1")
-	void delete(String shPostId);
+  List<ShPost> findByShPostType(ShPostType shPostType);
+
+  @Query(
+      "SELECT p.shPostType AS shPostType, COUNT(p.shPostType) AS totalPostType FROM ShPost AS p"
+          + " WHERE p.shSite = ?1 GROUP BY p.shPostType")
+  List<IShPostTypeCount> counShPostTypeByShSite(ShSite shSite);
+
+  List<ShPost> findByShSite_IdIn(Collection<String> shSiteId); // NOSONAR
+
+  List<ShPost> findByShSite_IdInAndShPostType(
+      Collection<String> shSiteId, ShPostType shPostType); // NOSONAR
+
+  List<ShPost> findByShFolderAndShPostTypeOrderByPositionAsc(
+      ShFolder shFolder, ShPostType shPostType);
+
+  @Query(
+      "select p from ShPost p JOIN FETCH p.shPostType JOIN FETCH p.shFolder JOIN FETCH"
+          + " p.shPostAttrs where p.id = ?1")
+  Optional<ShPost> findByIdFull(String id);
+
+  Optional<ShPost> findById(String id);
+
+  List<ShPost> findByTitle(String title);
+
+  List<ShPost> findBySummary(String summary);
+
+  List<ShPost> findByFurl(String furl);
+
+  List<ShPost> findByModifier(String modifier);
+
+  List<ShPost> findByPublisher(String publisher);
+
+  List<ShPost> findByShFolder_Name(String folderName); // NOSONAR
+
+  List<ShPost> findByShPostAttrsIn(Collection<ShPostAttr> shPostAttr);
+
+  ShPost findByShFolderAndTitle(ShFolder shFolder, String title);
+
+  ShPost findByShFolderAndFurl(ShFolder shFolder, String furl);
+
+  boolean existsByShFolderAndTitle(ShFolder shFolder, String title);
+
+  boolean existsByShFolderAndFurl(ShFolder shFolder, String furl);
+
+  @SuppressWarnings("unchecked")
+  ShPost save(ShPost shPost);
+
+  @Modifying
+  @Query("delete from ShPost p where p.id = ?1")
+  void delete(String shPostId);
 }

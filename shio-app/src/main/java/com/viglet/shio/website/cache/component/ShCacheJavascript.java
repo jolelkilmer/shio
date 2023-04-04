@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +19,6 @@ package com.viglet.shio.website.cache.component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,28 +32,28 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ShCacheJavascript {
-	private static final Logger logger = LogManager.getLogger(ShCacheJavascript.class);
-	@Autowired
-	private ResourceLoader resourceloader;
+  private static final Logger logger = LogManager.getLogger(ShCacheJavascript.class);
+  @Autowired private ResourceLoader resourceloader;
 
-	@Cacheable(value = "javascript", sync = true)
-	public StringBuilder shObjectJSFactory() {
+  @Cacheable(value = "javascript", sync = true)
+  public StringBuilder shObjectJSFactory() {
 
-		if (logger.isDebugEnabled())
-			logger.debug("Executing shObjectJSFactory");
+    if (logger.isDebugEnabled()) logger.debug("Executing shObjectJSFactory");
 
-		StringBuilder shObjectJS = new StringBuilder();
+    StringBuilder shObjectJS = new StringBuilder();
 
-		try (InputStream isrObjectJS = resourceloader.getResource("classpath:/js/server-side/shObject.js")
-				.getInputStream();
-				InputStream isrHandlebars = resourceloader.getResource("classpath:/js/server-side/handlebars.min.js")
-						.getInputStream();) {
-			shObjectJS.append(IOUtils.toString(isrObjectJS, StandardCharsets.UTF_8.name()));
-			shObjectJS.append(IOUtils.toString(isrHandlebars, StandardCharsets.UTF_8.name()));
-		} catch (IOException e) {
-			logger.error(e);
-		}
+    try (InputStream isrObjectJS =
+            resourceloader.getResource("classpath:/js/server-side/shObject.js").getInputStream();
+        InputStream isrHandlebars =
+            resourceloader
+                .getResource("classpath:/js/server-side/handlebars.min.js")
+                .getInputStream(); ) {
+      shObjectJS.append(IOUtils.toString(isrObjectJS, StandardCharsets.UTF_8.name()));
+      shObjectJS.append(IOUtils.toString(isrHandlebars, StandardCharsets.UTF_8.name()));
+    } catch (IOException e) {
+      logger.error(e);
+    }
 
-		return shObjectJS;
-	}
+    return shObjectJS;
+  }
 }

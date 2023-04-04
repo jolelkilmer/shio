@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,62 +20,60 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSResultsDataColumnsBean {
 
-	@JsonProperty("data_type")
-	private int dataType;
+  @JsonProperty("data_type")
+  private int dataType;
 
-	private String key;
+  private String key;
 
-	private String name;
+  private String name;
 
-	@JsonProperty("sort_key")
-	private String sortKey;
+  @JsonProperty("sort_key")
+  private String sortKey;
 
-	@JsonProperty("include_time")
-	private boolean includeTime;
+  @JsonProperty("include_time")
+  private boolean includeTime;
 
-	public int getDataType() {
-		return dataType;
-	}
+  public int getDataType() {
+    return dataType;
+  }
 
-	public void setDataType(int dataType) {
-		this.dataType = dataType;
-	}
+  public void setDataType(int dataType) {
+    this.dataType = dataType;
+  }
 
-	public String getKey() {
-		return key;
-	}
+  public String getKey() {
+    return key;
+  }
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getSortKey() {
-		return sortKey;
-	}
+  public String getSortKey() {
+    return sortKey;
+  }
 
-	public void setSortKey(String sortKey) {
-		this.sortKey = sortKey;
-	}
+  public void setSortKey(String sortKey) {
+    this.sortKey = sortKey;
+  }
 
-	public boolean isIncludeTime() {
-		return includeTime;
-	}
+  public boolean isIncludeTime() {
+    return includeTime;
+  }
 
-	public void setIncludeTime(boolean includeTime) {
-		this.includeTime = includeTime;
-	}
-
+  public void setIncludeTime(boolean includeTime) {
+    this.includeTime = includeTime;
+  }
 }

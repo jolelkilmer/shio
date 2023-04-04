@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 Alexandre Oliveira <alexandre.oliveira@viglet.com> 
- * 
+ * Copyright (C) 2016-2021 Alexandre Oliveira <alexandre.oliveira@viglet.com>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -38,28 +38,25 @@ import org.springframework.web.context.WebApplicationContext;
 @TestInstance(Lifecycle.PER_CLASS)
 class ShSitesContextTest {
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+  @Autowired private WebApplicationContext webApplicationContext;
 
-	private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	@BeforeAll
-	void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	}
+  @BeforeAll
+  void setup() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+  }
 
-	@Test
-	void sitesFullGeneric() throws Exception {
-		mockMvc.perform(get("/sites/viglet/default/en-us")).andExpect(status().isOk());
+  @Test
+  void sitesFullGeneric() throws Exception {
+    mockMvc.perform(get("/sites/viglet/default/en-us")).andExpect(status().isOk());
+  }
 
-	}
-
-	@Test
-	void sitesFullGenericHeaders() throws Exception {
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("x-sh-site", "viglet");
-		httpHeaders.add("x-sh-nocache", "1");
-		mockMvc.perform(get("/sites").headers(httpHeaders)).andExpect(status().isOk());
-
-	}
+  @Test
+  void sitesFullGenericHeaders() throws Exception {
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-sh-site", "viglet");
+    httpHeaders.add("x-sh-nocache", "1");
+    mockMvc.perform(get("/sites").headers(httpHeaders)).andExpect(status().isOk());
+  }
 }

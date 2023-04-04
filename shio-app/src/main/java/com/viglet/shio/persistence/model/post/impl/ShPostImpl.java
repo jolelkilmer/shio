@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,8 @@
  */
 package com.viglet.shio.persistence.model.post.impl;
 
-import java.util.Set;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -28,58 +29,54 @@ import com.viglet.shio.persistence.model.post.ShPostDraft;
 import com.viglet.shio.persistence.model.post.ShPostDraftAttr;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
 import com.viglet.shio.persistence.model.site.ShSite;
-
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import java.util.Set;
 
 /**
  * The interface class for the ShPost.
- * 
+ *
  * @author Alexandre Oliveira
  * @since 0.3.7
- * 
  */
 @JsonTypeInfo(use = NAME, include = PROPERTY)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value=ShPost.class, name = "ShPost"),
-  @JsonSubTypes.Type(value=ShPostDraft.class, name = "ShPostDraft")
+  @JsonSubTypes.Type(value = ShPost.class, name = "ShPost"),
+  @JsonSubTypes.Type(value = ShPostDraft.class, name = "ShPostDraft")
 })
 public interface ShPostImpl extends ShObjectImpl {
-	
-	String getSummary();
 
-	void setSummary(String summary);
+  String getSummary();
 
-	String getTitle();
+  void setSummary(String summary);
 
-	void setTitle(String title);
+  String getTitle();
 
-	ShPostType getShPostType();
+  void setTitle(String title);
 
-	void setShPostType(ShPostType shPostType);
+  ShPostType getShPostType();
 
-	Set<? extends ShPostAttrImpl> getShPostAttrs(); //NOSONAR
+  void setShPostType(ShPostType shPostType);
 
-	void setShPostAttrs(Set<? extends ShPostAttrImpl> shPostAttrs);
+  Set<? extends ShPostAttrImpl> getShPostAttrs(); // NOSONAR
 
-	ShPostAttrImpl addShPostAttr(ShPostAttrImpl shPostAttr);
+  void setShPostAttrs(Set<? extends ShPostAttrImpl> shPostAttrs);
 
-	ShPostAttrImpl removeShPostAttr(ShPostAttrImpl shPostAttr);
+  ShPostAttrImpl addShPostAttr(ShPostAttrImpl shPostAttr);
 
-	ShFolder getShFolder();
+  ShPostAttrImpl removeShPostAttr(ShPostAttrImpl shPostAttr);
 
-	void setShFolder(ShFolder shFolder);
+  ShFolder getShFolder();
 
-	ShSite getShSite();
+  void setShFolder(ShFolder shFolder);
 
-	void setShSite(ShSite shSite);
+  ShSite getShSite();
 
-	String getObjectType();
+  void setShSite(ShSite shSite);
 
-	void setObjectType(String objectType);
-	
-	Set<ShPostAttr> getShPostAttrsNonDraft();
-		
-	Set<ShPostDraftAttr> getShPostAttrsDraft();
-	
+  String getObjectType();
+
+  void setObjectType(String objectType);
+
+  Set<ShPostAttr> getShPostAttrsNonDraft();
+
+  Set<ShPostDraftAttr> getShPostAttrsDraft();
 }

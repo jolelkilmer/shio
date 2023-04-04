@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,22 +16,19 @@
  */
 package com.viglet.shio.persistence.spec.post;
 
+import com.viglet.shio.graphql.ShGraphQLConstants;
+import com.viglet.shio.persistence.model.post.ShPost;
+import com.viglet.shio.persistence.model.post.type.ShPostType;
+import com.viglet.shio.persistence.model.site.ShSite;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.springframework.data.jpa.domain.Specification;
-
-import com.viglet.shio.graphql.ShGraphQLConstants;
-import com.viglet.shio.persistence.model.post.ShPost;
-import com.viglet.shio.persistence.model.post.type.ShPostType;
-import com.viglet.shio.persistence.model.site.ShSite;
 
 /**
  * @author Alexandre Oliveira
@@ -39,57 +36,58 @@ import com.viglet.shio.persistence.model.site.ShSite;
  */
 public class ShPostSpecs {
 
-	private ShPostSpecs() {
-		throw new IllegalStateException("ShPostSpecs class");
-	}
-	
-	public static Specification<ShPost> hasShPostType(ShPostType shPostType) {
-		return (shPost, query, cb) -> cb.equal(shPost.get("shPostType"), shPostType);
-	}
+  private ShPostSpecs() {
+    throw new IllegalStateException("ShPostSpecs class");
+  }
 
-	public static Specification<ShPost> hasSites(List<ShSite> shSites) {
-		return (shPost, query, cb) -> {
-			query.distinct(true);
-			final Path<ShSite> shSitePath = shPost.<ShSite>get("shSite");
+  public static Specification<ShPost> hasShPostType(ShPostType shPostType) {
+    return (shPost, query, cb) -> cb.equal(shPost.get("shPostType"), shPostType);
+  }
 
-			return shSitePath.in(shSites);
-		};
-	}
+  public static Specification<ShPost> hasSites(List<ShSite> shSites) {
+    return (shPost, query, cb) -> {
+      query.distinct(true);
+      final Path<ShSite> shSitePath = shPost.<ShSite>get("shSite");
 
-	public static Specification<ShPost> hasSystemAttr(String attrName, String attrValue, String condition) {
-		return new Specification<ShPost>() {
+      return shSitePath.in(shSites);
+    };
+  }
 
-			private static final long serialVersionUID = 1L;
+  public static Specification<ShPost> hasSystemAttr(
+      String attrName, String attrValue, String condition) {
+    return new Specification<ShPost>() {
 
-			@Override
-			public Predicate toPredicate(Root<ShPost> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+      private static final long serialVersionUID = 1L;
 
-				Map<String, String> systemAttrsMap = new HashMap<>();
+      @Override
+      public Predicate toPredicate(
+          Root<ShPost> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
-				systemAttrsMap.put(ShGraphQLConstants.TITLE, "title");
-				systemAttrsMap.put(ShGraphQLConstants.DESCRIPTION, "summary");
-				systemAttrsMap.put(ShGraphQLConstants.FURL, "furl");
-				systemAttrsMap.put(ShGraphQLConstants.MODIFIER, "modifier");
-				systemAttrsMap.put(ShGraphQLConstants.PUBLISHER, "publisher");
-				systemAttrsMap.put(ShGraphQLConstants.FOLDER, "shFolder");
-				systemAttrsMap.put(ShGraphQLConstants.CREATED_AT, "createdAt");
-				systemAttrsMap.put(ShGraphQLConstants.UPDATED_AT, "updatedAt");
-				systemAttrsMap.put(ShGraphQLConstants.PUBLISHED_AT, "publishedAt");
-				
-				List<Predicate> predicates = ShPostSpecsCommons.predicateAttrCondition(systemAttrsMap.get(attrName),
-						attrValue, condition, root, criteriaBuilder);
+        Map<String, String> systemAttrsMap = new HashMap<>();
 
-				return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
+        systemAttrsMap.put(ShGraphQLConstants.TITLE, "title");
+        systemAttrsMap.put(ShGraphQLConstants.DESCRIPTION, "summary");
+        systemAttrsMap.put(ShGraphQLConstants.FURL, "furl");
+        systemAttrsMap.put(ShGraphQLConstants.MODIFIER, "modifier");
+        systemAttrsMap.put(ShGraphQLConstants.PUBLISHER, "publisher");
+        systemAttrsMap.put(ShGraphQLConstants.FOLDER, "shFolder");
+        systemAttrsMap.put(ShGraphQLConstants.CREATED_AT, "createdAt");
+        systemAttrsMap.put(ShGraphQLConstants.UPDATED_AT, "updatedAt");
+        systemAttrsMap.put(ShGraphQLConstants.PUBLISHED_AT, "publishedAt");
 
-		};
-	}
+        List<Predicate> predicates =
+            ShPostSpecsCommons.predicateAttrCondition(
+                systemAttrsMap.get(attrName), attrValue, condition, root, criteriaBuilder);
 
-	public static Specification<ShPost> hasPosts(List<ShPost> shPosts) {
-		return (shPost, query, cb) -> {
-			query.distinct(true);
-			return shPost.in(shPosts);
-		};
-	}
+        return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+      }
+    };
+  }
 
+  public static Specification<ShPost> hasPosts(List<ShPost> shPosts) {
+    return (shPost, query, cb) -> {
+      query.distinct(true);
+      return shPost.in(shPosts);
+    };
+  }
 }

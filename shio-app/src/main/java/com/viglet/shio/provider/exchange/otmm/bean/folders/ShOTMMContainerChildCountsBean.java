@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,42 +20,40 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMContainerChildCountsBean {
 
-	@JsonProperty("asset_count")
-	private int assetCount;
+  @JsonProperty("asset_count")
+  private int assetCount;
 
-	@JsonProperty("container_count")
-	private int containerCount;
+  @JsonProperty("container_count")
+  private int containerCount;
 
-	@JsonProperty("total_child_count")
-	private int totalChildCount;
+  @JsonProperty("total_child_count")
+  private int totalChildCount;
 
-	public int getAssetCount() {
-		return assetCount;
-	}
+  public int getAssetCount() {
+    return assetCount;
+  }
 
-	public void setAssetCount(int assetCount) {
-		this.assetCount = assetCount;
-	}
+  public void setAssetCount(int assetCount) {
+    this.assetCount = assetCount;
+  }
 
-	public int getContainerCount() {
-		return containerCount;
-	}
+  public int getContainerCount() {
+    return containerCount;
+  }
 
-	public void setContainerCount(int containerCount) {
-		this.containerCount = containerCount;
-	}
+  public void setContainerCount(int containerCount) {
+    this.containerCount = containerCount;
+  }
 
-	public int getTotalChildCount() {
-		return totalChildCount;
-	}
+  public int getTotalChildCount() {
+    return totalChildCount;
+  }
 
-	public void setTotalChildCount(int totalChildCount) {
-		this.totalChildCount = totalChildCount;
-	}
-
+  public void setTotalChildCount(int totalChildCount) {
+    this.totalChildCount = totalChildCount;
+  }
 }

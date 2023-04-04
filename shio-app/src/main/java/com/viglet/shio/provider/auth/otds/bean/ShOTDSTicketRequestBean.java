@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,59 +20,58 @@ package com.viglet.shio.provider.auth.otds.bean;
  * @author Alexandre Oliveira
  */
 public class ShOTDSTicketRequestBean {
-	private String targetResourceId;
-	private String sourceResourceId;
-	private String ticket;
-	private String secureSecret;
-	private String userName;
-	private String authenticator;
+  private String targetResourceId;
+  private String sourceResourceId;
+  private String ticket;
+  private String secureSecret;
+  private String userName;
+  private String authenticator;
 
-	public String getTargetResourceId() {
-		return targetResourceId;
-	}
+  public String getTargetResourceId() {
+    return targetResourceId;
+  }
 
-	public void setTargetResourceId(String targetResourceId) {
-		this.targetResourceId = targetResourceId;
-	}
+  public void setTargetResourceId(String targetResourceId) {
+    this.targetResourceId = targetResourceId;
+  }
 
-	public String getSourceResourceId() {
-		return sourceResourceId;
-	}
+  public String getSourceResourceId() {
+    return sourceResourceId;
+  }
 
-	public void setSourceResourceId(String sourceResourceId) {
-		this.sourceResourceId = sourceResourceId;
-	}
+  public void setSourceResourceId(String sourceResourceId) {
+    this.sourceResourceId = sourceResourceId;
+  }
 
-	public String getTicket() {
-		return ticket;
-	}
+  public String getTicket() {
+    return ticket;
+  }
 
-	public void setTicket(String ticket) {
-		this.ticket = ticket;
-	}
+  public void setTicket(String ticket) {
+    this.ticket = ticket;
+  }
 
-	public String getSecureSecret() {
-		return secureSecret;
-	}
+  public String getSecureSecret() {
+    return secureSecret;
+  }
 
-	public void setSecureSecret(String secureSecret) {
-		this.secureSecret = secureSecret;
-	}
+  public void setSecureSecret(String secureSecret) {
+    this.secureSecret = secureSecret;
+  }
 
-	public String getUserName() {
-		return userName;
-	}
+  public String getUserName() {
+    return userName;
+  }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
-	public String getAuthenticator() {
-		return authenticator;
-	}
+  public String getAuthenticator() {
+    return authenticator;
+  }
 
-	public void setAuthenticator(String authenticator) {
-		this.authenticator = authenticator;
-	}
-
+  public void setAuthenticator(String authenticator) {
+    this.authenticator = authenticator;
+  }
 }

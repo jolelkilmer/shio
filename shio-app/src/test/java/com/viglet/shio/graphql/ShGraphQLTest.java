@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +19,6 @@ package com.viglet.shio.graphql;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import graphql.kickstart.spring.webclient.boot.GraphQLWebClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,24 +37,23 @@ import reactor.core.publisher.Mono;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class ShGraphQLTest {
 
-	@LocalServerPort
-	private int randomServerPort;
+  @LocalServerPort private int randomServerPort;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-	private GraphQLWebClient graphqlClient;
+  private GraphQLWebClient graphqlClient;
 
-	@BeforeEach
-	void beforeEach() {
-		WebClient webClient = WebClient.builder().baseUrl("http://localhost:" + randomServerPort + "/graphql").build();
-		graphqlClient = GraphQLWebClient.newInstance(webClient, objectMapper);
-	}
+  @BeforeEach
+  void beforeEach() {
+    WebClient webClient =
+        WebClient.builder().baseUrl("http://localhost:" + randomServerPort + "/graphql").build();
+    graphqlClient = GraphQLWebClient.newInstance(webClient, objectMapper);
+  }
 
-	@Test
-	@DisplayName("Query Text Post Type List")
-	void queryWithoutVariablesSucceeds() {
-		Mono<String> response = graphqlClient.post("graphql/texts-test.graphql", null, String.class);
-		assertNotNull(response, "response should not be null");
-	}
+  @Test
+  @DisplayName("Query Text Post Type List")
+  void queryWithoutVariablesSucceeds() {
+    Mono<String> response = graphqlClient.post("graphql/texts-test.graphql", null, String.class);
+    assertNotNull(response, "response should not be null");
+  }
 }

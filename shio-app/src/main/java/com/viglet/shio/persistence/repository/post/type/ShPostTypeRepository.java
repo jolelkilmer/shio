@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,13 @@
  */
 package com.viglet.shio.persistence.repository.post.type;
 
+import com.viglet.shio.persistence.model.post.type.ShPostType;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.post.type.ShPostType;
 
 /**
  * @author Alexandre Oliveira
@@ -32,18 +30,18 @@ import com.viglet.shio.persistence.model.post.type.ShPostType;
 @Repository
 public interface ShPostTypeRepository extends JpaRepository<ShPostType, String> {
 
-	List<ShPostType> findAll();
+  List<ShPostType> findAll();
 
-	Optional<ShPostType> findById(String id);
-	
-	ShPostType findByName(String name);
+  Optional<ShPostType> findById(String id);
 
-	@SuppressWarnings("unchecked")
-	ShPostType save(ShPostType shPostType);
+  ShPostType findByName(String name);
 
-	void delete(ShPostType shPostType);
-	
-	@Modifying
-	@Query("delete from ShPostType pt where pt.id = ?1")
-	void delete(String shPostTypeId);
+  @SuppressWarnings("unchecked")
+  ShPostType save(ShPostType shPostType);
+
+  void delete(ShPostType shPostType);
+
+  @Modifying
+  @Query("delete from ShPostType pt where pt.id = ?1")
+  void delete(String shPostTypeId);
 }

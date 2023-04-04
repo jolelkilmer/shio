@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,24 +24,23 @@ package com.viglet.shio.website.nodejs.config;
  */
 public class ShNodeJSConfig {
 
-	private ShNodeJSConfigApp app;
+  private ShNodeJSConfigApp app;
 
-	private ShNodeJSConfigServer shioServer;
+  private ShNodeJSConfigServer shioServer;
 
-	public ShNodeJSConfigApp getApp() {
-		return app;
-	}
+  public ShNodeJSConfigApp getApp() {
+    return app;
+  }
 
-	public void setApp(ShNodeJSConfigApp app) {
-		this.app = app;
-	}
+  public void setApp(ShNodeJSConfigApp app) {
+    this.app = app;
+  }
 
-	public ShNodeJSConfigServer getShioServer() {
-		return shioServer;
-	}
+  public ShNodeJSConfigServer getShioServer() {
+    return shioServer;
+  }
 
-	public void setShioServer(ShNodeJSConfigServer shioServer) {
-		this.shioServer = shioServer;
-	}
-
+  public void setShioServer(ShNodeJSConfigServer shioServer) {
+    this.shioServer = shioServer;
+  }
 }

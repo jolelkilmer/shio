@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,12 +20,13 @@ package com.viglet.shio.object;
  * @author Alexandre Oliveira
  */
 public class ShObjectType {
-	
-	private ShObjectType() {
-		throw new IllegalStateException("Object Type Constants class");
-	}
-	public static final String FOLDER = "FOLDER";
-	public static final String POST = "POST";
-	public static final String POST_TYPE = "POST_TYPE";
-	public static final String SITE = "SITE";
+
+  private ShObjectType() {
+    throw new IllegalStateException("Object Type Constants class");
+  }
+
+  public static final String FOLDER = "FOLDER";
+  public static final String POST = "POST";
+  public static final String POST_TYPE = "POST_TYPE";
+  public static final String SITE = "SITE";
 }

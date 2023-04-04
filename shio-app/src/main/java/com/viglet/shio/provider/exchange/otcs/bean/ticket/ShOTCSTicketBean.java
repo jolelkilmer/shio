@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,18 +18,16 @@ package com.viglet.shio.provider.exchange.otcs.bean.ticket;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSTicketBean {
-	private String ticket;
+  private String ticket;
 
-	public String getTicket() {
-		return ticket;
-	}
+  public String getTicket() {
+    return ticket;
+  }
 
-	public void setTicket(String ticket) {
-		this.ticket = ticket;
-	}
-
+  public void setTicket(String ticket) {
+    this.ticket = ticket;
+  }
 }

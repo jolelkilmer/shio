@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,48 +16,44 @@
  */
 package com.viglet.shio.provider.exchange.otcs.bean.folder;
 
-import java.util.List;
-
 import com.viglet.shio.provider.exchange.otcs.bean.collection.ShOTCSCollectionBean;
 import com.viglet.shio.provider.exchange.otcs.bean.link.ShOTCSLinksBean;
 import com.viglet.shio.provider.exchange.otcs.bean.result.ShOTCSResultsBean;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSFolderBean {
 
-	private ShOTCSCollectionBean collection;
+  private ShOTCSCollectionBean collection;
 
-	private ShOTCSLinksBean links;
+  private ShOTCSLinksBean links;
 
-	private List<ShOTCSResultsBean> results;
+  private List<ShOTCSResultsBean> results;
 
-	public ShOTCSCollectionBean getCollection() {
-		return collection;
-	}
+  public ShOTCSCollectionBean getCollection() {
+    return collection;
+  }
 
-	public void setCollection(ShOTCSCollectionBean collection) {
-		this.collection = collection;
-	}
+  public void setCollection(ShOTCSCollectionBean collection) {
+    this.collection = collection;
+  }
 
-	public ShOTCSLinksBean getLinks() {
-		return links;
-	}
+  public ShOTCSLinksBean getLinks() {
+    return links;
+  }
 
-	public void setLinks(ShOTCSLinksBean links) {
-		this.links = links;
-	}
+  public void setLinks(ShOTCSLinksBean links) {
+    this.links = links;
+  }
 
-	public List<ShOTCSResultsBean> getResults() {
-		return results;
-	}
+  public List<ShOTCSResultsBean> getResults() {
+    return results;
+  }
 
-	public void setResults(List<ShOTCSResultsBean> results) {
-		this.results = results;
-	}
-
-	
+  public void setResults(List<ShOTCSResultsBean> results) {
+    this.results = results;
+  }
 }

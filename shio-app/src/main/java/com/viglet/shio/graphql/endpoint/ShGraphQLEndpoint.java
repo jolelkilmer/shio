@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,13 +16,18 @@
  */
 package com.viglet.shio.graphql.endpoint;
 
+import com.viglet.shio.utils.ShUserUtils;
 import graphql.ExecutionResult;
 import graphql.spring.web.servlet.ExecutionResultHandler;
 import graphql.spring.web.servlet.GraphQLInvocation;
 import graphql.spring.web.servlet.GraphQLInvocationData;
 import graphql.spring.web.servlet.JsonSerializer;
 import graphql.spring.web.servlet.components.GraphQLRequestBody;
-
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,101 +42,97 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.viglet.shio.utils.ShUserUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 @RestController
 public class ShGraphQLEndpoint {
 
-	@Autowired
-	GraphQLInvocation graphQLInvocation;
+  @Autowired GraphQLInvocation graphQLInvocation;
 
-	@Autowired
-	ExecutionResultHandler executionResultHandler;
+  @Autowired ExecutionResultHandler executionResultHandler;
 
-	@Autowired
-	JsonSerializer jsonSerializer;
+  @Autowired JsonSerializer jsonSerializer;
 
-	@Autowired
-	private ShUserUtils shUserUtils;
+  @Autowired private ShUserUtils shUserUtils;
 
-	@PostMapping(value = "graphql", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object graphqlPOST(@RequestHeader(value = HttpHeaders.CONTENT_TYPE, required = false) String contentType,
-			@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-			@RequestParam(value = "query", required = false) String query,
-			@RequestParam(value = "operationName", required = false) String operationName,
-			@RequestParam(value = "variables", required = false) String variablesJson,
-			@RequestBody(required = false) String body, WebRequest webRequest) {
+  @PostMapping(value = "graphql", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Object graphqlPOST(
+      @RequestHeader(value = HttpHeaders.CONTENT_TYPE, required = false) String contentType,
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+      @RequestParam(value = "query", required = false) String query,
+      @RequestParam(value = "operationName", required = false) String operationName,
+      @RequestParam(value = "variables", required = false) String variablesJson,
+      @RequestBody(required = false) String body,
+      WebRequest webRequest) {
 
-		if (this.isAuthenticated(authorization)) {
-			if (StringUtils.isEmpty(body)) {
-				body = StringUtils.EMPTY;
-			}
-			
-			if (MediaType.APPLICATION_JSON_VALUE.equals(contentType)) {
-				GraphQLRequestBody request = jsonSerializer.deserialize(body, GraphQLRequestBody.class);
-				if (StringUtils.isEmpty(request.getQuery())) {
-					request.setQuery(StringUtils.EMPTY);
-				}
-				return executeRequest(request.getQuery(), request.getOperationName(), request.getVariables(),
-						webRequest);
-			}
+    if (this.isAuthenticated(authorization)) {
+      if (StringUtils.isEmpty(body)) {
+        body = StringUtils.EMPTY;
+      }
 
-			if (query != null) {
-				return executeRequest(query, operationName, convertVariablesJson(variablesJson), webRequest);
-			}
+      if (MediaType.APPLICATION_JSON_VALUE.equals(contentType)) {
+        GraphQLRequestBody request = jsonSerializer.deserialize(body, GraphQLRequestBody.class);
+        if (StringUtils.isEmpty(request.getQuery())) {
+          request.setQuery(StringUtils.EMPTY);
+        }
+        return executeRequest(
+            request.getQuery(), request.getOperationName(), request.getVariables(), webRequest);
+      }
 
-			if ("application/graphql".equals(contentType)) {
-				return executeRequest(body, null, null, webRequest);
-			}
-		}
-		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Could not process GraphQL request");
-	}
+      if (query != null) {
+        return executeRequest(
+            query, operationName, convertVariablesJson(variablesJson), webRequest);
+      }
 
-	private boolean isAuthenticated(String authorization) {
-		boolean authenticated = true;
-		if (!StringUtils.isEmpty(authorization) && authorization.toLowerCase().startsWith("basic")) {
-			String base64Credentials = authorization.substring("Basic".length()).trim();
-			byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-			String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-			final String[] values = credentials.split(":", 2);
-			String username = values[0];
-			String password = values[1];
-			authenticated = shUserUtils.isValidUserAndPassword(username, password);
-		}
-		return authenticated;
-	}
+      if ("application/graphql".equals(contentType)) {
+        return executeRequest(body, null, null, webRequest);
+      }
+    }
+    throw new ResponseStatusException(
+        HttpStatus.UNPROCESSABLE_ENTITY, "Could not process GraphQL request");
+  }
 
-	@GetMapping(value = "graphql", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object graphqlGET(@RequestParam("query") String query,
-			@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
-			@RequestParam(value = "operationName", required = false) String operationName,
-			@RequestParam(value = "variables", required = false) String variablesJson, WebRequest webRequest) {
+  private boolean isAuthenticated(String authorization) {
+    boolean authenticated = true;
+    if (!StringUtils.isEmpty(authorization) && authorization.toLowerCase().startsWith("basic")) {
+      String base64Credentials = authorization.substring("Basic".length()).trim();
+      byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+      String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+      final String[] values = credentials.split(":", 2);
+      String username = values[0];
+      String password = values[1];
+      authenticated = shUserUtils.isValidUserAndPassword(username, password);
+    }
+    return authenticated;
+  }
 
-		if (this.isAuthenticated(authorization)) {
-			return executeRequest(query, operationName, convertVariablesJson(variablesJson), webRequest);
-		}
-		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Could not process GraphQL request");
-	}
+  @GetMapping(value = "graphql", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Object graphqlGET(
+      @RequestParam("query") String query,
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+      @RequestParam(value = "operationName", required = false) String operationName,
+      @RequestParam(value = "variables", required = false) String variablesJson,
+      WebRequest webRequest) {
 
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> convertVariablesJson(String jsonMap) {
-		if (jsonMap == null) {
-			return Collections.emptyMap();
-		}
-		return jsonSerializer.deserialize(jsonMap, Map.class);
-	}
+    if (this.isAuthenticated(authorization)) {
+      return executeRequest(query, operationName, convertVariablesJson(variablesJson), webRequest);
+    }
+    throw new ResponseStatusException(
+        HttpStatus.UNPROCESSABLE_ENTITY, "Could not process GraphQL request");
+  }
 
-	private Object executeRequest(String query, String operationName, Map<String, Object> variables,
-			WebRequest webRequest) {
-		GraphQLInvocationData invocationData = new GraphQLInvocationData(query, operationName, variables);
-		CompletableFuture<ExecutionResult> executionResult = graphQLInvocation.invoke(invocationData, webRequest);
-		return executionResultHandler.handleExecutionResult(executionResult);
-	}
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> convertVariablesJson(String jsonMap) {
+    if (jsonMap == null) {
+      return Collections.emptyMap();
+    }
+    return jsonSerializer.deserialize(jsonMap, Map.class);
+  }
 
+  private Object executeRequest(
+      String query, String operationName, Map<String, Object> variables, WebRequest webRequest) {
+    GraphQLInvocationData invocationData =
+        new GraphQLInvocationData(query, operationName, variables);
+    CompletableFuture<ExecutionResult> executionResult =
+        graphQLInvocation.invoke(invocationData, webRequest);
+    return executionResultHandler.handleExecutionResult(executionResult);
+  }
 }
