@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,9 +16,9 @@
  */
 package com.viglet.shio.persistence.model.workflow;
 
+import com.viglet.shio.persistence.model.object.ShObject;
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,90 +26,84 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-
 import org.hibernate.annotations.GenericGenerator;
-
-import com.viglet.shio.persistence.model.object.ShObject;
 
 /**
  * The persistent class for the ShWorkflowTask database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @NamedQuery(name = "ShWorkflowTask.findAll", query = "SELECT wt FROM ShWorkflowTask wt")
 public class ShWorkflowTask implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
-	@GeneratedValue(generator = "UUID")
+  @Id
+  @GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
+  @GeneratedValue(generator = "UUID")
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
+  private Date date;
 
-	private Date date;
+  private String title;
 
-	private String title;
+  @ManyToOne
+  @JoinColumn(name = "object_id")
+  private ShObject shObject;
 
-	@ManyToOne
-	@JoinColumn(name = "object_id")
-	private ShObject shObject;
+  // Who created
+  private String requester;
 
-	
-	// Who created
-	private String requester;
-	
-	// Who will be responsible for the action
-	private String requested;
+  // Who will be responsible for the action
+  private String requested;
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Date getDate() {
-		return date;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public String getRequester() {
-		return requester;
-	}
+  public String getRequester() {
+    return requester;
+  }
 
-	public void setRequester(String requester) {
-		this.requester = requester;
-	}
+  public void setRequester(String requester) {
+    this.requester = requester;
+  }
 
-	public String getRequested() {
-		return requested;
-	}
+  public String getRequested() {
+    return requested;
+  }
 
-	public void setRequested(String requested) {
-		this.requested = requested;
-	}
+  public void setRequested(String requested) {
+    this.requested = requested;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public ShObject getShObject() {
-		return shObject;
-	}
+  public ShObject getShObject() {
+    return shObject;
+  }
 
-	public void setShObject(ShObject shObject) {
-		this.shObject = shObject;
-	}
-
+  public void setShObject(ShObject shObject) {
+    this.shObject = shObject;
+  }
 }

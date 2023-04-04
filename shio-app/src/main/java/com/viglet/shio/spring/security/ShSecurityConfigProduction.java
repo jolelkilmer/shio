@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,10 @@
  */
 package com.viglet.shio.spring.security;
 
+import com.viglet.shio.persistence.model.provider.auth.ShAuthProviderInstance;
+import com.viglet.shio.persistence.repository.provider.auth.ShAuthProviderInstanceRepository;
+import com.viglet.shio.provider.auth.ShAuthSystemProviderVendor;
+import com.viglet.shio.provider.auth.ShAuthenticationProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -40,11 +43,6 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
-import com.viglet.shio.persistence.model.provider.auth.ShAuthProviderInstance;
-import com.viglet.shio.persistence.repository.provider.auth.ShAuthProviderInstanceRepository;
-import com.viglet.shio.provider.auth.ShAuthSystemProviderVendor;
-import com.viglet.shio.provider.auth.ShAuthenticationProvider;
-
 /**
  * @author Alexandre Oliveira
  */
@@ -53,85 +51,109 @@ import com.viglet.shio.provider.auth.ShAuthenticationProvider;
 @Profile("production")
 @ComponentScan(basePackageClasses = ShCustomUserDetailsService.class)
 public class ShSecurityConfigProduction extends WebSecurityConfigurerAdapter {
-	private static final Logger logger = LogManager.getLogger(ShSecurityConfigProduction.class);
-	@Autowired
-	private UserDetailsService userDetailsService;
-	@Autowired
-	private ShAuthenticationEntryPoint shAuthenticationEntryPoint;
-	@Autowired
-	private ShAuthProviderInstanceRepository shAuthProviderInstanceRepository;
-	@Autowired
-	private ApplicationContext context;
+  private static final Logger logger = LogManager.getLogger(ShSecurityConfigProduction.class);
+  @Autowired private UserDetailsService userDetailsService;
+  @Autowired private ShAuthenticationEntryPoint shAuthenticationEntryPoint;
+  @Autowired private ShAuthProviderInstanceRepository shAuthProviderInstanceRepository;
+  @Autowired private ApplicationContext context;
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		boolean hasAuthProvider = false;
-		for (ShAuthProviderInstance instance : shAuthProviderInstanceRepository.findByEnabled(true)) {
-			if (!hasAuthProvider) {
-				hasAuthProvider = true;
-				if (instance.getVendor().getId().equals(ShAuthSystemProviderVendor.NATIVE)) {
-					super.configure(auth);
-				} else {
-					ShAuthenticationProvider shAuthenticationProvider = (ShAuthenticationProvider) context
-							.getBean(Class.forName(instance.getVendor().getClassName()));
-					shAuthenticationProvider.init(instance.getId());
-					auth.authenticationProvider(shAuthenticationProvider);
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    boolean hasAuthProvider = false;
+    for (ShAuthProviderInstance instance : shAuthProviderInstanceRepository.findByEnabled(true)) {
+      if (!hasAuthProvider) {
+        hasAuthProvider = true;
+        if (instance.getVendor().getId().equals(ShAuthSystemProviderVendor.NATIVE)) {
+          super.configure(auth);
+        } else {
+          ShAuthenticationProvider shAuthenticationProvider =
+              (ShAuthenticationProvider)
+                  context.getBean(Class.forName(instance.getVendor().getClassName()));
+          shAuthenticationProvider.init(instance.getId());
+          auth.authenticationProvider(shAuthenticationProvider);
+        }
+      }
+    }
+    if (!hasAuthProvider) {
+      super.configure(auth);
+    }
+  }
 
-				}
-			}
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.headers().frameOptions().disable().cacheControl().disable();
+    http.cors()
+        .and()
+        .httpBasic()
+        .authenticationEntryPoint(shAuthenticationEntryPoint)
+        .and()
+        .authorizeRequests()
+        .antMatchers(
+            "/index.html",
+            "/welcome/**",
+            "/",
+            "/store/**",
+            "/thirdparty/**",
+            "/js/**",
+            "/css/**",
+            "/template/**",
+            "/img/**",
+            "/sites/**",
+            "/__tur/**",
+            "/swagger-resources/**",
+            "/h2/**",
+            "/image/**",
+            "/login-page/**",
+            "/logout-page/**",
+            "/graphql",
+            "/manifest.json",
+            "/*.png",
+            "/*.ico",
+            "/browserconfig.xml")
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .addFilterAfter(new ShCsrfHeaderFilter(), CsrfFilter.class)
+        .csrf()
+        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+        .logout();
+  }
 
-		}
-		if (!hasAuthProvider) {
-			super.configure(auth);
-		}
-	}
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/h2/**", "/graphql");
+    super.configure(web);
+    web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
+  }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.headers().frameOptions().disable().cacheControl().disable();
-		http.cors().and().httpBasic().authenticationEntryPoint(shAuthenticationEntryPoint).and().authorizeRequests()
-				.antMatchers("/index.html", "/welcome/**", "/", "/store/**", "/thirdparty/**", "/js/**", "/css/**",
-						"/template/**", "/img/**", "/sites/**", "/__tur/**", "/swagger-resources/**", "/h2/**",
-						"/image/**", "/login-page/**", "/logout-page/**", "/graphql","/manifest.json",
-						"/*.png", "/*.ico", "/browserconfig.xml")
-				.permitAll().anyRequest().authenticated().and()
-				.addFilterAfter(new ShCsrfHeaderFilter(), CsrfFilter.class).csrf()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().logout();
-	}
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) {
+    try {
+      auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+    } catch (Exception e) {
+      logger.error(e);
+    }
+  }
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/h2/**", "/graphql");
-		super.configure(web);
-		web.httpFirewall(allowUrlEncodedSlashHttpFirewall());
-	}
+  @SuppressWarnings("unused")
+  private CsrfTokenRepository csrfTokenRepository() {
+    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+    repository.setHeaderName("X-XSRF-TOKEN");
+    return repository;
+  }
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) {
-		try {
-			auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
+  @Bean(name = "passwordEncoder")
+  public PasswordEncoder passwordencoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-	@SuppressWarnings("unused")
-	private CsrfTokenRepository csrfTokenRepository() {
-		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		repository.setHeaderName("X-XSRF-TOKEN");
-		return repository;
-	}
-
-	@Bean(name = "passwordEncoder")
-	public PasswordEncoder passwordencoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
-		// Allow double slash in URL
-		StrictHttpFirewall firewall = new StrictHttpFirewall();
-		firewall.setAllowUrlEncodedSlash(true);
-		return firewall;
-	}
+  @Bean
+  public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+    // Allow double slash in URL
+    StrictHttpFirewall firewall = new StrictHttpFirewall();
+    firewall.setAllowUrlEncodedSlash(true);
+    return firewall;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,15 @@
  */
 package com.viglet.shio.persistence.repository.post.relator;
 
+import com.viglet.shio.persistence.model.post.ShPostDraftAttr;
+import com.viglet.shio.persistence.model.post.relator.ShRelatorItemDraft;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.post.ShPostDraftAttr;
-import com.viglet.shio.persistence.model.post.relator.ShRelatorItemDraft;
 
 /**
  * @author Alexandre Oliveira
@@ -34,16 +32,16 @@ import com.viglet.shio.persistence.model.post.relator.ShRelatorItemDraft;
 @Repository
 public interface ShRelatorItemDraftRepository extends JpaRepository<ShRelatorItemDraft, String> {
 
-	List<ShRelatorItemDraft> findAll();
-	
-	Optional<ShRelatorItemDraft> findById(String id);
-	
-	Set<ShRelatorItemDraft> findByShParentPostAttr (ShPostDraftAttr shPostAttr);
-	
-	@SuppressWarnings("unchecked")
-	ShRelatorItemDraft save(ShRelatorItemDraft shRelatorItem);
+  List<ShRelatorItemDraft> findAll();
 
-	@Modifying
-	@Query("delete from ShRelatorItemDraft ri where ri.id = ?1")
-	void delete(String shRelatorItemId);
+  Optional<ShRelatorItemDraft> findById(String id);
+
+  Set<ShRelatorItemDraft> findByShParentPostAttr(ShPostDraftAttr shPostAttr);
+
+  @SuppressWarnings("unchecked")
+  ShRelatorItemDraft save(ShRelatorItemDraft shRelatorItem);
+
+  @Modifying
+  @Query("delete from ShRelatorItemDraft ri where ri.id = ?1")
+  void delete(String shRelatorItemId);
 }

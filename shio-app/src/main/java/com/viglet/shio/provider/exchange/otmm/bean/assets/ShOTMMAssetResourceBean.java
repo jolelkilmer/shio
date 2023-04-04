@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,19 +18,17 @@ package com.viglet.shio.provider.exchange.otmm.bean.assets;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMAssetResourceBean {
 
-	private ShOTMMAssetBean asset;
+  private ShOTMMAssetBean asset;
 
-	public ShOTMMAssetBean getAsset() {
-		return asset;
-	}
+  public ShOTMMAssetBean getAsset() {
+    return asset;
+  }
 
-	public void setAsset(ShOTMMAssetBean asset) {
-		this.asset = asset;
-	}
-
+  public void setAsset(ShOTMMAssetBean asset) {
+    this.asset = asset;
+  }
 }

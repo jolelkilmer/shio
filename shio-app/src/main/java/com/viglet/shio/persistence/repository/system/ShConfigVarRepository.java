@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,10 +17,8 @@
 package com.viglet.shio.persistence.repository.system;
 
 import com.viglet.shio.persistence.model.system.ShConfigVar;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,26 +30,26 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShConfigVarRepository extends JpaRepository<ShConfigVar, String> {
 
-	List<ShConfigVar> findAll();
+  List<ShConfigVar> findAll();
 
-	boolean existsByPathAndName(String path, String name);
+  boolean existsByPathAndName(String path, String name);
 
-	boolean existsByPath(String path);
+  boolean existsByPath(String path);
 
-	List<ShConfigVar> findByPath(String path);
+  List<ShConfigVar> findByPath(String path);
 
-	ShConfigVar findByPathAndName(String path, String name);
+  ShConfigVar findByPathAndName(String path, String name);
 
-	Optional<ShConfigVar> findById(String id);
+  Optional<ShConfigVar> findById(String id);
 
-	@SuppressWarnings("unchecked")
-	ShConfigVar save(ShConfigVar turConfigVar);
+  @SuppressWarnings("unchecked")
+  ShConfigVar save(ShConfigVar turConfigVar);
 
-	void delete(ShConfigVar turConfigVar);
+  void delete(ShConfigVar turConfigVar);
 
-	void deleteByPath(String path);
+  void deleteByPath(String path);
 
-	@Modifying
-	@Query("delete from ShConfigVar cv where cv.id = ?1")
-	void delete(String id);
+  @Modifying
+  @Query("delete from ShConfigVar cv where cv.id = ?1")
+  void delete(String id);
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,34 +24,33 @@ package com.viglet.shio.website.nodejs.config;
  */
 public class ShNodeJSConfigServer {
 
-	private String endpoint;
+  private String endpoint;
 
-	private String fileServer;
+  private String fileServer;
 
-	private String token;
+  private String token;
 
-	public String getEndpoint() {
-		return endpoint;
-	}
+  public String getEndpoint() {
+    return endpoint;
+  }
 
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
-	}
+  public void setEndpoint(String endpoint) {
+    this.endpoint = endpoint;
+  }
 
-	public String getFileServer() {
-		return fileServer;
-	}
+  public String getFileServer() {
+    return fileServer;
+  }
 
-	public void setFileServer(String fileServer) {
-		this.fileServer = fileServer;
-	}
+  public void setFileServer(String fileServer) {
+    this.fileServer = fileServer;
+  }
 
-	public String getToken() {
-		return token;
-	}
+  public String getToken() {
+    return token;
+  }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
-
+  public void setToken(String token) {
+    this.token = token;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,44 +16,41 @@
  */
 package com.viglet.shio.onstartup.system;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.system.ShConfigVar;
 import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
 import com.viglet.shio.property.ShConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShConfigVarOnStartup {
-	
-	public static final String FIRST_TIME_NAME = "FIRST_TIME";
-	@Autowired
-	private ShConfigProperties shConfigProperties;
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
 
-	public void createDefaultRows() {
+  public static final String FIRST_TIME_NAME = "FIRST_TIME";
+  @Autowired private ShConfigProperties shConfigProperties;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
 
-		ShConfigVar shConfigVar = new ShConfigVar();
+  public void createDefaultRows() {
 
-		if (!shConfigVarRepository.existsByPathAndName(shConfigProperties.getSystem(), FIRST_TIME_NAME)) {
+    ShConfigVar shConfigVar = new ShConfigVar();
 
-			shConfigVar.setPath(shConfigProperties.getSystem());
-			shConfigVar.setName(FIRST_TIME_NAME);
-			shConfigVar.setValue("true");
-			shConfigVarRepository.save(shConfigVar);
+    if (!shConfigVarRepository.existsByPathAndName(
+        shConfigProperties.getSystem(), FIRST_TIME_NAME)) {
 
-			shConfigVar = new ShConfigVar();
-		
-			shConfigVar.setPath("/email");
-			shConfigVar.setName("HOST");
-			shConfigVar.setValue("localhost");
+      shConfigVar.setPath(shConfigProperties.getSystem());
+      shConfigVar.setName(FIRST_TIME_NAME);
+      shConfigVar.setValue("true");
+      shConfigVarRepository.save(shConfigVar);
 
-			shConfigVarRepository.save(shConfigVar);
-		}
-	}
+      shConfigVar = new ShConfigVar();
 
+      shConfigVar.setPath("/email");
+      shConfigVar.setName("HOST");
+      shConfigVar.setValue("localhost");
+
+      shConfigVarRepository.save(shConfigVar);
+    }
+  }
 }

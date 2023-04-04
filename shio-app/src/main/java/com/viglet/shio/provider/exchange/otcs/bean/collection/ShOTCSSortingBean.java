@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,25 +16,22 @@
  */
 package com.viglet.shio.provider.exchange.otcs.bean.collection;
 
-import java.util.List;
-
 import com.viglet.shio.provider.exchange.ot.bean.ShOTEntryBean;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSSortingBean {
 
-	private List<ShOTEntryBean> sort;
+  private List<ShOTEntryBean> sort;
 
-	public List<ShOTEntryBean> getSort() {
-		return sort;
-	}
+  public List<ShOTEntryBean> getSort() {
+    return sort;
+  }
 
-	public void setSort(List<ShOTEntryBean> sort) {
-		this.sort = sort;
-	}
-
+  public void setSort(List<ShOTEntryBean> sort) {
+    this.sort = sort;
+  }
 }

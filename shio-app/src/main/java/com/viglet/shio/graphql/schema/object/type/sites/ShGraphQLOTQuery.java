@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,14 +20,12 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.graphql.schema.query.type.sites.ShGraphQLQTQuery;
-
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLObjectType.Builder;
-import graphql.scalars.ExtendedScalars;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * GraphQL Navigation Object Type.
@@ -38,28 +36,26 @@ import graphql.scalars.ExtendedScalars;
 @Component
 public class ShGraphQLOTQuery {
 
-	@Autowired
-	private ShGraphQLQTQuery shGraphQLQTQuery;
+  @Autowired private ShGraphQLQTQuery shGraphQLQTQuery;
 
-	private GraphQLObjectType createWebSiteByURL() {
-		Builder builder = newObject().name("ShQuery").description("Query Component");
+  private GraphQLObjectType createWebSiteByURL() {
+    Builder builder = newObject().name("ShQuery").description("Query Component");
 
-		this.createSiteURLObjectTypeFields(builder);
+    this.createSiteURLObjectTypeFields(builder);
 
-		return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
-	}
+    return builder.comparatorRegistry(BY_NAME_REGISTRY).build();
+  }
 
-	private void createSiteURLObjectTypeFields(Builder builder) {		
-		builder.field(newFieldDefinition().name("post").description("Post").type(ExtendedScalars.Object));
+  private void createSiteURLObjectTypeFields(Builder builder) {
+    builder.field(
+        newFieldDefinition().name("post").description("Post").type(ExtendedScalars.Object));
+  }
 
-	}
+  public void createObjectType(
+      Builder queryTypeBuilder, graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 
-	public void createObjectType(Builder queryTypeBuilder,
-			graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+    GraphQLObjectType graphQLObjectType = this.createWebSiteByURL();
 
-		GraphQLObjectType graphQLObjectType = this.createWebSiteByURL();
-
-		shGraphQLQTQuery.createQueryType(queryTypeBuilder, codeRegistryBuilder, graphQLObjectType);
-	}
-
+    shGraphQLQTQuery.createQueryType(queryTypeBuilder, codeRegistryBuilder, graphQLObjectType);
+  }
 }

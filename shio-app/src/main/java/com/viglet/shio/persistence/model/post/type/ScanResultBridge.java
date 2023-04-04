@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,26 +21,25 @@ import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 
 /**
-* @author Alexandre Oliveira
-*/
+ * @author Alexandre Oliveira
+ */
 public class ScanResultBridge implements TwoWayFieldBridge {
 
-	@Override
-	public void set(String name, Object value, Document document, LuceneOptions luceneOptions) {
-		//
+  @Override
+  public void set(String name, Object value, Document document, LuceneOptions luceneOptions) {
+    //
 
-	}
+  }
 
-	@Override
-	public Object get(String name, Document document) {
-		//
-		return null;
-	}
+  @Override
+  public Object get(String name, Document document) {
+    //
+    return null;
+  }
 
-	@Override
-	public String objectToString(Object object) {
-		// 
-		return null;
-	}
-
+  @Override
+  public String objectToString(Object object) {
+    //
+    return null;
+  }
 }

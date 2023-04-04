@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,13 +21,13 @@ package com.viglet.shio.turing;
  */
 public class ShTuringSearchSettings {
 
-	private ShTuringSearchSettings() {
-		throw new IllegalStateException("Turing Constants class");
-	}
+  private ShTuringSearchSettings() {
+    throw new IllegalStateException("Turing Constants class");
+  }
 
-	public static final String SEARCH = "search";
-	public static final String IS_ADDITIONAL_FIELD = "isAdditionalField";
-	public static final String IS_SAME_POSTTYPE_FIELD = "isSamePostTypeField";
-	public static final String CUSTOM_FIELD_NAME = "customFieldName";
-	public static final String ASSOCIATION = "association";
+  public static final String SEARCH = "search";
+  public static final String IS_ADDITIONAL_FIELD = "isAdditionalField";
+  public static final String IS_SAME_POSTTYPE_FIELD = "isSamePostTypeField";
+  public static final String CUSTOM_FIELD_NAME = "customFieldName";
+  public static final String ASSOCIATION = "association";
 }

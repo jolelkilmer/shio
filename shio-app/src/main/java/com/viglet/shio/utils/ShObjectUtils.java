@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,6 @@
  */
 package com.viglet.shio.utils;
 
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.viglet.shio.api.folder.ShFolderPath;
 import com.viglet.shio.persistence.model.auth.ShGroup;
 import com.viglet.shio.persistence.model.auth.ShUser;
@@ -36,111 +26,115 @@ import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
 import com.viglet.shio.persistence.model.site.ShSite;
 import com.viglet.shio.persistence.repository.auth.ShUserRepository;
 import com.viglet.shio.persistence.repository.object.ShObjectRepository;
+import java.security.Principal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShObjectUtils {
-	@Autowired
-	private ShFolderUtils shFolderUtils;
-	@Autowired
-	private ShObjectRepository shObjectRepository;
-	@Autowired
-	private ShUserRepository shUserRepository;
-	@Autowired
-	private ShPostUtils shPostUtils;
+  @Autowired private ShFolderUtils shFolderUtils;
+  @Autowired private ShObjectRepository shObjectRepository;
+  @Autowired private ShUserRepository shUserRepository;
+  @Autowired private ShPostUtils shPostUtils;
 
-	public ShSite getSite(ShObjectImpl shObject) {
-		if (shObject instanceof ShPostImpl shPostImpl) {
-			return shPostUtils.getSite(shPostImpl);
-		} else if (shObject instanceof ShFolder shFolder) {
-			return shFolderUtils.getSite(shFolder);
-		} else {
-			return null;
-		}
-	}
+  public ShSite getSite(ShObjectImpl shObject) {
+    if (shObject instanceof ShPostImpl shPostImpl) {
+      return shPostUtils.getSite(shPostImpl);
+    } else if (shObject instanceof ShFolder shFolder) {
+      return shFolderUtils.getSite(shFolder);
+    } else {
+      return null;
+    }
+  }
 
-	public boolean canAccess(Principal principal, String shObjectId) {
-		ShUser shUser = null;
-		ShObjectImpl shObject = shObjectRepository.findById(shObjectId).orElse(null);
-		shUser = getShUser(principal, shUser);
-		if (shObject != null) {
-			if (userHasGroups(shUser)) {
-				return isAdministrator(shUser) || hasAccess(shUser, shObject);
-			} else {
-				return true;
-			}
-		}
+  public boolean canAccess(Principal principal, String shObjectId) {
+    ShUser shUser = null;
+    ShObjectImpl shObject = shObjectRepository.findById(shObjectId).orElse(null);
+    shUser = getShUser(principal, shUser);
+    if (shObject != null) {
+      if (userHasGroups(shUser)) {
+        return isAdministrator(shUser) || hasAccess(shUser, shObject);
+      } else {
+        return true;
+      }
+    }
 
-		return false;
-	}
+    return false;
+  }
 
-	private ShUser getShUser(Principal principal, ShUser shUser) {
-		if (principal != null)
-			shUser = shUserRepository.findByUsername(principal.getName());
-		return shUser;
-	}
+  private ShUser getShUser(Principal principal, ShUser shUser) {
+    if (principal != null) shUser = shUserRepository.findByUsername(principal.getName());
+    return shUser;
+  }
 
-	private boolean userHasGroups(ShUser shUser) {
-		return shUser != null && shUser.getShGroups() != null;
-	}
+  private boolean userHasGroups(ShUser shUser) {
+    return shUser != null && shUser.getShGroups() != null;
+  }
 
-	private boolean isAdministrator(ShUser shUser) {
-		boolean fullAccess = false;
-		for (ShGroup shGroup : shUser.getShGroups()) {
-			if (shGroup.getName().equals("Administrator")) {
-				fullAccess = true;
-			}
-		}
-		return fullAccess;
-	}
+  private boolean isAdministrator(ShUser shUser) {
+    boolean fullAccess = false;
+    for (ShGroup shGroup : shUser.getShGroups()) {
+      if (shGroup.getName().equals("Administrator")) {
+        fullAccess = true;
+      }
+    }
+    return fullAccess;
+  }
 
-	private boolean hasAccess(ShUser shUser, ShObjectImpl shObject) {
-		Set<String> shGroups = new HashSet<>();
-		Set<String> shUsers = new HashSet<>();
-		shUser.getShGroups().forEach(shGroup -> shGroups.add(shGroup.getName()));
-		shUsers.add(shUser.getUsername());
-		return (shObjectRepository.countByIdAndShGroupsInOrIdAndShUsersInOrIdAndShGroupsIsNullAndShUsersIsNull(
-				shObject.getId(), shGroups, shObject.getId(), shUsers, shObject.getId()) > 0);
+  private boolean hasAccess(ShUser shUser, ShObjectImpl shObject) {
+    Set<String> shGroups = new HashSet<>();
+    Set<String> shUsers = new HashSet<>();
+    shUser.getShGroups().forEach(shGroup -> shGroups.add(shGroup.getName()));
+    shUsers.add(shUser.getUsername());
+    return (shObjectRepository
+            .countByIdAndShGroupsInOrIdAndShUsersInOrIdAndShGroupsIsNullAndShUsersIsNull(
+                shObject.getId(), shGroups, shObject.getId(), shUsers, shObject.getId())
+        > 0);
+  }
 
-	}
-
-	public ShFolderPath objectPath(@PathVariable String id) {
-		Optional<ShObject> shObject = shObjectRepository.findById(id);
-		if (shObject.isPresent()) {
-			if (shObject.get() instanceof ShSite shSite) {
-				ShFolderPath shFolderPath = new ShFolderPath();
-				shFolderPath.setFolderPath(null);
-				shFolderPath.setCurrentFolder(null);
-				shFolderPath.setBreadcrumb(null);
-				shFolderPath.setShSite(shSite);
-				return shFolderPath;
-			} else if (shObject.get() instanceof ShFolder shFolder) {
-				ShFolderPath shFolderPath = new ShFolderPath();
-				String folderPath = shFolderUtils.folderPath(shFolder, true, false);
-				List<ShFolder> breadcrumb = shFolderUtils.breadcrumb(shFolder);
-				ShSite shSite = breadcrumb.get(0).getShSite();
-				shFolderPath.setFolderPath(folderPath);
-				shFolderPath.setCurrentFolder(shFolder);
-				shFolderPath.setBreadcrumb(breadcrumb);
-				shFolderPath.setShSite(shSite);
-				return shFolderPath;
-			} else if (shObject.get() instanceof ShPostImpl) {
-				ShPostImpl shPost = shPostUtils.loadLazyPost(shObject.get().getId(), false);
-				ShFolder shFolder = shPost.getShFolder();
-				ShFolderPath shFolderPath = new ShFolderPath();
-				String folderPath = shFolderUtils.folderPath(shFolder, true, false);
-				List<ShFolder> breadcrumb = shFolderUtils.breadcrumb(shFolder);
-				ShSite shSite = breadcrumb.get(0).getShSite();
-				shFolderPath.setFolderPath(folderPath);
-				shFolderPath.setCurrentFolder(shFolder);
-				shFolderPath.setBreadcrumb(breadcrumb);
-				shFolderPath.setShSite(shSite);
-				shFolderPath.setShPost(shPost);
-				return shFolderPath;
-			}
-		}
-		return null;
-	}
+  public ShFolderPath objectPath(@PathVariable String id) {
+    Optional<ShObject> shObject = shObjectRepository.findById(id);
+    if (shObject.isPresent()) {
+      if (shObject.get() instanceof ShSite shSite) {
+        ShFolderPath shFolderPath = new ShFolderPath();
+        shFolderPath.setFolderPath(null);
+        shFolderPath.setCurrentFolder(null);
+        shFolderPath.setBreadcrumb(null);
+        shFolderPath.setShSite(shSite);
+        return shFolderPath;
+      } else if (shObject.get() instanceof ShFolder shFolder) {
+        ShFolderPath shFolderPath = new ShFolderPath();
+        String folderPath = shFolderUtils.folderPath(shFolder, true, false);
+        List<ShFolder> breadcrumb = shFolderUtils.breadcrumb(shFolder);
+        ShSite shSite = breadcrumb.get(0).getShSite();
+        shFolderPath.setFolderPath(folderPath);
+        shFolderPath.setCurrentFolder(shFolder);
+        shFolderPath.setBreadcrumb(breadcrumb);
+        shFolderPath.setShSite(shSite);
+        return shFolderPath;
+      } else if (shObject.get() instanceof ShPostImpl) {
+        ShPostImpl shPost = shPostUtils.loadLazyPost(shObject.get().getId(), false);
+        ShFolder shFolder = shPost.getShFolder();
+        ShFolderPath shFolderPath = new ShFolderPath();
+        String folderPath = shFolderUtils.folderPath(shFolder, true, false);
+        List<ShFolder> breadcrumb = shFolderUtils.breadcrumb(shFolder);
+        ShSite shSite = breadcrumb.get(0).getShSite();
+        shFolderPath.setFolderPath(folderPath);
+        shFolderPath.setCurrentFolder(shFolder);
+        shFolderPath.setBreadcrumb(breadcrumb);
+        shFolderPath.setShSite(shSite);
+        shFolderPath.setShPost(shPost);
+        return shFolderPath;
+      }
+    }
+    return null;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,62 +20,58 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSLinksDataSelfBean {
 
-	private String body;
-	
-	@JsonProperty("content_type")
-	private String contentType;
-	
-	private String href;
-	
-	private String method;
-	
-	private String name;
+  private String body;
 
-	public String getBody() {
-		return body;
-	}
+  @JsonProperty("content_type")
+  private String contentType;
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+  private String href;
 
-	public String getContentType() {
-		return contentType;
-	}
+  private String method;
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+  private String name;
 
-	public String getHref() {
-		return href;
-	}
+  public String getBody() {
+    return body;
+  }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+  public void setBody(String body) {
+    this.body = body;
+  }
 
-	public String getMethod() {
-		return method;
-	}
+  public String getContentType() {
+    return contentType;
+  }
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getHref() {
+    return href;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-	
+  public void setHref(String href) {
+    this.href = href;
+  }
+
+  public String getMethod() {
+    return method;
+  }
+
+  public void setMethod(String method) {
+    this.method = method;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

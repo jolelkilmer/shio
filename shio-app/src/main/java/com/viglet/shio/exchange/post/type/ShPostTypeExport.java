@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,23 +16,20 @@
  */
 package com.viglet.shio.exchange.post.type;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
 import com.viglet.shio.exchange.ShExchange;
 import com.viglet.shio.exchange.ShExchangeFilesDirs;
 import com.viglet.shio.exchange.utils.ShExchangeUtils;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
 import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * Export PostType.
@@ -42,74 +39,83 @@ import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
  */
 @Component
 public class ShPostTypeExport {
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShExchangeUtils shExchangeUtils;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShExchangeUtils shExchangeUtils;
 
-	public StreamingResponseBody exportObject(HttpServletResponse response) {
-		ShExchangeFilesDirs shExchangeFilesDirs = new ShExchangeFilesDirs();
-		if (shExchangeFilesDirs.generate()) {
-			
-			List<ShPostTypeExchange> postTypeExchanges = new ArrayList<>();
+  public StreamingResponseBody exportObject(HttpServletResponse response) {
+    ShExchangeFilesDirs shExchangeFilesDirs = new ShExchangeFilesDirs();
+    if (shExchangeFilesDirs.generate()) {
 
-			shPostTypeRepository.findAll().forEach(shPostType -> postTypeExchanges.add(this.exportPostType(shPostType)));
+      List<ShPostTypeExchange> postTypeExchanges = new ArrayList<>();
 
-			ShExchange shExchange = new ShExchange();
-		
-			shExchange.setPostTypes(postTypeExchanges);
+      shPostTypeRepository
+          .findAll()
+          .forEach(shPostType -> postTypeExchanges.add(this.exportPostType(shPostType)));
 
-			return shExchangeUtils.downloadZipFile("PostType", response, shExchange, shExchangeFilesDirs);
-		} else {
-			return null;
-		}
-	}
+      ShExchange shExchange = new ShExchange();
 
-	public ShPostTypeExchange exportPostType(ShPostType shPostType) {
-		ShPostTypeExchange shPostTypeExchange = new ShPostTypeExchange();
-		shPostTypeExchange.setId(shPostType.getId());
-		shPostTypeExchange.setName(shPostType.getName());
-		shPostTypeExchange.setNamePlural(shPostType.getNamePlural());
-		shPostTypeExchange.setLabel(shPostType.getTitle());
-		shPostTypeExchange.setDate(shPostType.getDate());
-		shPostTypeExchange.setDescription(shPostType.getDescription());
+      shExchange.setPostTypes(postTypeExchanges);
 
-		shPostTypeExchange.setOwner(shPostType.getOwner());
-		shPostTypeExchange.setSystem(shPostType.getSystem() == (byte) 1);
+      return shExchangeUtils.downloadZipFile("PostType", response, shExchange, shExchangeFilesDirs);
+    } else {
+      return null;
+    }
+  }
 
-		if (!shPostType.getShPostTypeAttrs().isEmpty()) {
-			Map<String, ShPostTypeFieldExchange> shPostTypeFieldExchanges = new HashMap<>();
-			shPostType.getShPostTypeAttrs().forEach(shPostTypeAttr -> {
-				ShPostTypeFieldExchange shPostTypeFieldExchange = this.exportPostTypeField(shPostTypeAttr);
-				shPostTypeFieldExchanges.put(shPostTypeAttr.getName(), shPostTypeFieldExchange);
-			});
-			shPostTypeExchange.setFields(shPostTypeFieldExchanges);
-		}
+  public ShPostTypeExchange exportPostType(ShPostType shPostType) {
+    ShPostTypeExchange shPostTypeExchange = new ShPostTypeExchange();
+    shPostTypeExchange.setId(shPostType.getId());
+    shPostTypeExchange.setName(shPostType.getName());
+    shPostTypeExchange.setNamePlural(shPostType.getNamePlural());
+    shPostTypeExchange.setLabel(shPostType.getTitle());
+    shPostTypeExchange.setDate(shPostType.getDate());
+    shPostTypeExchange.setDescription(shPostType.getDescription());
 
-		return shPostTypeExchange;
-	}
+    shPostTypeExchange.setOwner(shPostType.getOwner());
+    shPostTypeExchange.setSystem(shPostType.getSystem() == (byte) 1);
 
-	public ShPostTypeFieldExchange exportPostTypeField(ShPostTypeAttr shPostTypeAttr) {
-		ShPostTypeFieldExchange shPostTypeFieldExchange = new ShPostTypeFieldExchange();
-		shPostTypeFieldExchange.setId(shPostTypeAttr.getId());
-		shPostTypeFieldExchange.setLabel(shPostTypeAttr.getLabel());
-		shPostTypeFieldExchange.setDescription(shPostTypeAttr.getDescription());
+    if (!shPostType.getShPostTypeAttrs().isEmpty()) {
+      Map<String, ShPostTypeFieldExchange> shPostTypeFieldExchanges = new HashMap<>();
+      shPostType
+          .getShPostTypeAttrs()
+          .forEach(
+              shPostTypeAttr -> {
+                ShPostTypeFieldExchange shPostTypeFieldExchange =
+                    this.exportPostTypeField(shPostTypeAttr);
+                shPostTypeFieldExchanges.put(shPostTypeAttr.getName(), shPostTypeFieldExchange);
+              });
+      shPostTypeExchange.setFields(shPostTypeFieldExchanges);
+    }
 
-		shPostTypeFieldExchange.setOrdinal(shPostTypeAttr.getOrdinal());
-		shPostTypeFieldExchange.setRequired(shPostTypeAttr.getRequired() == (byte) 1);
-		shPostTypeFieldExchange.setSummary(shPostTypeAttr.getIsSummary() == (byte) 1);
-		shPostTypeFieldExchange.setTitle(shPostTypeAttr.getIsTitle() == (byte) 1);
-		shPostTypeFieldExchange.setWidget(shPostTypeAttr.getShWidget().getName());
-		shPostTypeFieldExchange.setWidgetSettings(shPostTypeAttr.getWidgetSettings());
+    return shPostTypeExchange;
+  }
 
-		if (!shPostTypeAttr.getShPostTypeAttrs().isEmpty()) {
-			Map<String, ShPostTypeFieldExchange> shPostTypeFieldExchanges = new HashMap<>();
-			shPostTypeAttr.getShPostTypeAttrs().forEach(shPostTypeAttrChild -> {
-				ShPostTypeFieldExchange shPostTypeFieldExchangeChild = this.exportPostTypeField(shPostTypeAttrChild);
-				shPostTypeFieldExchanges.put(shPostTypeAttrChild.getName(), shPostTypeFieldExchangeChild);
-			});
-			shPostTypeFieldExchange.setFields(shPostTypeFieldExchanges);
-		}
-		return shPostTypeFieldExchange;
-	}
+  public ShPostTypeFieldExchange exportPostTypeField(ShPostTypeAttr shPostTypeAttr) {
+    ShPostTypeFieldExchange shPostTypeFieldExchange = new ShPostTypeFieldExchange();
+    shPostTypeFieldExchange.setId(shPostTypeAttr.getId());
+    shPostTypeFieldExchange.setLabel(shPostTypeAttr.getLabel());
+    shPostTypeFieldExchange.setDescription(shPostTypeAttr.getDescription());
+
+    shPostTypeFieldExchange.setOrdinal(shPostTypeAttr.getOrdinal());
+    shPostTypeFieldExchange.setRequired(shPostTypeAttr.getRequired() == (byte) 1);
+    shPostTypeFieldExchange.setSummary(shPostTypeAttr.getIsSummary() == (byte) 1);
+    shPostTypeFieldExchange.setTitle(shPostTypeAttr.getIsTitle() == (byte) 1);
+    shPostTypeFieldExchange.setWidget(shPostTypeAttr.getShWidget().getName());
+    shPostTypeFieldExchange.setWidgetSettings(shPostTypeAttr.getWidgetSettings());
+
+    if (!shPostTypeAttr.getShPostTypeAttrs().isEmpty()) {
+      Map<String, ShPostTypeFieldExchange> shPostTypeFieldExchanges = new HashMap<>();
+      shPostTypeAttr
+          .getShPostTypeAttrs()
+          .forEach(
+              shPostTypeAttrChild -> {
+                ShPostTypeFieldExchange shPostTypeFieldExchangeChild =
+                    this.exportPostTypeField(shPostTypeAttrChild);
+                shPostTypeFieldExchanges.put(
+                    shPostTypeAttrChild.getName(), shPostTypeFieldExchangeChild);
+              });
+      shPostTypeFieldExchange.setFields(shPostTypeFieldExchanges);
+    }
+    return shPostTypeFieldExchange;
+  }
 }

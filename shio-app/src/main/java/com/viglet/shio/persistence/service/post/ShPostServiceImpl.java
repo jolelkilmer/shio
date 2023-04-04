@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,13 @@
  */
 package com.viglet.shio.persistence.service.post;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import static com.viglet.shio.persistence.spec.post.ShPostAttrSpecs.conditionParams;
+import static com.viglet.shio.persistence.spec.post.ShPostAttrSpecs.hasShPostTypeAttr;
+import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasPosts;
+import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasShPostType;
+import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasSites;
+import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasSystemAttr;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 import com.google.common.collect.Sets;
 import com.viglet.shio.persistence.model.post.ShPost;
@@ -35,14 +34,13 @@ import com.viglet.shio.persistence.repository.post.ShPostAttrRepository;
 import com.viglet.shio.persistence.repository.post.ShPostRepository;
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeAttrRepository;
 import com.viglet.shio.persistence.repository.site.ShSiteRepository;
-
-import static com.viglet.shio.persistence.spec.post.ShPostAttrSpecs.conditionParams;
-import static com.viglet.shio.persistence.spec.post.ShPostAttrSpecs.hasShPostTypeAttr;
-import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasSites;
-import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasShPostType;
-import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasSystemAttr;
-import static com.viglet.shio.persistence.spec.post.ShPostSpecs.hasPosts;
-import static org.springframework.data.jpa.domain.Specification.where;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Alexandre Oliveira
@@ -51,44 +49,45 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @Service
 public class ShPostServiceImpl implements ShPostService {
 
-	@Autowired
-	private ShPostRepository shPostRepository;
-	@Autowired
-	private ShPostAttrRepository shPostAttrRepository;
-	@Autowired
-	private ShPostTypeAttrRepository shPostTypeAttrRepository;
-	@Autowired
-	private ShSiteRepository shSiteRepository;
+  @Autowired private ShPostRepository shPostRepository;
+  @Autowired private ShPostAttrRepository shPostAttrRepository;
+  @Autowired private ShPostTypeAttrRepository shPostTypeAttrRepository;
+  @Autowired private ShSiteRepository shSiteRepository;
 
-	public List<ShPost> findByShPostTypeAndAttrNameAndAttrValueAndConditionAndSites(ShPostType shPostType,
-			String attrName, String attrValue, String condition, List<String> siteIds) {
+  public List<ShPost> findByShPostTypeAndAttrNameAndAttrValueAndConditionAndSites(
+      ShPostType shPostType,
+      String attrName,
+      String attrValue,
+      String condition,
+      List<String> siteIds) {
 
-		Specification<ShPost> shPostSpecs = where(hasShPostType(shPostType));
+    Specification<ShPost> shPostSpecs = where(hasShPostType(shPostType));
 
-		if (!attrName.startsWith("_")) {
+    if (!attrName.startsWith("_")) {
 
-			ShPostTypeAttr shPostTypeAttr = shPostTypeAttrRepository.findByShPostTypeAndName(shPostType,
-					attrName.toUpperCase());
-			Set<ShPostAttr> shPostAttrs = Sets.newHashSet(shPostAttrRepository.findAll(
-					where(conditionParams(attrValue, condition)).and(hasShPostTypeAttr(shPostTypeAttr))));
+      ShPostTypeAttr shPostTypeAttr =
+          shPostTypeAttrRepository.findByShPostTypeAndName(shPostType, attrName.toUpperCase());
+      Set<ShPostAttr> shPostAttrs =
+          Sets.newHashSet(
+              shPostAttrRepository.findAll(
+                  where(conditionParams(attrValue, condition))
+                      .and(hasShPostTypeAttr(shPostTypeAttr))));
 
-			List<ShPost> shPosts = shPostRepository.findByShPostAttrsIn(shPostAttrs);
+      List<ShPost> shPosts = shPostRepository.findByShPostAttrsIn(shPostAttrs);
 
-			shPostSpecs = shPostSpecs.and(hasPosts(shPosts));
-		} else {
-	
-			shPostSpecs = shPostSpecs.and(hasSystemAttr(attrName, attrValue, condition));
-		}
-		
-		
-		if (siteIds != null && !siteIds.isEmpty()) {
-			Collection<String> siteCollection = new ArrayList<>(siteIds);
+      shPostSpecs = shPostSpecs.and(hasPosts(shPosts));
+    } else {
 
-			List<ShSite> shSites = shSiteRepository.findByIdIn(siteCollection);
-			shPostSpecs = shPostSpecs.and(hasSites(shSites));
-		}
+      shPostSpecs = shPostSpecs.and(hasSystemAttr(attrName, attrValue, condition));
+    }
 
-		return shPostRepository.findAll(shPostSpecs);
-	}
+    if (siteIds != null && !siteIds.isEmpty()) {
+      Collection<String> siteCollection = new ArrayList<>(siteIds);
 
+      List<ShSite> shSites = shSiteRepository.findByIdIn(siteCollection);
+      shPostSpecs = shPostSpecs.and(hasSites(shSites));
+    }
+
+    return shPostRepository.findAll(shPostSpecs);
+  }
 }

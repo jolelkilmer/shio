@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,16 @@
  */
 package com.viglet.shio.persistence.repository.folder;
 
+import com.viglet.shio.bean.ShFolderTinyBean;
+import com.viglet.shio.persistence.model.folder.ShFolderDraft;
+import com.viglet.shio.persistence.model.site.ShSite;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.bean.ShFolderTinyBean;
-import com.viglet.shio.persistence.model.folder.ShFolderDraft;
-import com.viglet.shio.persistence.model.site.ShSite;
 
 /**
  * @author Alexandre Oliveira
@@ -35,35 +33,38 @@ import com.viglet.shio.persistence.model.site.ShSite;
 @Repository
 public interface ShFolderDraftRepository extends JpaRepository<ShFolderDraft, String> {
 
-	List<ShFolderDraft> findAll();
+  List<ShFolderDraft> findAll();
 
-	@Query("select new com.viglet.shio.bean.ShFolderTinyBean(f.id, f.name, f.position, f.date) from ShFolderDraft f where f.shSite = ?1 and f.rootFolder = ?2")
-	Set<ShFolderTinyBean> findByShSiteAndRootFolderTiny(ShSite shSite, byte rootFolder);
-	
-	
-	Set<ShFolderDraft> findByShSiteAndRootFolder(ShSite shSite, byte rootFolder);
+  @Query(
+      "select new com.viglet.shio.bean.ShFolderTinyBean(f.id, f.name, f.position, f.date) from"
+          + " ShFolderDraft f where f.shSite = ?1 and f.rootFolder = ?2")
+  Set<ShFolderTinyBean> findByShSiteAndRootFolderTiny(ShSite shSite, byte rootFolder);
 
-	ShFolderDraft findByShSiteAndName(ShSite shSite, String name);
+  Set<ShFolderDraft> findByShSiteAndRootFolder(ShSite shSite, byte rootFolder);
 
-	ShFolderDraft findByShSiteAndFurl(ShSite shSite, String furl);
+  ShFolderDraft findByShSiteAndName(ShSite shSite, String name);
 
-	ShFolderDraft findByParentFolderAndName(ShFolderDraft parentFolder, String name);
+  ShFolderDraft findByShSiteAndFurl(ShSite shSite, String furl);
 
-	ShFolderDraft findByParentFolderAndFurl(ShFolderDraft parentFolder, String furl);
+  ShFolderDraft findByParentFolderAndName(ShFolderDraft parentFolder, String name);
 
-	@Query("select new com.viglet.shio.bean.ShFolderTinyBean(f.id, f.name, f.position, f.date) from ShFolderDraft f where f.parentFolder = ?1")
-	Set<ShFolderTinyBean> findByParentFolderTiny(ShFolderDraft parentFolder);
+  ShFolderDraft findByParentFolderAndFurl(ShFolderDraft parentFolder, String furl);
 
-	Set<ShFolderDraft> findByParentFolder(ShFolderDraft parentFolder);
+  @Query(
+      "select new com.viglet.shio.bean.ShFolderTinyBean(f.id, f.name, f.position, f.date) from"
+          + " ShFolderDraft f where f.parentFolder = ?1")
+  Set<ShFolderTinyBean> findByParentFolderTiny(ShFolderDraft parentFolder);
 
-	List<ShFolderDraft> findByParentFolderOrderByPositionAsc(ShFolderDraft parentFolder);
+  Set<ShFolderDraft> findByParentFolder(ShFolderDraft parentFolder);
 
-	Optional<ShFolderDraft> findById(String id);
+  List<ShFolderDraft> findByParentFolderOrderByPositionAsc(ShFolderDraft parentFolder);
 
-	@SuppressWarnings("unchecked")
-	ShFolderDraft save(ShFolderDraft shFolder);
+  Optional<ShFolderDraft> findById(String id);
 
-	@Modifying
-	@Query("delete from ShFolder p where p.id = ?1")
-	void delete(String shFolderId);
+  @SuppressWarnings("unchecked")
+  ShFolderDraft save(ShFolderDraft shFolder);
+
+  @Modifying
+  @Query("delete from ShFolder p where p.id = ?1")
+  void delete(String shFolderId);
 }

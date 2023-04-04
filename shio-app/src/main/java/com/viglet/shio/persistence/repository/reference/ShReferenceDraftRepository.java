@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,15 @@
  */
 package com.viglet.shio.persistence.repository.reference;
 
+import com.viglet.shio.persistence.model.object.ShObject;
+import com.viglet.shio.persistence.model.object.ShObjectDraft;
+import com.viglet.shio.persistence.model.reference.ShReferenceDraft;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.object.ShObject;
-import com.viglet.shio.persistence.model.object.ShObjectDraft;
-import com.viglet.shio.persistence.model.reference.ShReferenceDraft;
 
 /**
  * @author Alexandre Oliveira
@@ -34,18 +32,18 @@ import com.viglet.shio.persistence.model.reference.ShReferenceDraft;
 @Repository
 public interface ShReferenceDraftRepository extends JpaRepository<ShReferenceDraft, String> {
 
-	List<ShReferenceDraft> findAll();
+  List<ShReferenceDraft> findAll();
 
-	Optional<ShReferenceDraft> findById(String id);
-	
-	List<ShReferenceDraft> findByShObjectFrom(ShObjectDraft shObjectFrom);
-	
-	List<ShReferenceDraft> findByShObjectTo(ShObject shObjectTo);
+  Optional<ShReferenceDraft> findById(String id);
 
-	@SuppressWarnings("unchecked")
-	ShReferenceDraft save(ShReferenceDraft shReference);
+  List<ShReferenceDraft> findByShObjectFrom(ShObjectDraft shObjectFrom);
 
-	@Modifying
-	@Query("delete from ShReferenceDraft rd where rd.id = ?1")
-	void delete(String id);
+  List<ShReferenceDraft> findByShObjectTo(ShObject shObjectTo);
+
+  @SuppressWarnings("unchecked")
+  ShReferenceDraft save(ShReferenceDraft shReference);
+
+  @Modifying
+  @Query("delete from ShReferenceDraft rd where rd.id = ?1")
+  void delete(String id);
 }

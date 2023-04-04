@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -25,22 +25,22 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("shio.git")
 public class ShGitProperties {
-	private String url = "none";
-	private String token = "none";
+  private String url = "none";
+  private String token = "none";
 
-	public String getUrl() {
-		return url;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	public String getToken() {
-		return token;
-	}
+  public String getToken() {
+    return token;
+  }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+  public void setToken(String token) {
+    this.token = token;
+  }
 }

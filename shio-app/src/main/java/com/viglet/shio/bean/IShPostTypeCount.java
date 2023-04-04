@@ -4,7 +4,7 @@ import com.viglet.shio.persistence.model.post.type.ShPostType;
 
 public interface IShPostTypeCount {
 
-	ShPostType getShPostType();
+  ShPostType getShPostType();
 
-	Float getTotalPostType();
+  Float getTotalPostType();
 }

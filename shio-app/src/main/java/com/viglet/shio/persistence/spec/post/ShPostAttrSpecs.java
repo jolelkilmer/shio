@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,22 +16,19 @@
  */
 package com.viglet.shio.persistence.spec.post;
 
+import com.viglet.shio.persistence.model.post.ShPost;
+import com.viglet.shio.persistence.model.post.ShPostAttr;
+import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
+import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
+import com.viglet.shio.persistence.model.site.ShSite;
 import java.util.List;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-
 import org.springframework.data.jpa.domain.Specification;
-
-import com.viglet.shio.persistence.model.post.ShPost;
-import com.viglet.shio.persistence.model.post.ShPostAttr;
-import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
-import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
-import com.viglet.shio.persistence.model.site.ShSite;
 
 /**
  * @author Alexandre Oliveira
@@ -39,45 +36,46 @@ import com.viglet.shio.persistence.model.site.ShSite;
  */
 public class ShPostAttrSpecs {
 
-	private ShPostAttrSpecs() {
-		throw new IllegalStateException("ShPostAttrSpecs class");
-	}
-	
-	public static Specification<ShPostAttr> hasShPostTypeAttr(ShPostTypeAttr shPostTypeAttr) {
-		return (shPostAttr, query, cb) -> cb.equal(shPostAttr.get("shPostTypeAttr"), shPostTypeAttr);
-	}
+  private ShPostAttrSpecs() {
+    throw new IllegalStateException("ShPostAttrSpecs class");
+  }
 
-	public static Specification<ShPostAttr> hasSites(List<ShSite> shSites) {
-		return (shPostAttr, query, cb) -> {
-			final Path<ShPostImpl> shPost = shPostAttr.<ShPostImpl>get("shPost");
+  public static Specification<ShPostAttr> hasShPostTypeAttr(ShPostTypeAttr shPostTypeAttr) {
+    return (shPostAttr, query, cb) -> cb.equal(shPostAttr.get("shPostTypeAttr"), shPostTypeAttr);
+  }
 
-			query.distinct(true);
-			Subquery<ShPost> postSubQuery = query.subquery(ShPost.class);
-			Root<ShPost> post = postSubQuery.from(ShPost.class);
+  public static Specification<ShPostAttr> hasSites(List<ShSite> shSites) {
+    return (shPostAttr, query, cb) -> {
+      final Path<ShPostImpl> shPost = shPostAttr.<ShPostImpl>get("shPost");
 
-			final Path<ShSite> shSitePath = post.<ShSite>get("shSite");
+      query.distinct(true);
+      Subquery<ShPost> postSubQuery = query.subquery(ShPost.class);
+      Root<ShPost> post = postSubQuery.from(ShPost.class);
 
-			postSubQuery.select(post);
-			postSubQuery.where(shSitePath.in(shSites));
+      final Path<ShSite> shSitePath = post.<ShSite>get("shSite");
 
-			return shPost.in(postSubQuery);
-		};
-	}
+      postSubQuery.select(post);
+      postSubQuery.where(shSitePath.in(shSites));
 
-	public static Specification<ShPostAttr> conditionParams(String attrValue, String condition) {
-		return new Specification<ShPostAttr>() {
+      return shPost.in(postSubQuery);
+    };
+  }
 
-			private static final long serialVersionUID = 1L;
+  public static Specification<ShPostAttr> conditionParams(String attrValue, String condition) {
+    return new Specification<ShPostAttr>() {
 
-			@Override
-			public Predicate toPredicate(Root<ShPostAttr> root, CriteriaQuery<?> query,
-					CriteriaBuilder criteriaBuilder) {
+      private static final long serialVersionUID = 1L;
 
-				String attrName = "strValue";
-				List<Predicate> predicates = ShPostSpecsCommons.predicateAttrCondition(attrName, attrValue, condition,
-						root, criteriaBuilder);
-				return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-			}
-		};
-	}
+      @Override
+      public Predicate toPredicate(
+          Root<ShPostAttr> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+
+        String attrName = "strValue";
+        List<Predicate> predicates =
+            ShPostSpecsCommons.predicateAttrCondition(
+                attrName, attrValue, condition, root, criteriaBuilder);
+        return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+      }
+    };
+  }
 }

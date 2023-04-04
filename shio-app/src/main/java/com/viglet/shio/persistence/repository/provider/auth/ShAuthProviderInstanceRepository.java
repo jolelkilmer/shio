@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,32 +16,31 @@
  */
 package com.viglet.shio.persistence.repository.provider.auth;
 
+import com.viglet.shio.persistence.model.provider.auth.ShAuthProviderInstance;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.viglet.shio.persistence.model.provider.auth.ShAuthProviderInstance;
-
 /**
  * @author Alexandre Oliveira
  */
 @Repository
-public interface ShAuthProviderInstanceRepository extends JpaRepository<ShAuthProviderInstance, String> {
+public interface ShAuthProviderInstanceRepository
+    extends JpaRepository<ShAuthProviderInstance, String> {
 
-	List<ShAuthProviderInstance> findAll();
+  List<ShAuthProviderInstance> findAll();
 
-	List<ShAuthProviderInstance> findByEnabled(boolean enabled);
-	
-	Optional<ShAuthProviderInstance> findById(String id);
+  List<ShAuthProviderInstance> findByEnabled(boolean enabled);
 
-	@SuppressWarnings("unchecked")
-	ShAuthProviderInstance save(ShAuthProviderInstance shAuthProviderInstance);
+  Optional<ShAuthProviderInstance> findById(String id);
 
-	@Modifying
-	@Query("delete from ShAuthProviderInstance api where api.id = ?1")
-	void delete(String id);
+  @SuppressWarnings("unchecked")
+  ShAuthProviderInstance save(ShAuthProviderInstance shAuthProviderInstance);
+
+  @Modifying
+  @Query("delete from ShAuthProviderInstance api where api.id = ?1")
+  void delete(String id);
 }

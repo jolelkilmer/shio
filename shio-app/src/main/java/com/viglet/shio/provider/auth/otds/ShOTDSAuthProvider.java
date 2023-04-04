@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,19 +16,16 @@
  */
 package com.viglet.shio.provider.auth.otds;
 
+import com.viglet.shio.persistence.model.auth.ShUser;
+import com.viglet.shio.provider.auth.ShAuthenticationProvider;
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-
-import com.viglet.shio.persistence.model.auth.ShUser;
-import com.viglet.shio.provider.auth.ShAuthenticationProvider;
 
 /**
  * @author Alexandre Oliveira
@@ -37,43 +34,40 @@ import com.viglet.shio.provider.auth.ShAuthenticationProvider;
 @Component
 public class ShOTDSAuthProvider implements ShAuthenticationProvider {
 
-	@Autowired
-	private ShOTDSService shOTDSService;
-	@Autowired
-	private ObjectFactory<HttpSession> httpSessionFactory;
+  @Autowired private ShOTDSService shOTDSService;
+  @Autowired private ObjectFactory<HttpSession> httpSessionFactory;
 
-	private String providerId = null;
+  private String providerId = null;
 
-	@Override
-	public void init(String providerId) {
-		this.providerId = providerId;
-		shOTDSService.init(providerId);
-	}
+  @Override
+  public void init(String providerId) {
+    this.providerId = providerId;
+    shOTDSService.init(providerId);
+  }
 
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-		String name = authentication.getName();
-		String password = authentication.getCredentials().toString();
+    String name = authentication.getName();
+    String password = authentication.getCredentials().toString();
 
-		if (shOTDSService.isAuthorizedUser(name, password)) {
-			HttpSession session = httpSessionFactory.getObject();
-			session.setAttribute("authProvider", this.providerId);
-			return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
+    if (shOTDSService.isAuthorizedUser(name, password)) {
+      HttpSession session = httpSessionFactory.getObject();
+      session.setAttribute("authProvider", this.providerId);
+      return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
 
-		} else {
-			return null;
-		}
+    } else {
+      return null;
+    }
+  }
 
-	}
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return authentication.equals(UsernamePasswordAuthenticationToken.class);
+  }
 
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
-
-	@Override
-	public ShUser getShUser(String username) {
-		return shOTDSService.getShUser(username);
-	}
+  @Override
+  public ShUser getShUser(String username) {
+    return shOTDSService.getShUser(username);
+  }
 }

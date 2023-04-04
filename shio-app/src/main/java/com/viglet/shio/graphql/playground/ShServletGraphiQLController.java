@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,37 +16,37 @@
  */
 package com.viglet.shio.graphql.playground;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
+import java.io.IOException;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author Andrew Potter
  * @since 0.3.7
  */
-
 @Controller
-public class ShServletGraphiQLController extends ShGraphiQLController{
+public class ShServletGraphiQLController extends ShGraphiQLController {
 
-    @PostConstruct
-    @Override
-    public void onceConstructed() throws IOException {
-        super.onceConstructed();
-    }
+  @PostConstruct
+  @Override
+  public void onceConstructed() throws IOException {
+    super.onceConstructed();
+  }
 
-    @GetMapping(value = "${graphiql.mapping:/graphiql}")
-    public void graphiql(HttpServletRequest request, HttpServletResponse response,
-                         @PathVariable Map<String, String> params) throws IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        Object csrf = request.getAttribute("_csrf");
-        byte[] graphiqlBytes = super.graphiql(request.getContextPath(), params, csrf);
-        response.getOutputStream().write(graphiqlBytes);
-    }
-
+  @GetMapping(value = "${graphiql.mapping:/graphiql}")
+  public void graphiql(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @PathVariable Map<String, String> params)
+      throws IOException {
+    response.setContentType("text/html; charset=UTF-8");
+    Object csrf = request.getAttribute("_csrf");
+    byte[] graphiqlBytes = super.graphiql(request.getContextPath(), params, csrf);
+    response.getOutputStream().write(graphiqlBytes);
+  }
 }

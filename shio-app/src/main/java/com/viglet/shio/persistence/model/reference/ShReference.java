@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,8 +16,9 @@
  */
 package com.viglet.shio.persistence.model.reference;
 
+import com.viglet.shio.persistence.model.object.ShObject;
+import com.viglet.shio.persistence.model.object.impl.ShObjectImpl;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,59 +27,54 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-
 import org.hibernate.annotations.GenericGenerator;
-
-import com.viglet.shio.persistence.model.object.ShObject;
-import com.viglet.shio.persistence.model.object.impl.ShObjectImpl;
 
 /**
  * The persistent class for the ShReference database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @NamedQuery(name = "ShReference.findAll", query = "SELECT r FROM ShReference r")
-public class ShReference implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
-	@GeneratedValue(generator = "UUID")
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "object_from" , nullable = false)
-	private ShObject shObjectFrom;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "object_to", nullable = false)
-	private ShObject shObjectTo;
+public class ShReference implements Serializable {
 
-	public String getId() {
-		return id;
-	}
+  private static final long serialVersionUID = 1L;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  @Id
+  @GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
+  @GeneratedValue(generator = "UUID")
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	public ShObjectImpl getShObjectFrom() {
-		return shObjectFrom;
-	}
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "object_from", nullable = false)
+  private ShObject shObjectFrom;
 
-	public void setShObjectFrom(ShObject shObjectFrom) {
-		this.shObjectFrom = shObjectFrom;
-	}
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "object_to", nullable = false)
+  private ShObject shObjectTo;
 
-	public ShObjectImpl getShObjectTo() {
-		return shObjectTo;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setShObjectTo(ShObject shObjectTo) {
-		this.shObjectTo = shObjectTo;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	
+  public ShObjectImpl getShObjectFrom() {
+    return shObjectFrom;
+  }
+
+  public void setShObjectFrom(ShObject shObjectFrom) {
+    this.shObjectFrom = shObjectFrom;
+  }
+
+  public ShObjectImpl getShObjectTo() {
+    return shObjectTo;
+  }
+
+  public void setShObjectTo(ShObject shObjectTo) {
+    this.shObjectTo = shObjectTo;
+  }
 }

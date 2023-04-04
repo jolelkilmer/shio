@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,26 +16,22 @@
  */
 package com.viglet.shio.bean.provider.exchange;
 
+import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderInstance;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderInstance;
 
 /**
  * @author Alexandre Oliveira
  */
-public class ShExchangeProviderInstanceBean extends ShExchangeProviderInstance  {
+public class ShExchangeProviderInstanceBean extends ShExchangeProviderInstance {
 
-	private Map<String, String> properties = new HashMap<>();
+  private Map<String, String> properties = new HashMap<>();
 
-	public Map<String, String> getProperties() {
-		return properties;
-	}
+  public Map<String, String> getProperties() {
+    return properties;
+  }
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
-	}
-
-
-	
+  public void setProperties(Map<String, String> properties) {
+    this.properties = properties;
+  }
 }

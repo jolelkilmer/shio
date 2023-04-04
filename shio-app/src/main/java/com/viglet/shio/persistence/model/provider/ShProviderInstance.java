@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -23,13 +23,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * The persistent class for the ShProviderInstance database table.
- * 
+ *
  * @author Alexandre Oliveira
  * @since 0.3.6
  */
@@ -37,72 +36,70 @@ import org.hibernate.annotations.GenericGenerator;
 @NamedQuery(name = "ShProviderInstance.findAll", query = "SELECT pi FROM ShProviderInstance pi")
 public class ShProviderInstance {
 
-	@Id
-	@GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
-	@GeneratedValue(generator = "UUID")
+  @Id
+  @GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
+  @GeneratedValue(generator = "UUID")
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
+  private String name;
 
-	private String name;
+  private String description;
 
-	private String description;
+  private int position;
 
-	private int position;
+  @ManyToOne
+  @JoinColumn(name = "vendor_id")
+  @Fetch(org.hibernate.annotations.FetchMode.JOIN)
+  private ShProviderVendor vendor;
 
-	@ManyToOne
-	@JoinColumn(name = "vendor_id")
-	@Fetch(org.hibernate.annotations.FetchMode.JOIN)
-	private ShProviderVendor vendor;
+  private boolean enabled;
 
-	private boolean enabled;
+  public String getId() {
+    return id;
+  }
 
-	public String getId() {
-		return id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public ShProviderVendor getVendor() {
+    return vendor;
+  }
 
-	public ShProviderVendor getVendor() {
-		return vendor;
-	}
+  public void setVendor(ShProviderVendor vendor) {
+    this.vendor = vendor;
+  }
 
-	public void setVendor(ShProviderVendor vendor) {
-		this.vendor = vendor;
-	}
+  public int getPosition() {
+    return position;
+  }
 
-	public int getPosition() {
-		return position;
-	}
+  public void setPosition(int position) {
+    this.position = position;
+  }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
+  public boolean getEnabled() {
+    return enabled;
+  }
 
-	public boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
 }

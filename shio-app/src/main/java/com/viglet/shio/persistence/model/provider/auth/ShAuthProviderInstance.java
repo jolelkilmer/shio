@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,17 @@
  */
 package com.viglet.shio.persistence.model.provider.auth;
 
+import com.viglet.shio.persistence.model.provider.ShProviderInstance;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
-import com.viglet.shio.persistence.model.provider.ShProviderInstance;
-
 /**
  * The persistent class for the ShAuthProviderInstance database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
-@NamedQuery(name = "ShAuthProviderInstance.findAll", query = "SELECT pi FROM ShAuthProviderInstance pi")
-public class ShAuthProviderInstance extends ShProviderInstance {
-
-}
+@NamedQuery(
+    name = "ShAuthProviderInstance.findAll",
+    query = "SELECT pi FROM ShAuthProviderInstance pi")
+public class ShAuthProviderInstance extends ShProviderInstance {}

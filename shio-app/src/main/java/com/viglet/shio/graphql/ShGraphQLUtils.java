@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,16 @@
  */
 package com.viglet.shio.graphql;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.google.common.base.CaseFormat;
 import com.viglet.shio.persistence.model.post.ShPost;
 import com.viglet.shio.persistence.model.post.impl.ShPostAttrImpl;
 import com.viglet.shio.utils.ShObjectUtils;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * GraphQL Utils.
@@ -38,42 +36,43 @@ import com.viglet.shio.utils.ShObjectUtils;
 @Component
 public class ShGraphQLUtils {
 
-	@Autowired
-	private ShObjectUtils shObjectUtils;
+  @Autowired private ShObjectUtils shObjectUtils;
 
-	public String normalizedField(String object) {
-		return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, object.toLowerCase().replace(" ", "_").replace("-", "_"));
-	}
+  public String normalizedField(String object) {
+    return CaseFormat.LOWER_UNDERSCORE.to(
+        CaseFormat.LOWER_CAMEL, object.toLowerCase().replace(" ", "_").replace("-", "_"));
+  }
 
-	public String normalizedName(String name) {
-		if (StringUtils.isNotEmpty(name)) {
-			char[] c = name.replace(" ","_").replace("-", "_").toCharArray();
-			c[0] = Character.toLowerCase(c[0]);
-			return  StringUtils.remove(WordUtils.capitalizeFully(new String(c), '_'), "_");
-		} else {
-			return StringUtils.EMPTY;
-		}
-	}
+  public String normalizedName(String name) {
+    if (StringUtils.isNotEmpty(name)) {
+      char[] c = name.replace(" ", "_").replace("-", "_").toCharArray();
+      c[0] = Character.toLowerCase(c[0]);
+      return StringUtils.remove(WordUtils.capitalizeFully(new String(c), '_'), "_");
+    } else {
+      return StringUtils.EMPTY;
+    }
+  }
 
-	public Map<String, String> graphQLAttrsByPost(ShPost shPost) {
+  public Map<String, String> graphQLAttrsByPost(ShPost shPost) {
 
-		Map<String, String> shPostAttrMap = new HashMap<>();
-		if (shPost != null) {
-			shPostAttrMap.put(ShGraphQLConstants.ID, shPost.getId());
-			shPostAttrMap.put(ShGraphQLConstants.TITLE, shPost.getTitle());
-			shPostAttrMap.put(ShGraphQLConstants.DESCRIPTION, shPost.getSummary());
-			shPostAttrMap.put(ShGraphQLConstants.FURL, shPost.getFurl());
-			shPostAttrMap.put(ShGraphQLConstants.MODIFIER, shPost.getOwner());
-			shPostAttrMap.put(ShGraphQLConstants.PUBLISHER, shPost.getPublisher());
-			shPostAttrMap.put(ShGraphQLConstants.FOLDER, shPost.getShFolder().getName());
-			shPostAttrMap.put(ShGraphQLConstants.SITE, shObjectUtils.getSite(shPost).getName());
-			for (ShPostAttrImpl shPostAttr : shPost.getShPostAttrs()) {
-				String postTypeAttrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL,
-						shPostAttr.getShPostTypeAttr().getName().toLowerCase().replace("-", "_"));
-				shPostAttrMap.put(postTypeAttrName, shPostAttr.getStrValue());
-			}
-		}
-		return shPostAttrMap;
-	}
-
+    Map<String, String> shPostAttrMap = new HashMap<>();
+    if (shPost != null) {
+      shPostAttrMap.put(ShGraphQLConstants.ID, shPost.getId());
+      shPostAttrMap.put(ShGraphQLConstants.TITLE, shPost.getTitle());
+      shPostAttrMap.put(ShGraphQLConstants.DESCRIPTION, shPost.getSummary());
+      shPostAttrMap.put(ShGraphQLConstants.FURL, shPost.getFurl());
+      shPostAttrMap.put(ShGraphQLConstants.MODIFIER, shPost.getOwner());
+      shPostAttrMap.put(ShGraphQLConstants.PUBLISHER, shPost.getPublisher());
+      shPostAttrMap.put(ShGraphQLConstants.FOLDER, shPost.getShFolder().getName());
+      shPostAttrMap.put(ShGraphQLConstants.SITE, shObjectUtils.getSite(shPost).getName());
+      for (ShPostAttrImpl shPostAttr : shPost.getShPostAttrs()) {
+        String postTypeAttrName =
+            CaseFormat.LOWER_UNDERSCORE.to(
+                CaseFormat.LOWER_CAMEL,
+                shPostAttr.getShPostTypeAttr().getName().toLowerCase().replace("-", "_"));
+        shPostAttrMap.put(postTypeAttrName, shPostAttr.getStrValue());
+      }
+    }
+    return shPostAttrMap;
+  }
 }

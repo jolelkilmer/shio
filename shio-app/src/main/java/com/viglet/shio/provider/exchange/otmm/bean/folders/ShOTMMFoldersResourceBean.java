@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,28 +16,23 @@
  */
 package com.viglet.shio.provider.exchange.otmm.bean.folders;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTMMFoldersResourceBean {
 
-	@JsonProperty("folder_list")
-	private List<ShOTMMFolderBean> folderList;
+  @JsonProperty("folder_list")
+  private List<ShOTMMFolderBean> folderList;
 
-	public List<ShOTMMFolderBean> getFolderList() {
-		return folderList;
-	}
+  public List<ShOTMMFolderBean> getFolderList() {
+    return folderList;
+  }
 
-	public void setFolderList(List<ShOTMMFolderBean> folderList) {
-		this.folderList = folderList;
-	}
-
-	
-
+  public void setFolderList(List<ShOTMMFolderBean> folderList) {
+    this.folderList = folderList;
+  }
 }

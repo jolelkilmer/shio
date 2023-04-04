@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,8 @@
  */
 package com.viglet.shio;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -24,39 +26,34 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-
 /**
- * Class that can be used to bootstrap and launch a Shio CMS from a Java
- * main method.
+ * Class that can be used to bootstrap and launch a Shio CMS from a Java main method.
  *
  * @author Alexandre Oliveira
- *
- **/
-
+ */
 @SpringBootApplication
 @EnableJms
 @EnableCaching
 public class Shio {
 
-	public static void main(String[] args) {
-		SpringApplication application = new SpringApplication(Shio.class);
-		application.run();
-	}
+  public static void main(String[] args) {
+    SpringApplication application = new SpringApplication(Shio.class);
+    application.run();
+  }
 
-	@Bean
-	public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean() {
-		FilterRegistrationBean<CharacterEncodingFilter> registrationBean = new FilterRegistrationBean<>();
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setForceEncoding(true);
-		characterEncodingFilter.setEncoding("UTF-8");
-		registrationBean.setFilter(characterEncodingFilter);
-		return registrationBean;
-	}
+  @Bean
+  public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean() {
+    FilterRegistrationBean<CharacterEncodingFilter> registrationBean =
+        new FilterRegistrationBean<>();
+    CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+    characterEncodingFilter.setForceEncoding(true);
+    characterEncodingFilter.setEncoding("UTF-8");
+    registrationBean.setFilter(characterEncodingFilter);
+    return registrationBean;
+  }
 
-	@Bean
-	public Module hibernate5Module() {
-		return new Hibernate5Module();
-	}
+  @Bean
+  public Module hibernate5Module() {
+    return new Hibernate5Module();
+  }
 }

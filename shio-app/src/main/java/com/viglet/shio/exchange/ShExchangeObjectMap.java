@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,23 +27,22 @@ import java.util.Map;
  * @since 0.3.4
  */
 public class ShExchangeObjectMap {
-	private Map<String, Object> shObjects = new HashMap<>();
-	private Map<String, List<String>> shChildObjects = new HashMap<>();
+  private Map<String, Object> shObjects = new HashMap<>();
+  private Map<String, List<String>> shChildObjects = new HashMap<>();
 
-	public Map<String, Object> getShObjects() {
-		return shObjects;
-	}
+  public Map<String, Object> getShObjects() {
+    return shObjects;
+  }
 
-	public void setShObjects(Map<String, Object> shObjects) {
-		this.shObjects = shObjects;
-	}
+  public void setShObjects(Map<String, Object> shObjects) {
+    this.shObjects = shObjects;
+  }
 
-	public Map<String, List<String>> getShChildObjects() {
-		return shChildObjects;
-	}
+  public Map<String, List<String>> getShChildObjects() {
+    return shChildObjects;
+  }
 
-	public void setShChildObjects(Map<String, List<String>> shChildObjects) {
-		this.shChildObjects = shChildObjects;
-	}
-
+  public void setShChildObjects(Map<String, List<String>> shChildObjects) {
+    this.shChildObjects = shChildObjects;
+  }
 }

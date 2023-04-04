@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,108 +16,102 @@
  */
 package com.viglet.shio.utils;
 
+import com.viglet.shio.persistence.model.post.type.ShPostType;
+import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
+import com.viglet.shio.persistence.repository.post.type.ShPostTypeAttrRepository;
+import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.viglet.shio.persistence.model.post.type.ShPostType;
-import com.viglet.shio.persistence.model.post.type.ShPostTypeAttr;
-import com.viglet.shio.persistence.repository.post.type.ShPostTypeAttrRepository;
-import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShPostTypeUtils {
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShPostTypeAttrRepository shPostTypeAttrRepository;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShPostTypeAttrRepository shPostTypeAttrRepository;
 
-	public Map<String, ShPostTypeAttr> toMap(ShPostType shPostType) {
+  public Map<String, ShPostTypeAttr> toMap(ShPostType shPostType) {
 
-		Set<ShPostTypeAttr> shPostTypeAttrList = shPostType.getShPostTypeAttrs();
+    Set<ShPostTypeAttr> shPostTypeAttrList = shPostType.getShPostTypeAttrs();
 
-		Map<String, ShPostTypeAttr> shPostTypeMap = new HashMap<>();
-		for (ShPostTypeAttr shPostTypeAttr : shPostTypeAttrList)
-			shPostTypeMap.put(shPostTypeAttr.getName(), shPostTypeAttr);
+    Map<String, ShPostTypeAttr> shPostTypeMap = new HashMap<>();
+    for (ShPostTypeAttr shPostTypeAttr : shPostTypeAttrList)
+      shPostTypeMap.put(shPostTypeAttr.getName(), shPostTypeAttr);
 
-		return shPostTypeMap;
+    return shPostTypeMap;
+  }
 
-	}
+  public ShPostType clone(ShPostType shPostType) {
 
-	public ShPostType clone(ShPostType shPostType) {
+    List<ShPostType> shPostTypes = shPostTypeRepository.findAll();
 
-		List<ShPostType> shPostTypes = shPostTypeRepository.findAll();
+    Set<String> titles = new HashSet<>();
+    int lowerPosition = 0;
+    for (ShPostType shPostTypeCheck : shPostTypes) {
+      titles.add(shPostTypeCheck.getTitle());
+      if (shPostTypeCheck.getPosition() < lowerPosition)
+        lowerPosition = shPostTypeCheck.getPosition();
+    }
 
-		Set<String> titles = new HashSet<>();
-		int lowerPosition = 0;
-		for (ShPostType shPostTypeCheck : shPostTypes) {
-			titles.add(shPostTypeCheck.getTitle());
-			if (shPostTypeCheck.getPosition() < lowerPosition)
-				lowerPosition = shPostTypeCheck.getPosition();
+    ShPostType shPostTypeClone = new ShPostType();
+    shPostTypeClone.setDate(new Date());
+    shPostTypeClone.setDescription(shPostType.getDescription());
+    shPostTypeClone.setModifiedDate(new Date());
 
-		}
+    shPostTypeClone.setObjectType(shPostType.getObjectType());
+    shPostTypeClone.setOwner(shPostType.getOwner());
+    shPostTypeClone.setSystem((byte) 0);
 
-		ShPostType shPostTypeClone = new ShPostType();
-		shPostTypeClone.setDate(new Date());
-		shPostTypeClone.setDescription(shPostType.getDescription());
-		shPostTypeClone.setModifiedDate(new Date());
+    String title = shPostType.getTitle();
+    String name = shPostType.getName();
+    String namePlural = shPostType.getNamePlural();
+    if (titles.contains(String.format("Clone of %s", shPostType.getTitle()))) {
+      int countSameTitle = 0;
+      boolean uniqueTitle = false;
+      while (!uniqueTitle) {
+        title = String.format("Clone (%d) of %s", countSameTitle + 1, shPostType.getTitle());
+        name = String.format("Clone%d%s", countSameTitle + 1, shPostType.getName());
+        namePlural = String.format("Clone%d%s", countSameTitle + 1, shPostType.getNamePlural());
+        if (!titles.contains(title) || (countSameTitle > titles.size())) {
+          uniqueTitle = true;
+        }
+        countSameTitle++;
+      }
+    } else {
+      title = String.format("Clone of %s", shPostType.getTitle());
+      name = String.format("Clone%s", shPostType.getName());
+      namePlural = String.format("Clone%s", shPostType.getNamePlural());
+    }
+    shPostTypeClone.setTitle(title);
+    shPostTypeClone.setName(name);
+    shPostTypeClone.setNamePlural(namePlural);
 
-		shPostTypeClone.setObjectType(shPostType.getObjectType());
-		shPostTypeClone.setOwner(shPostType.getOwner());
-		shPostTypeClone.setSystem((byte) 0);
+    shPostTypeRepository.save(shPostTypeClone);
 
-		String title = shPostType.getTitle();
-		String name = shPostType.getName();
-		String namePlural = shPostType.getNamePlural();
-		if (titles.contains(String.format("Clone of %s", shPostType.getTitle()))) {
-			int countSameTitle = 0;
-			boolean uniqueTitle = false;
-			while (!uniqueTitle) {
-				title = String.format("Clone (%d) of %s", countSameTitle + 1, shPostType.getTitle());
-				name = String.format("Clone%d%s", countSameTitle + 1, shPostType.getName());
-				namePlural = String.format("Clone%d%s", countSameTitle + 1, shPostType.getNamePlural());
-				if (!titles.contains(title) || (countSameTitle > titles.size())) {
-					uniqueTitle = true;
-				}
-				countSameTitle++;
-			}
-		} else {
-			title = String.format("Clone of %s", shPostType.getTitle());
-			name = String.format("Clone%s", shPostType.getName());
-			namePlural = String.format("Clone%s", shPostType.getNamePlural());
-		}
-		shPostTypeClone.setTitle(title);
-		shPostTypeClone.setName(name);
-		shPostTypeClone.setNamePlural(namePlural);
+    Set<ShPostTypeAttr> shPostTypeAttrs = shPostTypeAttrRepository.findByShPostType(shPostType);
+    for (ShPostTypeAttr shPostTypeAttr : shPostTypeAttrs) {
+      ShPostTypeAttr shPostTypeAttrClone = new ShPostTypeAttr();
+      shPostTypeAttrClone.setDescription(shPostTypeAttr.getDescription());
+      shPostTypeAttrClone.setIsSummary(shPostTypeAttr.getIsSummary());
+      shPostTypeAttrClone.setIsTitle(shPostTypeAttr.getIsTitle());
+      shPostTypeAttrClone.setLabel(shPostTypeAttr.getLabel());
+      shPostTypeAttrClone.setName(shPostTypeAttr.getName());
+      shPostTypeAttrClone.setOrdinal(shPostTypeAttr.getOrdinal());
+      shPostTypeAttrClone.setRequired(shPostTypeAttr.getRequired());
+      shPostTypeAttrClone.setWidgetSettings(shPostTypeAttr.getWidgetSettings());
+      shPostTypeAttrClone.setShWidget(shPostTypeAttr.getShWidget());
+      shPostTypeAttrClone.setShPostType(shPostTypeClone);
 
-		shPostTypeRepository.save(shPostTypeClone);
+      shPostTypeAttrRepository.save(shPostTypeAttrClone);
+    }
 
-		Set<ShPostTypeAttr> shPostTypeAttrs = shPostTypeAttrRepository.findByShPostType(shPostType);
-		for (ShPostTypeAttr shPostTypeAttr : shPostTypeAttrs) {
-			ShPostTypeAttr shPostTypeAttrClone = new ShPostTypeAttr();
-			shPostTypeAttrClone.setDescription(shPostTypeAttr.getDescription());
-			shPostTypeAttrClone.setIsSummary(shPostTypeAttr.getIsSummary());
-			shPostTypeAttrClone.setIsTitle(shPostTypeAttr.getIsTitle());
-			shPostTypeAttrClone.setLabel(shPostTypeAttr.getLabel());
-			shPostTypeAttrClone.setName(shPostTypeAttr.getName());
-			shPostTypeAttrClone.setOrdinal(shPostTypeAttr.getOrdinal());
-			shPostTypeAttrClone.setRequired(shPostTypeAttr.getRequired());
-			shPostTypeAttrClone.setWidgetSettings(shPostTypeAttr.getWidgetSettings());
-			shPostTypeAttrClone.setShWidget(shPostTypeAttr.getShWidget());
-			shPostTypeAttrClone.setShPostType(shPostTypeClone);
-
-			shPostTypeAttrRepository.save(shPostTypeAttrClone);
-		}
-
-		return shPostTypeClone;
-	}
+    return shPostTypeClone;
+  }
 }

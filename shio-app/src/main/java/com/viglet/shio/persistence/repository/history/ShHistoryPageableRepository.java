@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,12 @@
  */
 package com.viglet.shio.persistence.repository.history;
 
+import com.viglet.shio.persistence.model.history.ShHistory;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.history.ShHistory;
 
 /**
  * @author Alexandre Oliveira
@@ -31,12 +29,11 @@ import com.viglet.shio.persistence.model.history.ShHistory;
 @Repository
 public interface ShHistoryPageableRepository extends PagingAndSortingRepository<ShHistory, String> {
 
-	List<ShHistory> findAll();
+  List<ShHistory> findAll();
 
-	List<ShHistory> findByShObjectOrderByDateDesc(String shObject,  Pageable pageable);
-	
-	List<ShHistory> findByShSiteOrderByDateDesc(String shSite,  Pageable pageable);
-	
-	Optional<ShHistory> findById(String id);
-	
+  List<ShHistory> findByShObjectOrderByDateDesc(String shObject, Pageable pageable);
+
+  List<ShHistory> findByShSiteOrderByDateDesc(String shSite, Pageable pageable);
+
+  Optional<ShHistory> findById(String id);
 }

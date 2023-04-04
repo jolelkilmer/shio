@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com> 
- * 
+ * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,15 +21,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.viglet.shio.persistence.model.site.ShSite;
+import com.viglet.shio.utils.ShUtils;
 import java.security.Principal;
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,107 +43,108 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.viglet.shio.persistence.model.site.ShSite;
-import com.viglet.shio.utils.ShUtils;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestMethodOrder (MethodOrderer.MethodName.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class ShSiteAPITest {
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+  @Autowired private WebApplicationContext webApplicationContext;
 
-	private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	private String sampleSiteId = "c5bdee96-6feb-4894-9daf-3aab6cdd5087";
+  private String sampleSiteId = "c5bdee96-6feb-4894-9daf-3aab6cdd5087";
 
-	private String newSiteId  = "2761f115-198d-4cd8-9566-7d5671764444";
+  private String newSiteId = "2761f115-198d-4cd8-9566-7d5671764444";
 
-	private Principal mockPrincipal;
-	
-	@BeforeAll
-	void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		mockPrincipal = Mockito.mock(Principal.class);
-		Mockito.when(mockPrincipal.getName()).thenReturn("admin");
-	}
+  private Principal mockPrincipal;
 
-	@Test
-	void shSiteList()  throws Exception {	
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v2/site").principal(mockPrincipal);
+  @BeforeAll
+  void setup() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    mockPrincipal = Mockito.mock(Principal.class);
+    Mockito.when(mockPrincipal.getName()).thenReturn("admin");
+  }
 
-		mockMvc.perform(requestBuilder).andExpect(status().isOk());
-	}
-	
-	@Test
-	void shSiteStructure()  throws Exception {		
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v2/site/model").principal(mockPrincipal);
+  @Test
+  void shSiteList() throws Exception {
+    RequestBuilder requestBuilder =
+        MockMvcRequestBuilders.get("/api/v2/site").principal(mockPrincipal);
 
-		mockMvc.perform(requestBuilder).andExpect(status().isOk());
-	}
-	
-	@Test
-	void shSiteRootFolder() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v2/site/" + sampleSiteId + "/folder").principal(mockPrincipal);
+    mockMvc.perform(requestBuilder).andExpect(status().isOk());
+  }
 
-		mockMvc.perform(requestBuilder).andExpect(status().isOk());
-		
-	}
-	
-	@Test
-	void shSiteEdit() throws Exception {
-		mockMvc.perform(get("/api/v2/site/" + sampleSiteId)).andExpect(status().isOk());
+  @Test
+  void shSiteStructure() throws Exception {
+    RequestBuilder requestBuilder =
+        MockMvcRequestBuilders.get("/api/v2/site/model").principal(mockPrincipal);
 
-	}
+    mockMvc.perform(requestBuilder).andExpect(status().isOk());
+  }
 
-	@Test
-	void shSiteExport() throws Exception {
-		mockMvc.perform(get("/api/v2/site/" + sampleSiteId + "/export")).andExpect(status().isOk());
+  @Test
+  void shSiteRootFolder() throws Exception {
+    RequestBuilder requestBuilder =
+        MockMvcRequestBuilders.get("/api/v2/site/" + sampleSiteId + "/folder")
+            .principal(mockPrincipal);
 
-	}
+    mockMvc.perform(requestBuilder).andExpect(status().isOk());
+  }
 
-	@Test
-	void stage01ShSiteAdd() throws Exception {
-		ShSite shSite = new ShSite();
-		shSite.setId(newSiteId);
-		shSite.setDescription("Test Site");
-		shSite.setName(UUID.randomUUID().toString());
-		shSite.setUrl("http://example.com");
+  @Test
+  void shSiteEdit() throws Exception {
+    mockMvc.perform(get("/api/v2/site/" + sampleSiteId)).andExpect(status().isOk());
+  }
 
-		String requestBody = ShUtils.asJsonString(shSite);
+  @Test
+  void shSiteExport() throws Exception {
+    mockMvc.perform(get("/api/v2/site/" + sampleSiteId + "/export")).andExpect(status().isOk());
+  }
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v2/site").principal(mockPrincipal)
-				.accept(MediaType.APPLICATION_JSON).content(requestBody).contentType("application/json")
-				.header("X-Requested-With", "XMLHttpRequest");
+  @Test
+  void stage01ShSiteAdd() throws Exception {
+    ShSite shSite = new ShSite();
+    shSite.setId(newSiteId);
+    shSite.setDescription("Test Site");
+    shSite.setName(UUID.randomUUID().toString());
+    shSite.setUrl("http://example.com");
 
-		mockMvc.perform(requestBuilder).andExpect(status().isOk());
+    String requestBody = ShUtils.asJsonString(shSite);
 
-	}
+    RequestBuilder requestBuilder =
+        MockMvcRequestBuilders.post("/api/v2/site")
+            .principal(mockPrincipal)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(requestBody)
+            .contentType("application/json")
+            .header("X-Requested-With", "XMLHttpRequest");
 
-	@Test
-	void stage02ShSiteUpdate() throws Exception {
-		ShSite shSite = new ShSite();
-		shSite.setId(newSiteId);
-		shSite.setDescription("Test Site2");
-		shSite.setName("Test2");
-		shSite.setUrl("http://www2.example.com");
+    mockMvc.perform(requestBuilder).andExpect(status().isOk());
+  }
 
-		String requestBody = ShUtils.asJsonString(shSite);
+  @Test
+  void stage02ShSiteUpdate() throws Exception {
+    ShSite shSite = new ShSite();
+    shSite.setId(newSiteId);
+    shSite.setDescription("Test Site2");
+    shSite.setName("Test2");
+    shSite.setUrl("http://www2.example.com");
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v2/site/" + newSiteId).principal(mockPrincipal)
-				.accept(MediaType.APPLICATION_JSON).content(requestBody).contentType("application/json")
-				.header("X-Requested-With", "XMLHttpRequest");
+    String requestBody = ShUtils.asJsonString(shSite);
 
-		mockMvc.perform(requestBuilder).andExpect(status().isOk());
+    RequestBuilder requestBuilder =
+        MockMvcRequestBuilders.put("/api/v2/site/" + newSiteId)
+            .principal(mockPrincipal)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(requestBody)
+            .contentType("application/json")
+            .header("X-Requested-With", "XMLHttpRequest");
 
-	}
-	
-	@Test
-	void stage03ShSiteDelete() throws Exception {
-		mockMvc.perform(delete("/api/v2/site/" + newSiteId)).andExpect(status().isOk());
+    mockMvc.perform(requestBuilder).andExpect(status().isOk());
+  }
 
-	}
-
+  @Test
+  void stage03ShSiteDelete() throws Exception {
+    mockMvc.perform(delete("/api/v2/site/" + newSiteId)).andExpect(status().isOk());
+  }
 }

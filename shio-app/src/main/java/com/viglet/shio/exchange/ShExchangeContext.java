@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,34 +20,32 @@ import java.io.File;
 
 /**
  * Post Exchange Context
- * 
+ *
  * @author Alexandre Oliveira
  * @since 0.3.7
- * 
  */
 public class ShExchangeContext {
-	private File extractFolder;
-	private boolean isCloned;
+  private File extractFolder;
+  private boolean isCloned;
 
-	public ShExchangeContext(File extractFolder, boolean isCloned) {
-		this.extractFolder = extractFolder;
-		this.isCloned = isCloned;
-	}
+  public ShExchangeContext(File extractFolder, boolean isCloned) {
+    this.extractFolder = extractFolder;
+    this.isCloned = isCloned;
+  }
 
-	public File getExtractFolder() {
-		return extractFolder;
-	}
+  public File getExtractFolder() {
+    return extractFolder;
+  }
 
-	public void setExtractFolder(File extractFolder) {
-		this.extractFolder = extractFolder;
-	}
+  public void setExtractFolder(File extractFolder) {
+    this.extractFolder = extractFolder;
+  }
 
-	public boolean isCloned() {
-		return isCloned;
-	}
+  public boolean isCloned() {
+    return isCloned;
+  }
 
-	public void setCloned(boolean isCloned) {
-		this.isCloned = isCloned;
-	}
-
+  public void setCloned(boolean isCloned) {
+    this.isCloned = isCloned;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -23,25 +23,23 @@ import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
  */
 public class ShPostXP {
 
-	private ShPostImpl shPost;
-	
-	private boolean allowPublish;
+  private ShPostImpl shPost;
 
-	public ShPostImpl getShPost() {
-		return shPost;
-	}
+  private boolean allowPublish;
 
-	public void setShPost(ShPostImpl shPost) {
-		this.shPost = shPost;
-	}
+  public ShPostImpl getShPost() {
+    return shPost;
+  }
 
-	public boolean isAllowPublish() {
-		return allowPublish;
-	}
+  public void setShPost(ShPostImpl shPost) {
+    this.shPost = shPost;
+  }
 
-	public void setAllowPublish(boolean allowPublish) {
-		this.allowPublish = allowPublish;
-	} 
-	
-	
+  public boolean isAllowPublish() {
+    return allowPublish;
+  }
+
+  public void setAllowPublish(boolean allowPublish) {
+    this.allowPublish = allowPublish;
+  }
 }

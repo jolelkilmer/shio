@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,14 +16,12 @@
  */
 package com.viglet.shio.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.system.ShConfigVar;
 import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
@@ -31,16 +29,15 @@ import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
 @Component
 public class ShConfigVarUtils {
 
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
 
-	public Map<String, String> getVariablesFromPath(String path) {
+  public Map<String, String> getVariablesFromPath(String path) {
 
-		Map<String, String> configVarMap = new HashMap<>();
+    Map<String, String> configVarMap = new HashMap<>();
 
-		for (ShConfigVar shConfigVar : shConfigVarRepository.findByPath(path))
-			configVarMap.put(shConfigVar.getName(), shConfigVar.getValue());
+    for (ShConfigVar shConfigVar : shConfigVarRepository.findByPath(path))
+      configVarMap.put(shConfigVar.getName(), shConfigVar.getValue());
 
-		return configVarMap;
-	}
+    return configVarMap;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,14 @@
  */
 package com.viglet.shio.website.component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.post.ShPostAttr;
 import com.viglet.shio.persistence.repository.post.ShPostAttrRepository;
 import com.viglet.shio.website.utils.ShSitesPostUtils;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
@@ -33,16 +31,14 @@ import com.viglet.shio.website.utils.ShSitesPostUtils;
 @Component
 public class ShGetRelationComponent {
 
-	@Autowired
-	private ShPostAttrRepository shPostAttrRepository;
-	@Autowired
-	private ShSitesPostUtils shSitesPostUtils;
+  @Autowired private ShPostAttrRepository shPostAttrRepository;
+  @Autowired private ShSitesPostUtils shSitesPostUtils;
 
-	public List<Map<String, ShPostAttr>> findByPostAttrId(String postAttrId) {
-		Optional<ShPostAttr> shPostAttr = shPostAttrRepository.findById(postAttrId);
+  public List<Map<String, ShPostAttr>> findByPostAttrId(String postAttrId) {
+    Optional<ShPostAttr> shPostAttr = shPostAttrRepository.findById(postAttrId);
 
-		return shPostAttr.isPresent()
-				? shSitesPostUtils.relationToMap(shSitesPostUtils.getPostAttrByStage(shPostAttr.get()))
-				: null;
-	}
+    return shPostAttr.isPresent()
+        ? shSitesPostUtils.relationToMap(shSitesPostUtils.getPostAttrByStage(shPostAttr.get()))
+        : null;
+  }
 }

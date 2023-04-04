@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,89 +22,87 @@ import java.util.List;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShExchangeProviderFolder {
 
-	private String id;
+  private String id;
 
-	private String name;
+  private String name;
 
-	private Date date;
+  private Date date;
 
-	private String parentId;
-	
-	private List<ShExchangeProviderFolder> folders = new ArrayList<>();
+  private String parentId;
 
-	private List<ShExchangeProviderPost> posts = new ArrayList<>();
+  private List<ShExchangeProviderFolder> folders = new ArrayList<>();
 
-	private List<ShExchangeProviderBreadcrumbItem> breadcrumb = new ArrayList<>();
+  private List<ShExchangeProviderPost> posts = new ArrayList<>();
 
-	private String providerName;
-	
-	
-	public String getId() {
-		return id;
-	}
+  private List<ShExchangeProviderBreadcrumbItem> breadcrumb = new ArrayList<>();
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  private String providerName;
 
-	public String getName() {
-		return name;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Date getDate() {
-		return date;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getParentId() {
-		return parentId;
-	}
+  public Date getDate() {
+    return date;
+  }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public List<ShExchangeProviderFolder> getFolders() {
-		return folders;
-	}
+  public String getParentId() {
+    return parentId;
+  }
 
-	public void setFolders(List<ShExchangeProviderFolder> folders) {
-		this.folders = folders;
-	}
+  public void setParentId(String parentId) {
+    this.parentId = parentId;
+  }
 
-	public List<ShExchangeProviderPost> getPosts() {
-		return posts;
-	}
+  public List<ShExchangeProviderFolder> getFolders() {
+    return folders;
+  }
 
-	public void setPosts(List<ShExchangeProviderPost> posts) {
-		this.posts = posts;
-	}
+  public void setFolders(List<ShExchangeProviderFolder> folders) {
+    this.folders = folders;
+  }
 
-	public List<ShExchangeProviderBreadcrumbItem> getBreadcrumb() {
-		return breadcrumb;
-	}
+  public List<ShExchangeProviderPost> getPosts() {
+    return posts;
+  }
 
-	public void setBreadcrumb(List<ShExchangeProviderBreadcrumbItem> breadcrumb) {
-		this.breadcrumb = breadcrumb;
-	}
+  public void setPosts(List<ShExchangeProviderPost> posts) {
+    this.posts = posts;
+  }
 
-	public String getProviderName() {
-		return providerName;
-	}
+  public List<ShExchangeProviderBreadcrumbItem> getBreadcrumb() {
+    return breadcrumb;
+  }
 
-	public void setProviderName(String providerName) {
-		this.providerName = providerName;
-	}
+  public void setBreadcrumb(List<ShExchangeProviderBreadcrumbItem> breadcrumb) {
+    this.breadcrumb = breadcrumb;
+  }
+
+  public String getProviderName() {
+    return providerName;
+  }
+
+  public void setProviderName(String providerName) {
+    this.providerName = providerName;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,61 +16,59 @@
  */
 package com.viglet.shio.graphql.playground;
 
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.graphql.playground.properties.Cdn;
 import com.viglet.shio.graphql.playground.properties.CodeMirror;
 import com.viglet.shio.graphql.playground.properties.Endpoint;
 import com.viglet.shio.graphql.playground.properties.Props;
 import com.viglet.shio.graphql.playground.properties.Static;
 import com.viglet.shio.graphql.playground.properties.Subscriptions;
+import org.springframework.stereotype.Component;
 
 /**
-* @author Alexandre Oliveira
-* @since 0.3.7
-*/
+ * @author Alexandre Oliveira
+ * @since 0.3.7
+ */
 @Component
 public class ShGraphiQLProperties {
 
-	private Endpoint endpoint = new Endpoint();
-	private Static staticFile = new Static();
-	private CodeMirror codeMirror = new CodeMirror();
-	private Props props = new Props();
-	private String pageTitle = "Shio CMS Playground";
-	private String mapping = "/graphiql";
-	private Subscriptions subscriptions = new Subscriptions();
-	private Cdn cdn = new Cdn();
+  private Endpoint endpoint = new Endpoint();
+  private Static staticFile = new Static();
+  private CodeMirror codeMirror = new CodeMirror();
+  private Props props = new Props();
+  private String pageTitle = "Shio CMS Playground";
+  private String mapping = "/graphiql";
+  private Subscriptions subscriptions = new Subscriptions();
+  private Cdn cdn = new Cdn();
 
-	public Endpoint getEndpoint() {
-		return endpoint;
-	}
+  public Endpoint getEndpoint() {
+    return endpoint;
+  }
 
-	public Static getStatic() {
-		return staticFile;
-	}
+  public Static getStatic() {
+    return staticFile;
+  }
 
-	public CodeMirror getCodeMirror() {
-		return codeMirror;
-	}
+  public CodeMirror getCodeMirror() {
+    return codeMirror;
+  }
 
-	public Props getProps() {
-		return props;
-	}
+  public Props getProps() {
+    return props;
+  }
 
-	public String getPageTitle() {
-		return pageTitle;
-	}
+  public String getPageTitle() {
+    return pageTitle;
+  }
 
-	public String getMapping() {
-		return mapping;
-	}
+  public String getMapping() {
+    return mapping;
+  }
 
-	public Subscriptions getSubscriptions() {
-		return subscriptions;
-	}
+  public Subscriptions getSubscriptions() {
+    return subscriptions;
+  }
 
-	public Cdn getCdn() {
-		return cdn;
-	}
-
+  public Cdn getCdn() {
+    return cdn;
+  }
 }

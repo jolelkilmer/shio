@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,121 +16,119 @@
  */
 package com.viglet.shio.exchange.site;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShSiteExchange {
-	
-	private String id;
 
-	private String name;
+  private String id;
 
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm'Z'")
-	private Date date;
+  private String name;
 
-	private String description;
+  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm'Z'")
+  private Date date;
 
-	private String url;
+  private String description;
 
-	private String postTypeLayout;
-	
-	private String searchablePostTypes;
-	
-	private String owner;
-	
-	private String furl;
-	
-	private List<String> rootFolders;
+  private String url;
 
-	public ShSiteExchange() {
-		super();
-	}
-	
-	public String getId() {
-		return id;
-	}
+  private String postTypeLayout;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  private String searchablePostTypes;
 
-	public Date getDate() {
-		return this.date;
-	}
+  private String owner;
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+  private String furl;
 
-	public String getName() {
-		return name;
-	}
+  private List<String> rootFolders;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public ShSiteExchange() {
+    super();
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public String getUrl() {
-		return url;
-	}
+  public Date getDate() {
+    return this.date;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-	public List<String> getRootFolders() {
-		return rootFolders;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setRootFolders(List<String> rootFolders) {
-		this.rootFolders = rootFolders;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getPostTypeLayout() {
-		return postTypeLayout;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setPostTypeLayout(String postTypeLayout) {
-		this.postTypeLayout = postTypeLayout;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public String getOwner() {
-		return owner;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	public String getFurl() {
-		return furl;
-	}
+  public List<String> getRootFolders() {
+    return rootFolders;
+  }
 
-	public void setFurl(String furl) {
-		this.furl = furl;
-	}
+  public void setRootFolders(List<String> rootFolders) {
+    this.rootFolders = rootFolders;
+  }
 
-	public String getSearchablePostTypes() {
-		return searchablePostTypes;
-	}
+  public String getPostTypeLayout() {
+    return postTypeLayout;
+  }
 
-	public void setSearchablePostTypes(String searchablePostTypes) {
-		this.searchablePostTypes = searchablePostTypes;
-	}
+  public void setPostTypeLayout(String postTypeLayout) {
+    this.postTypeLayout = postTypeLayout;
+  }
 
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  public String getFurl() {
+    return furl;
+  }
+
+  public void setFurl(String furl) {
+    this.furl = furl;
+  }
+
+  public String getSearchablePostTypes() {
+    return searchablePostTypes;
+  }
+
+  public void setSearchablePostTypes(String searchablePostTypes) {
+    this.searchablePostTypes = searchablePostTypes;
+  }
 }

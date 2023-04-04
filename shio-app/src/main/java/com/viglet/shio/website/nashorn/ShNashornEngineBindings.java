@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,9 +16,6 @@
  */
 package com.viglet.shio.website.nashorn;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.property.ShWebsiteProperties;
 import com.viglet.shio.website.component.ShGetRelationComponent;
 import com.viglet.shio.website.component.ShNavigationComponent;
@@ -28,67 +25,58 @@ import com.viglet.shio.website.component.form.ShFormComponent;
 import com.viglet.shio.website.utils.ShSitesFolderUtils;
 import com.viglet.shio.website.utils.ShSitesObjectUtils;
 import com.viglet.shio.website.utils.ShSitesPostUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.9
  */
 @Component
 public class ShNashornEngineBindings {
-	@Autowired
-	private ShNavigationComponent shNavigationComponent;
-	@Autowired
-	private ShQueryComponent shQueryComponent;
-	@Autowired
-	private ShSearchComponent shSearchComponent;
-	@Autowired
-	private ShFormComponent shFormComponent;
-	@Autowired
-	private ShSitesFolderUtils shSitesFolderUtils;
-	@Autowired
-	private ShSitesObjectUtils shSitesObjectUtils;
-	@Autowired
-	private ShSitesPostUtils shSitesPostUtils;
-	@Autowired
-	private ShGetRelationComponent shGetRelationComponent;
-	@Autowired
-	private ShWebsiteProperties shWebsiteProperties;
+  @Autowired private ShNavigationComponent shNavigationComponent;
+  @Autowired private ShQueryComponent shQueryComponent;
+  @Autowired private ShSearchComponent shSearchComponent;
+  @Autowired private ShFormComponent shFormComponent;
+  @Autowired private ShSitesFolderUtils shSitesFolderUtils;
+  @Autowired private ShSitesObjectUtils shSitesObjectUtils;
+  @Autowired private ShSitesPostUtils shSitesPostUtils;
+  @Autowired private ShGetRelationComponent shGetRelationComponent;
+  @Autowired private ShWebsiteProperties shWebsiteProperties;
 
-	public ShNavigationComponent getShNavigationComponent() {
-		return shNavigationComponent;
-	}
+  public ShNavigationComponent getShNavigationComponent() {
+    return shNavigationComponent;
+  }
 
-	public ShQueryComponent getShQueryComponent() {
-		return shQueryComponent;
-	}
+  public ShQueryComponent getShQueryComponent() {
+    return shQueryComponent;
+  }
 
-	public ShSearchComponent getShSearchComponent() {
-		return shSearchComponent;
-	}
+  public ShSearchComponent getShSearchComponent() {
+    return shSearchComponent;
+  }
 
-	public ShFormComponent getShFormComponent() {
-		return shFormComponent;
-	}
+  public ShFormComponent getShFormComponent() {
+    return shFormComponent;
+  }
 
-	public ShSitesFolderUtils getShSitesFolderUtils() {
-		return shSitesFolderUtils;
-	}
+  public ShSitesFolderUtils getShSitesFolderUtils() {
+    return shSitesFolderUtils;
+  }
 
-	public ShSitesObjectUtils getShSitesObjectUtils() {
-		return shSitesObjectUtils;
-	}
+  public ShSitesObjectUtils getShSitesObjectUtils() {
+    return shSitesObjectUtils;
+  }
 
-	public ShSitesPostUtils getShSitesPostUtils() {
-		return shSitesPostUtils;
-	}
+  public ShSitesPostUtils getShSitesPostUtils() {
+    return shSitesPostUtils;
+  }
 
-	public ShGetRelationComponent getShGetRelationComponent() {
-		return shGetRelationComponent;
-	}
+  public ShGetRelationComponent getShGetRelationComponent() {
+    return shGetRelationComponent;
+  }
 
-	public ShWebsiteProperties getShWebsiteProperties() {
-		return shWebsiteProperties;
-	}
-
+  public ShWebsiteProperties getShWebsiteProperties() {
+    return shWebsiteProperties;
+  }
 }

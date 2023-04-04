@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,14 @@
  */
 package com.viglet.shio.persistence.repository.site;
 
+import com.viglet.shio.persistence.model.site.ShSite;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.viglet.shio.persistence.model.site.ShSite;
 
 /**
  * @author Alexandre Oliveira
@@ -33,24 +31,24 @@ import com.viglet.shio.persistence.model.site.ShSite;
 @Repository
 public interface ShSiteRepository extends JpaRepository<ShSite, String> {
 
-	List<ShSite> findAll();
+  List<ShSite> findAll();
 
-	Optional<ShSite> findById(String id);
+  Optional<ShSite> findById(String id);
 
-	List<ShSite> findByOwner(String owner);
-	
-	List<ShSite> findByIdIn(Collection<String> ids);
-	
-	List<ShSite> findByOwnerOrOwnerIsNull(String owner);
-	
-	ShSite findByName(String name);
-	
-	ShSite findByFurl(String furl);
+  List<ShSite> findByOwner(String owner);
 
-	@SuppressWarnings("unchecked")
-	ShSite save(ShSite shSite);
+  List<ShSite> findByIdIn(Collection<String> ids);
 
-	@Modifying
-	@Query("delete from ShSite p where p.id = ?1")
-	void delete(String shSiteId);
+  List<ShSite> findByOwnerOrOwnerIsNull(String owner);
+
+  ShSite findByName(String name);
+
+  ShSite findByFurl(String furl);
+
+  @SuppressWarnings("unchecked")
+  ShSite save(ShSite shSite);
+
+  @Modifying
+  @Query("delete from ShSite p where p.id = ?1")
+  void delete(String shSiteId);
 }

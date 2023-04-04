@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,24 +21,23 @@ package com.viglet.shio.bean.security;
  */
 public class ShSecurityBean {
 
-	private ShConsoleSecurityBean console;
-	
-	private ShPageSecurityBean page;
+  private ShConsoleSecurityBean console;
 
-	public ShConsoleSecurityBean getConsole() {
-		return console;
-	}
+  private ShPageSecurityBean page;
 
-	public void setConsole(ShConsoleSecurityBean console) {
-		this.console = console;
-	}
+  public ShConsoleSecurityBean getConsole() {
+    return console;
+  }
 
-	public ShPageSecurityBean getPage() {
-		return page;
-	}
+  public void setConsole(ShConsoleSecurityBean console) {
+    this.console = console;
+  }
 
-	public void setPage(ShPageSecurityBean page) {
-		this.page = page;
-	}
+  public ShPageSecurityBean getPage() {
+    return page;
+  }
 
+  public void setPage(ShPageSecurityBean page) {
+    this.page = page;
+  }
 }

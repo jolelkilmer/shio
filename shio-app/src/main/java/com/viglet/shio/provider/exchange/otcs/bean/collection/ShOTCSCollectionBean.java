@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,29 +18,27 @@ package com.viglet.shio.provider.exchange.otcs.bean.collection;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 public class ShOTCSCollectionBean {
 
-	private ShOTCSPagingBean paging;
+  private ShOTCSPagingBean paging;
 
-	private ShOTCSSortingBean sorting;
+  private ShOTCSSortingBean sorting;
 
-	public ShOTCSPagingBean getPaging() {
-		return paging;
-	}
+  public ShOTCSPagingBean getPaging() {
+    return paging;
+  }
 
-	public void setPaging(ShOTCSPagingBean paging) {
-		this.paging = paging;
-	}
+  public void setPaging(ShOTCSPagingBean paging) {
+    this.paging = paging;
+  }
 
-	public ShOTCSSortingBean getSorting() {
-		return sorting;
-	}
+  public ShOTCSSortingBean getSorting() {
+    return sorting;
+  }
 
-	public void setSorting(ShOTCSSortingBean sorting) {
-		this.sorting = sorting;
-	}
-
+  public void setSorting(ShOTCSSortingBean sorting) {
+    this.sorting = sorting;
+  }
 }

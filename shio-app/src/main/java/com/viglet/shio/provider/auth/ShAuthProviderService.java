@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,15 +16,13 @@
  */
 package com.viglet.shio.provider.auth;
 
-import java.util.List;
-
 import com.viglet.shio.bean.provider.auth.ShAuthProviderInstanceBean;
 import com.viglet.shio.persistence.model.provider.auth.ShAuthProviderInstance;
 import com.viglet.shio.persistence.model.system.ShConfigVar;
 import com.viglet.shio.persistence.repository.provider.auth.ShAuthProviderInstanceRepository;
 import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
 import com.viglet.shio.property.ShConfigProperties;
-
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,41 +30,41 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.6
  */
 @Component
 public class ShAuthProviderService {
-	@SuppressWarnings("unused")
-	private static final Log logger = LogFactory.getLog(ShAuthProviderService.class);
-	@Autowired
-	private ShConfigProperties shConfigProperties;
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
-	@Autowired
-	private ShAuthProviderInstanceRepository shAuthProviderInstanceRepository;
+  @SuppressWarnings("unused")
+  private static final Log logger = LogFactory.getLog(ShAuthProviderService.class);
 
-	public ShAuthProviderInstanceBean getShAuthProviderInstanceBean(String providerId) {
-		ShAuthProviderInstance shAuthProviderInstance = shAuthProviderInstanceRepository.findById(providerId)
-				.orElse(null);
-		ShAuthProviderInstanceBean shAuthProviderInstanceBean = new ShAuthProviderInstanceBean();
-		if (shAuthProviderInstance != null) {
-			shAuthProviderInstanceBean = new ShAuthProviderInstanceBean();
-			shAuthProviderInstanceBean.setId(shAuthProviderInstance.getId());
-			shAuthProviderInstanceBean.setName(shAuthProviderInstance.getName());
-			shAuthProviderInstanceBean.setDescription(shAuthProviderInstance.getDescription());
-			shAuthProviderInstanceBean.setVendor(shAuthProviderInstance.getVendor());
-			shAuthProviderInstanceBean.setEnabled(shAuthProviderInstance.getEnabled());
+  @Autowired private ShConfigProperties shConfigProperties;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
+  @Autowired private ShAuthProviderInstanceRepository shAuthProviderInstanceRepository;
 
-			String providerInstancePath = String.format(shConfigProperties.getAuth(), shAuthProviderInstance.getId());
+  public ShAuthProviderInstanceBean getShAuthProviderInstanceBean(String providerId) {
+    ShAuthProviderInstance shAuthProviderInstance =
+        shAuthProviderInstanceRepository.findById(providerId).orElse(null);
+    ShAuthProviderInstanceBean shAuthProviderInstanceBean = new ShAuthProviderInstanceBean();
+    if (shAuthProviderInstance != null) {
+      shAuthProviderInstanceBean = new ShAuthProviderInstanceBean();
+      shAuthProviderInstanceBean.setId(shAuthProviderInstance.getId());
+      shAuthProviderInstanceBean.setName(shAuthProviderInstance.getName());
+      shAuthProviderInstanceBean.setDescription(shAuthProviderInstance.getDescription());
+      shAuthProviderInstanceBean.setVendor(shAuthProviderInstance.getVendor());
+      shAuthProviderInstanceBean.setEnabled(shAuthProviderInstance.getEnabled());
 
-			List<ShConfigVar> shConfigVars = shConfigVarRepository.findByPath(providerInstancePath);
+      String providerInstancePath =
+          String.format(shConfigProperties.getAuth(), shAuthProviderInstance.getId());
 
-			for (ShConfigVar shConfigVar : shConfigVars) {
-				shAuthProviderInstanceBean.getProperties().put(shConfigVar.getName(), shConfigVar.getValue());
-			}
-		}
+      List<ShConfigVar> shConfigVars = shConfigVarRepository.findByPath(providerInstancePath);
 
-		return shAuthProviderInstanceBean;
-	}
+      for (ShConfigVar shConfigVar : shConfigVars) {
+        shAuthProviderInstanceBean
+            .getProperties()
+            .put(shConfigVar.getName(), shConfigVar.getValue());
+      }
+    }
+
+    return shAuthProviderInstanceBean;
+  }
 }

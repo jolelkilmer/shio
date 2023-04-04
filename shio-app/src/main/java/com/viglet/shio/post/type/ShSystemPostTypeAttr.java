@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,24 +21,24 @@ package com.viglet.shio.post.type;
  */
 public class ShSystemPostTypeAttr {
 
-	private ShSystemPostTypeAttr() {
-		throw new IllegalStateException("System Post Type Attr Constants class");
-	}
+  private ShSystemPostTypeAttr() {
+    throw new IllegalStateException("System Post Type Attr Constants class");
+  }
 
-	public static final String ID = "id";
-	public static final String TITLE = "TITLE";
-	public static final String DESCRIPTION = "DESCRIPTION";
-	public static final String FILE = "FILE";
-	public static final String TEXT = "TEXT";
-	public static final String CSS = "CSS";
-	public static final String JAVASCRIPT = "JAVASCRIPT";
-	public static final String HTML = "HTML";
-	public static final String PAGE_LAYOUT = "PAGE-LAYOUT";
-	public static final String THEME = "THEME";
-	public static final String CONTENT = "CONTENT";
-	public static final String PHOTO = "PHOTO";
-	public static final String VIDEO = "VIDEO";
-	public static final String LINK = "LINK";
-	public static final String RELATION = "RELATION";
-	public static final String CACHED = "CACHED";
+  public static final String ID = "id";
+  public static final String TITLE = "TITLE";
+  public static final String DESCRIPTION = "DESCRIPTION";
+  public static final String FILE = "FILE";
+  public static final String TEXT = "TEXT";
+  public static final String CSS = "CSS";
+  public static final String JAVASCRIPT = "JAVASCRIPT";
+  public static final String HTML = "HTML";
+  public static final String PAGE_LAYOUT = "PAGE-LAYOUT";
+  public static final String THEME = "THEME";
+  public static final String CONTENT = "CONTENT";
+  public static final String PHOTO = "PHOTO";
+  public static final String VIDEO = "VIDEO";
+  public static final String LINK = "LINK";
+  public static final String RELATION = "RELATION";
+  public static final String CACHED = "CACHED";
 }

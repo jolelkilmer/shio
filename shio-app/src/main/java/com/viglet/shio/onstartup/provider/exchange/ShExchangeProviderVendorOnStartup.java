@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,12 +16,11 @@
  */
 package com.viglet.shio.onstartup.provider.exchange;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderVendor;
 import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderVendorRepository;
 import com.viglet.shio.provider.exchange.ShExchangeSystemProviderVendor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
@@ -29,31 +28,33 @@ import com.viglet.shio.provider.exchange.ShExchangeSystemProviderVendor;
 @Component
 public class ShExchangeProviderVendorOnStartup {
 
-	@Autowired
-	private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
+  @Autowired private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
 
-	public void createDefaultRows() {
+  public void createDefaultRows() {
 
-		if (shExchangeProviderVendorRepository.findAll().isEmpty()) {
+    if (shExchangeProviderVendorRepository.findAll().isEmpty()) {
 
-			ShExchangeProviderVendor shExchangeProviderVendor = new ShExchangeProviderVendor();
-			shExchangeProviderVendor.setId(ShExchangeSystemProviderVendor.OTCS);
-			shExchangeProviderVendor.setName("OpenText Content Services");
-			shExchangeProviderVendor.setDescription("OpenText Content Services");
-			shExchangeProviderVendor.setClassName("com.viglet.shio.provider.exchange.otcs.ShOTCSProvider");
-			shExchangeProviderVendor.setConfigurationPage("template/config/provider/exchange/otcs/otcs-configuration.html");
+      ShExchangeProviderVendor shExchangeProviderVendor = new ShExchangeProviderVendor();
+      shExchangeProviderVendor.setId(ShExchangeSystemProviderVendor.OTCS);
+      shExchangeProviderVendor.setName("OpenText Content Services");
+      shExchangeProviderVendor.setDescription("OpenText Content Services");
+      shExchangeProviderVendor.setClassName(
+          "com.viglet.shio.provider.exchange.otcs.ShOTCSProvider");
+      shExchangeProviderVendor.setConfigurationPage(
+          "template/config/provider/exchange/otcs/otcs-configuration.html");
 
-			shExchangeProviderVendorRepository.save(shExchangeProviderVendor);
+      shExchangeProviderVendorRepository.save(shExchangeProviderVendor);
 
-			shExchangeProviderVendor = new ShExchangeProviderVendor();
-			shExchangeProviderVendor.setId(ShExchangeSystemProviderVendor.OTMM);
-			shExchangeProviderVendor.setName("OpenText Media Management");
-			shExchangeProviderVendor.setDescription("OpenText Media Management");
-			shExchangeProviderVendor.setClassName("com.viglet.shio.provider.exchange.otmm.ShOTMMProvider");
-			shExchangeProviderVendor.setConfigurationPage("template/config/provider/exchange/otmm/otmm-configuration.html");
+      shExchangeProviderVendor = new ShExchangeProviderVendor();
+      shExchangeProviderVendor.setId(ShExchangeSystemProviderVendor.OTMM);
+      shExchangeProviderVendor.setName("OpenText Media Management");
+      shExchangeProviderVendor.setDescription("OpenText Media Management");
+      shExchangeProviderVendor.setClassName(
+          "com.viglet.shio.provider.exchange.otmm.ShOTMMProvider");
+      shExchangeProviderVendor.setConfigurationPage(
+          "template/config/provider/exchange/otmm/otmm-configuration.html");
 
-			shExchangeProviderVendorRepository.save(shExchangeProviderVendor);
-		}
-
-	}
+      shExchangeProviderVendorRepository.save(shExchangeProviderVendor);
+    }
+  }
 }

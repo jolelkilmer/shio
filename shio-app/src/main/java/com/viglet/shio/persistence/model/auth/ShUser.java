@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,11 +17,9 @@
 package com.viglet.shio.persistence.model.auth;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -32,162 +30,161 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the ShUser database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @NamedQuery(name = "ShUser.findAll", query = "SELECT s FROM ShUser s")
 public class ShUser implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "username")
-	private String username;
+  @Id
+  @Column(name = "username")
+  private String username;
 
-	private String confirmEmail;
+  private String confirmEmail;
 
-	@Column(name = "email")
-	private String email;
+  @Column(name = "email")
+  private String email;
 
-	private String firstName;
+  private String firstName;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastLogin;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date lastLogin;
 
-	private String lastName;
+  private String lastName;
 
-	private String lastPostType;
+  private String lastPostType;
 
-	private int loginTimes;
+  private int loginTimes;
 
-	@Column(name = "password")
-	private String password;
+  @Column(name = "password")
+  private String password;
 
-	private String realm;
+  private String realm;
 
-	private String recoverPassword;
+  private String recoverPassword;
 
-	@Column(name = "enabled")
-	private int enabled;
-	
-	@ManyToMany
-	private Set<ShGroup> shGroups = new HashSet<>();
-	
-	public ShUser(ShUser shUser) {
-		this.username = shUser.username;
-		this.email = shUser.email;
-		this.password = shUser.password;
-		this.enabled = shUser.enabled;
-	}
+  @Column(name = "enabled")
+  private int enabled;
 
-	public ShUser() {
-		super();
-	}
+  @ManyToMany private Set<ShGroup> shGroups = new HashSet<>();
 
-	public String getConfirmEmail() {
-		return this.confirmEmail;
-	}
+  public ShUser(ShUser shUser) {
+    this.username = shUser.username;
+    this.email = shUser.email;
+    this.password = shUser.password;
+    this.enabled = shUser.enabled;
+  }
 
-	public void setConfirmEmail(String confirmEmail) {
-		this.confirmEmail = confirmEmail;
-	}
+  public ShUser() {
+    super();
+  }
 
-	public String getEmail() {
-		return this.email;
-	}
+  public String getConfirmEmail() {
+    return this.confirmEmail;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public void setConfirmEmail(String confirmEmail) {
+    this.confirmEmail = confirmEmail;
+  }
 
-	public String getFirstName() {
-		return this.firstName;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public Date getLastLogin() {
-		return this.lastLogin;
-	}
+  public String getFirstName() {
+    return this.firstName;
+  }
 
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
-	}
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-	public String getLastName() {
-		return this.lastName;
-	}
+  public Date getLastLogin() {
+    return this.lastLogin;
+  }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public void setLastLogin(Date lastLogin) {
+    this.lastLogin = lastLogin;
+  }
 
-	public String getLastPostType() {
-		return this.lastPostType;
-	}
+  public String getLastName() {
+    return this.lastName;
+  }
 
-	public void setLastPostType(String lastPostType) {
-		this.lastPostType = lastPostType;
-	}
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-	public int getLoginTimes() {
-		return this.loginTimes;
-	}
+  public String getLastPostType() {
+    return this.lastPostType;
+  }
 
-	public void setLoginTimes(int loginTimes) {
-		this.loginTimes = loginTimes;
-	}
+  public void setLastPostType(String lastPostType) {
+    this.lastPostType = lastPostType;
+  }
 
-	public String getPassword() {
-		return this.password;
-	}
+  public int getLoginTimes() {
+    return this.loginTimes;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setLoginTimes(int loginTimes) {
+    this.loginTimes = loginTimes;
+  }
 
-	public String getRealm() {
-		return this.realm;
-	}
+  public String getPassword() {
+    return this.password;
+  }
 
-	public void setRealm(String realm) {
-		this.realm = realm;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public String getRecoverPassword() {
-		return this.recoverPassword;
-	}
+  public String getRealm() {
+    return this.realm;
+  }
 
-	public void setRecoverPassword(String recoverPassword) {
-		this.recoverPassword = recoverPassword;
-	}
+  public void setRealm(String realm) {
+    this.realm = realm;
+  }
 
-	public String getUsername() {
-		return this.username;
-	}
+  public String getRecoverPassword() {
+    return this.recoverPassword;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public int getEnabled() {
-		return enabled;
-	}
+  public void setRecoverPassword(String recoverPassword) {
+    this.recoverPassword = recoverPassword;
+  }
 
-	public void setEnabled(int enabled) {
-		this.enabled = enabled;
-	}
-	
-	public Set<ShGroup> getShGroups() {
-		return this.shGroups;
-	}
+  public String getUsername() {
+    return this.username;
+  }
 
-	public void setShGroups(Set<ShGroup> shGroups) {
-		this.shGroups.clear();
-		if (shGroups != null) {
-			this.shGroups.addAll(shGroups);
-		}
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public int getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(int enabled) {
+    this.enabled = enabled;
+  }
+
+  public Set<ShGroup> getShGroups() {
+    return this.shGroups;
+  }
+
+  public void setShGroups(Set<ShGroup> shGroups) {
+    this.shGroups.clear();
+    if (shGroups != null) {
+      this.shGroups.addAll(shGroups);
+    }
+  }
 }

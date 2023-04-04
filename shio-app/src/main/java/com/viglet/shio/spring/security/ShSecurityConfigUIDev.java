@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,11 +17,9 @@
 package com.viglet.shio.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
@@ -34,18 +32,42 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @Profile("ui-dev")
 @ComponentScan(basePackageClasses = ShCustomUserDetailsService.class)
 public class ShSecurityConfigUIDev extends ShSecurityConfigProduction {
-	@Autowired
-	private ShAuthenticationEntryPoint shAuthenticationEntryPoint;
+  @Autowired private ShAuthenticationEntryPoint shAuthenticationEntryPoint;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.headers().frameOptions().disable().cacheControl().disable();
-		http.cors().and().httpBasic().authenticationEntryPoint(shAuthenticationEntryPoint).and().authorizeRequests()
-				.antMatchers("/index.html", "/welcome/**", "/", "/store/**", "/thirdparty/**", "/js/**", "/css/**",
-						"/template/**", "/img/**", "/sites/**", "/__tur/**", "/swagger-resources/**", "/h2/**",
-						"/image/**", "/login-page/**", "/logout-page/**", "/graphql","/manifest.json",
-						"/*.png", "/*.ico")
-				.permitAll().anyRequest().authenticated().and().logout();
-
-	}
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.headers().frameOptions().disable().cacheControl().disable();
+    http.cors()
+        .and()
+        .httpBasic()
+        .authenticationEntryPoint(shAuthenticationEntryPoint)
+        .and()
+        .authorizeRequests()
+        .antMatchers(
+            "/index.html",
+            "/welcome/**",
+            "/",
+            "/store/**",
+            "/thirdparty/**",
+            "/js/**",
+            "/css/**",
+            "/template/**",
+            "/img/**",
+            "/sites/**",
+            "/__tur/**",
+            "/swagger-resources/**",
+            "/h2/**",
+            "/image/**",
+            "/login-page/**",
+            "/logout-page/**",
+            "/graphql",
+            "/manifest.json",
+            "/*.png",
+            "/*.ico")
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .logout();
+  }
 }

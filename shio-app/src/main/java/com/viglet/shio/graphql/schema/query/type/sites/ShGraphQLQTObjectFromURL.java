@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,14 +22,6 @@ import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLNonNull.nonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.google.gson.Gson;
 import com.viglet.shio.graphql.ShGraphQLConstants;
 import com.viglet.shio.graphql.ShGraphQLUtils;
@@ -41,10 +33,15 @@ import com.viglet.shio.persistence.repository.object.ShObjectRepository;
 import com.viglet.shio.website.ShContent;
 import com.viglet.shio.website.component.ShSitesContent;
 import com.viglet.shio.website.utils.ShSitesPageLayoutUtils;
-
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLObjectType.Builder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * GraphQL Object From URL Query Type.
@@ -55,74 +52,74 @@ import graphql.schema.GraphQLObjectType.Builder;
 @Component
 public class ShGraphQLQTObjectFromURL {
 
-	@Autowired
-	private ShSitesContent shSitesContent;
-	@Autowired
-	private ShObjectRepository shObjectRepository;
-	@Autowired
-	private ShGraphQLUtils shGraphQLUtils;
-	@Autowired
-	private ShSitesPageLayoutUtils shSitesPageLayoutUtils;
+  @Autowired private ShSitesContent shSitesContent;
+  @Autowired private ShObjectRepository shObjectRepository;
+  @Autowired private ShGraphQLUtils shGraphQLUtils;
+  @Autowired private ShSitesPageLayoutUtils shSitesPageLayoutUtils;
 
-	private static final String CONTENT_NAME = "shObjectFromURL";
-	private static final String SYSTEM_ATTR = "system";
+  private static final String CONTENT_NAME = "shObjectFromURL";
+  private static final String SYSTEM_ATTR = "system";
 
-	public void createQueryType(Builder queryTypeBuilder,
-			graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder, GraphQLObjectType graphQLObjectType) {
+  public void createQueryType(
+      Builder queryTypeBuilder,
+      graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder,
+      GraphQLObjectType graphQLObjectType) {
 
-		this.createArguments(queryTypeBuilder, graphQLObjectType);
+    this.createArguments(queryTypeBuilder, graphQLObjectType);
 
-		codeRegistryBuilder.dataFetcher(coordinates(ShGraphQLConstants.QUERY_TYPE, CONTENT_NAME),
-				this.getDataFetcher());
-	}
+    codeRegistryBuilder.dataFetcher(
+        coordinates(ShGraphQLConstants.QUERY_TYPE, CONTENT_NAME), this.getDataFetcher());
+  }
 
-	private void createArguments(Builder queryTypeBuilder, GraphQLObjectType graphQLObjectType) {
+  private void createArguments(Builder queryTypeBuilder, GraphQLObjectType graphQLObjectType) {
 
-		queryTypeBuilder.field(newFieldDefinition().name(CONTENT_NAME).type(nonNull(graphQLObjectType))
-				.argument(newArgument().name("url").description("Site URL").type(nonNull(GraphQLString))));
+    queryTypeBuilder.field(
+        newFieldDefinition()
+            .name(CONTENT_NAME)
+            .type(nonNull(graphQLObjectType))
+            .argument(
+                newArgument().name("url").description("Site URL").type(nonNull(GraphQLString))));
+  }
 
-	}
+  private DataFetcher<Map<String, Object>> getDataFetcher() {
+    return dataFetchingEnvironment -> {
+      Gson gson = new Gson();
+      String url = dataFetchingEnvironment.getArgument("url");
+      ShContent shContent = shSitesContent.fromURL(url);
+      JSONObject system = new JSONObject(gson.toJson(shContent.get(SYSTEM_ATTR)));
+      String objectId = system.getString("id");
+      Optional<ShObject> shObject = shObjectRepository.findById(objectId);
+      if (shObject.isPresent()) {
+        Map<String, Object> post = new HashMap<>();
+        JSONObject site = new JSONObject(gson.toJson(shContent.get("site")));
+        String siteId = site.getJSONObject(SYSTEM_ATTR).getString("id");
+        String siteName = site.getJSONObject(SYSTEM_ATTR).getString("title");
+        String type = null;
 
-	private DataFetcher<Map<String, Object>> getDataFetcher() {
-		return dataFetchingEnvironment -> {
-			Gson gson = new Gson();
-			String url = dataFetchingEnvironment.getArgument("url");
-			ShContent shContent = shSitesContent.fromURL(url);
-			JSONObject system = new JSONObject(gson.toJson(shContent.get(SYSTEM_ATTR)));
-			String objectId = system.getString("id");
-			Optional<ShObject> shObject = shObjectRepository.findById(objectId);
-			if (shObject.isPresent()) {
-				Map<String, Object> post = new HashMap<>();
-				JSONObject site = new JSONObject(gson.toJson(shContent.get("site")));
-				String siteId = site.getJSONObject(SYSTEM_ATTR).getString("id");
-				String siteName = site.getJSONObject(SYSTEM_ATTR).getString("title");
-				String type = null;
+        if (shObject.get() instanceof ShPost shPost) {
+          type = shGraphQLUtils.normalizedName(shPost.getShPostType().getName());
+        } else if (shObject.get() instanceof ShFolder) {
+          type = "folder";
+        } else if (shObject.get() instanceof ShSite) {
+          type = "site";
+        }
 
-				if (shObject.get() instanceof ShPost shPost) {
-					type = shGraphQLUtils.normalizedName(shPost.getShPostType().getName());
-				} else if (shObject.get() instanceof ShFolder) {
-					type = "folder";
-				} else if (shObject.get() instanceof ShSite) {
-					type = "site";
-				}
+        ShPost pageLayout = shSitesPageLayoutUtils.fromURL(url);
 
-				ShPost pageLayout = shSitesPageLayoutUtils.fromURL(url);
+        if (pageLayout != null) post.put("pageLayout", pageLayout.getTitle());
 
-				if (pageLayout != null)
-					post.put("pageLayout", pageLayout.getTitle());
+        post.put("id", system.getString("id"));
+        post.put("locale", "Locale1");
+        post.put("context", "Context1");
+        post.put("type", type);
+        post.put("format", "Format1");
+        post.put("siteId", siteId);
+        post.put("siteName", siteName);
+        post.put("content", shContent);
 
-				post.put("id", system.getString("id"));
-				post.put("locale", "Locale1");
-				post.put("context", "Context1");
-				post.put("type", type);
-				post.put("format", "Format1");
-				post.put("siteId", siteId);
-				post.put("siteName", siteName);
-				post.put("content", shContent);
-
-				return post;
-			}
-			return null;
-		};
-	}
+        return post;
+      }
+      return null;
+    };
+  }
 }

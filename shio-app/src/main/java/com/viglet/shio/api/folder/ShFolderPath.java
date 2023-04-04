@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,65 +16,63 @@
  */
 package com.viglet.shio.api.folder;
 
-import java.util.List;
-
 import com.viglet.shio.persistence.model.folder.ShFolder;
 import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
 import com.viglet.shio.persistence.model.site.ShSite;
+import java.util.List;
 
 /**
  * @author Alexandre Oliveira
  */
 public class ShFolderPath {
 
-	private String folderPath;
-	
-	private ShFolder currentFolder;
-	
-	private List<ShFolder> breadcrumb;
-	
-	private ShPostImpl shPost;
-	
-	private ShSite shSite;
+  private String folderPath;
 
-	public String getFolderPath() {
-		return folderPath;
-	}
+  private ShFolder currentFolder;
 
-	public void setFolderPath(String folderPath) {
-		this.folderPath = folderPath;
-	}
+  private List<ShFolder> breadcrumb;
 
-	public ShFolder getCurrentFolder() {
-		return currentFolder;
-	}
+  private ShPostImpl shPost;
 
-	public void setCurrentFolder(ShFolder currentFolder) {
-		this.currentFolder = currentFolder;
-	}
+  private ShSite shSite;
 
-	public List<ShFolder> getBreadcrumb() {
-		return breadcrumb;
-	}
+  public String getFolderPath() {
+    return folderPath;
+  }
 
-	public void setBreadcrumb(List<ShFolder> breadcrumb) {
-		this.breadcrumb = breadcrumb;
-	}
+  public void setFolderPath(String folderPath) {
+    this.folderPath = folderPath;
+  }
 
-	public ShSite getShSite() {
-		return shSite;
-	}
+  public ShFolder getCurrentFolder() {
+    return currentFolder;
+  }
 
-	public void setShSite(ShSite shSite) {
-		this.shSite = shSite;
-	}
+  public void setCurrentFolder(ShFolder currentFolder) {
+    this.currentFolder = currentFolder;
+  }
 
-	public ShPostImpl getShPost() {
-		return shPost;
-	}
+  public List<ShFolder> getBreadcrumb() {
+    return breadcrumb;
+  }
 
-	public void setShPost(ShPostImpl shPost) {
-		this.shPost = shPost;
-	}
+  public void setBreadcrumb(List<ShFolder> breadcrumb) {
+    this.breadcrumb = breadcrumb;
+  }
 
+  public ShSite getShSite() {
+    return shSite;
+  }
+
+  public void setShSite(ShSite shSite) {
+    this.shSite = shSite;
+  }
+
+  public ShPostImpl getShPost() {
+    return shPost;
+  }
+
+  public void setShPost(ShPostImpl shPost) {
+    this.shPost = shPost;
+  }
 }

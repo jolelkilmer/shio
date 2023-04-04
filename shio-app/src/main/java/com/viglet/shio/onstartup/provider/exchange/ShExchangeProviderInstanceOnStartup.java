@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,9 +16,6 @@
  */
 package com.viglet.shio.onstartup.provider.exchange;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderInstance;
 import com.viglet.shio.persistence.model.system.ShConfigVar;
 import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderInstanceRepository;
@@ -26,81 +23,89 @@ import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProvid
 import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
 import com.viglet.shio.property.ShConfigProperties;
 import com.viglet.shio.provider.exchange.ShExchangeSystemProviderVendor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Alexandre Oliveira
  */
 @Component
 public class ShExchangeProviderInstanceOnStartup {
-	@Autowired
-	private ShConfigProperties shConfigProperties;
-	private static final String URL = "URL";
-	private static final String USERNAME = "USERNAME";
-	private static final String PASSWORD = "PASSWORD";
+  @Autowired private ShConfigProperties shConfigProperties;
+  private static final String URL = "URL";
+  private static final String USERNAME = "USERNAME";
+  private static final String PASSWORD = "PASSWORD";
 
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
-	@Autowired
-	private ShExchangeProviderInstanceRepository shExchangeProviderInstanceRepository;
-	@Autowired
-	private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
+  @Autowired private ShExchangeProviderInstanceRepository shExchangeProviderInstanceRepository;
+  @Autowired private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
 
-	public void createDefaultRows() {
+  public void createDefaultRows() {
 
-		if (shExchangeProviderInstanceRepository.findAll().isEmpty()) {
-			this.createOTCSInstance();
-			this.createOTMMInstance();
-		}
-	}
+    if (shExchangeProviderInstanceRepository.findAll().isEmpty()) {
+      this.createOTCSInstance();
+      this.createOTMMInstance();
+    }
+  }
 
-	private void createOTCSInstance() {
-		ShExchangeProviderInstance shExchangeProviderInstance = setProviderInstance("OpenText Content Services",
-				"Sample of OTCS", ShExchangeSystemProviderVendor.OTCS, false);
+  private void createOTCSInstance() {
+    ShExchangeProviderInstance shExchangeProviderInstance =
+        setProviderInstance(
+            "OpenText Content Services",
+            "Sample of OTCS",
+            ShExchangeSystemProviderVendor.OTCS,
+            false);
 
-		String providerInstance = String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
+    String providerInstance =
+        String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
 
-		this.setConfigVar(providerInstance, "http://localhost/OTCS/cs.exe", "admin", "password");
-	}
+    this.setConfigVar(providerInstance, "http://localhost/OTCS/cs.exe", "admin", "password");
+  }
 
-	private ShExchangeProviderInstance setProviderInstance(String name, String description, String provider,
-			boolean isEnabled) {
-		ShExchangeProviderInstance shExchangeProviderInstance = new ShExchangeProviderInstance();
-		shExchangeProviderInstance.setName(name);
-		shExchangeProviderInstance.setDescription(description);
-		shExchangeProviderInstance.setVendor(shExchangeProviderVendorRepository.findById(provider).orElse(null));
-		shExchangeProviderInstance.setEnabled(isEnabled);
+  private ShExchangeProviderInstance setProviderInstance(
+      String name, String description, String provider, boolean isEnabled) {
+    ShExchangeProviderInstance shExchangeProviderInstance = new ShExchangeProviderInstance();
+    shExchangeProviderInstance.setName(name);
+    shExchangeProviderInstance.setDescription(description);
+    shExchangeProviderInstance.setVendor(
+        shExchangeProviderVendorRepository.findById(provider).orElse(null));
+    shExchangeProviderInstance.setEnabled(isEnabled);
 
-		shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
-		return shExchangeProviderInstance;
-	}
+    shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
+    return shExchangeProviderInstance;
+  }
 
-	private void setConfigVar(String providerInstance, String url, String username, String password) {
-		ShConfigVar shConfigVar = new ShConfigVar();
-		shConfigVar.setPath(providerInstance);
-		shConfigVar.setName(URL);
-		shConfigVar.setValue(url);
-		shConfigVarRepository.save(shConfigVar);
+  private void setConfigVar(String providerInstance, String url, String username, String password) {
+    ShConfigVar shConfigVar = new ShConfigVar();
+    shConfigVar.setPath(providerInstance);
+    shConfigVar.setName(URL);
+    shConfigVar.setValue(url);
+    shConfigVarRepository.save(shConfigVar);
 
-		shConfigVar = new ShConfigVar();
-		shConfigVar.setPath(providerInstance);
-		shConfigVar.setName(USERNAME);
-		shConfigVar.setValue(username);
-		shConfigVarRepository.save(shConfigVar);
+    shConfigVar = new ShConfigVar();
+    shConfigVar.setPath(providerInstance);
+    shConfigVar.setName(USERNAME);
+    shConfigVar.setValue(username);
+    shConfigVarRepository.save(shConfigVar);
 
-		shConfigVar = new ShConfigVar();
-		shConfigVar.setPath(providerInstance);
-		shConfigVar.setName(PASSWORD);
-		shConfigVar.setValue(password);
-		shConfigVarRepository.save(shConfigVar);
-	}
+    shConfigVar = new ShConfigVar();
+    shConfigVar.setPath(providerInstance);
+    shConfigVar.setName(PASSWORD);
+    shConfigVar.setValue(password);
+    shConfigVarRepository.save(shConfigVar);
+  }
 
-	private void createOTMMInstance() {
-		ShExchangeProviderInstance shExchangeProviderInstance = setProviderInstance("OpenText Media Management",
-				"Sample of OTMM", ShExchangeSystemProviderVendor.OTMM, false);
+  private void createOTMMInstance() {
+    ShExchangeProviderInstance shExchangeProviderInstance =
+        setProviderInstance(
+            "OpenText Media Management",
+            "Sample of OTMM",
+            ShExchangeSystemProviderVendor.OTMM,
+            false);
 
-		String providerInstance = String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
+    String providerInstance =
+        String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
 
-		this.setConfigVar(providerInstance, "http://localhost:11090", "admin", "password");
-	}
-
+    this.setConfigVar(providerInstance, "http://localhost:11090", "admin", "password");
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,23 +20,22 @@ package com.viglet.shio.provider.auth.otds.bean;
  * @author Alexandre Oliveira
  */
 public class ShOTDSCredencialBean {
-	private String userName;
-	private String password;
+  private String userName;
+  private String password;
 
-	public String getUserName() {
-		return userName;
-	}
+  public String getUserName() {
+    return userName;
+  }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
-	public String getPassword() {
-		return password;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

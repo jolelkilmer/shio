@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,10 +17,8 @@
 package com.viglet.shio.spring.security;
 
 import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
@@ -33,21 +31,24 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ShAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
-	private static final Log logger = LogFactory.getLog(ShAuthenticationEntryPoint.class);
+  private static final Log logger = LogFactory.getLog(ShAuthenticationEntryPoint.class);
 
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException {
-		response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
-	}
+  @Override
+  public void commence(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      AuthenticationException authException)
+      throws IOException {
+    response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+  }
 
-	@Override
-	public void afterPropertiesSet() {
-		this.setRealmName("Shio");
-		try {
-			super.afterPropertiesSet();
-		} catch (Exception e) {
-			logger.error("afterPropertiesSet: ", e);
-		}
-	}
+  @Override
+  public void afterPropertiesSet() {
+    this.setRealmName("Shio");
+    try {
+      super.afterPropertiesSet();
+    } catch (Exception e) {
+      logger.error("afterPropertiesSet: ", e);
+    }
+  }
 }

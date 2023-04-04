@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,10 @@
  */
 package com.viglet.shio.graphql.schema;
 
+import static graphql.schema.GraphQLCodeRegistry.newCodeRegistry;
+import static graphql.schema.GraphQLObjectType.newObject;
+import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
+
 import com.viglet.shio.graphql.ShGraphQLConstants;
 import com.viglet.shio.graphql.schema.object.type.ShGraphQLOTPostType;
 import com.viglet.shio.graphql.schema.object.type.sites.ShGraphQLOTNavigation;
@@ -25,21 +29,14 @@ import com.viglet.shio.graphql.schema.object.type.sites.ShGraphQLOTQuery;
 import com.viglet.shio.graphql.schema.query.type.ShGraphQLQTCommons;
 import com.viglet.shio.persistence.model.post.type.ShPostType;
 import com.viglet.shio.persistence.repository.post.type.ShPostTypeRepository;
-
 import graphql.GraphQL;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLObjectType.Builder;
 import graphql.schema.GraphQLSchema;
-
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-
-import static graphql.schema.GraphQLObjectType.newObject;
-import static graphql.schema.GraphQLCodeRegistry.newCodeRegistry;
-import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
 
 /**
  * GraphQL Schema.
@@ -50,53 +47,47 @@ import static graphql.schema.GraphqlTypeComparatorRegistry.BY_NAME_REGISTRY;
 @Component
 public class ShGraphQLSchema {
 
-	@Autowired
-	private ShPostTypeRepository shPostTypeRepository;
-	@Autowired
-	private ShGraphQLOTPostType shGraphQLOTPostType;
-	@Autowired
-	private ShGraphQLOTObjectFromURL shGraphQLOTObjectFromURL;
-	@Autowired
-	private ShGraphQLOTNavigation shGraphQLOTNavigation;
-	@Autowired
-	private ShGraphQLOTQuery shGraphQLOTQuery;
-	@Autowired
-	private ShGraphQLOTObjectURL shGraphQLOTObjectURL;
-	@Autowired
-	private ShGraphQLQTCommons shGraphQLQTCommons;
+  @Autowired private ShPostTypeRepository shPostTypeRepository;
+  @Autowired private ShGraphQLOTPostType shGraphQLOTPostType;
+  @Autowired private ShGraphQLOTObjectFromURL shGraphQLOTObjectFromURL;
+  @Autowired private ShGraphQLOTNavigation shGraphQLOTNavigation;
+  @Autowired private ShGraphQLOTQuery shGraphQLOTQuery;
+  @Autowired private ShGraphQLOTObjectURL shGraphQLOTObjectURL;
+  @Autowired private ShGraphQLQTCommons shGraphQLQTCommons;
 
-	private GraphQL graphQL;
+  private GraphQL graphQL;
 
-	private GraphQLSchema loadSchema() {
-		Builder queryTypeBuilder = newObject().name(ShGraphQLConstants.QUERY_TYPE);
-		graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder = newCodeRegistry();
-		for (ShPostType shPostType : shPostTypeRepository.findAll())
-			shGraphQLOTPostType.createObjectTypes(queryTypeBuilder, codeRegistryBuilder, shPostType);
+  private GraphQLSchema loadSchema() {
+    Builder queryTypeBuilder = newObject().name(ShGraphQLConstants.QUERY_TYPE);
+    graphql.schema.GraphQLCodeRegistry.Builder codeRegistryBuilder = newCodeRegistry();
+    for (ShPostType shPostType : shPostTypeRepository.findAll())
+      shGraphQLOTPostType.createObjectTypes(queryTypeBuilder, codeRegistryBuilder, shPostType);
 
-		shGraphQLOTObjectFromURL.createObjectType(queryTypeBuilder, codeRegistryBuilder);
+    shGraphQLOTObjectFromURL.createObjectType(queryTypeBuilder, codeRegistryBuilder);
 
-		shGraphQLOTNavigation.createObjectType(queryTypeBuilder, codeRegistryBuilder);
+    shGraphQLOTNavigation.createObjectType(queryTypeBuilder, codeRegistryBuilder);
 
-		shGraphQLOTObjectURL.createObjectType(queryTypeBuilder, codeRegistryBuilder);
+    shGraphQLOTObjectURL.createObjectType(queryTypeBuilder, codeRegistryBuilder);
 
-		shGraphQLOTQuery.createObjectType(queryTypeBuilder, codeRegistryBuilder);
+    shGraphQLOTQuery.createObjectType(queryTypeBuilder, codeRegistryBuilder);
 
-		GraphQLObjectType queryType = queryTypeBuilder.comparatorRegistry(BY_NAME_REGISTRY).build();
+    GraphQLObjectType queryType = queryTypeBuilder.comparatorRegistry(BY_NAME_REGISTRY).build();
 
-		return GraphQLSchema.newSchema().additionalType(shGraphQLQTCommons.createSiteEnum()).query(queryType)
-				.codeRegistry(codeRegistryBuilder.build()).build();
+    return GraphQLSchema.newSchema()
+        .additionalType(shGraphQLQTCommons.createSiteEnum())
+        .query(queryType)
+        .codeRegistry(codeRegistryBuilder.build())
+        .build();
+  }
 
-	}
+  @PostConstruct
+  public void init() {
+    GraphQLSchema graphQLSchema = this.loadSchema();
+    this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
+  }
 
-	@PostConstruct
-	public void init() {
-		GraphQLSchema graphQLSchema = this.loadSchema();
-		this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
-	}
-
-	@Bean
-	public GraphQL graphQL() {
-		return graphQL;
-	}
-
+  @Bean
+  public GraphQL graphQL() {
+    return graphQL;
+  }
 }

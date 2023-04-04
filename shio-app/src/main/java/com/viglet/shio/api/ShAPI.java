@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2021 the original author or authors. 
- * 
+ * Copyright (C) 2016-2021 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,12 +16,11 @@
  */
 package com.viglet.shio.api;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * @author Alexandre Oliveira
@@ -29,17 +28,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequestMapping("/api/v2")
-@Tag( name = "Heartbeat", description = "Heartbeat")
+@Tag(name = "Heartbeat", description = "Heartbeat")
 public class ShAPI {
 
-	@Autowired
-	private ShAPIBean shAPIBean;
+  @Autowired private ShAPIBean shAPIBean;
 
-	@GetMapping
-	public ShAPIBean shApiInfo() {
+  @GetMapping
+  public ShAPIBean shApiInfo() {
 
-		shAPIBean.setProduct("Viglet Shio CMS");
+    shAPIBean.setProduct("Viglet Shio CMS");
 
-		return shAPIBean;
-	}
+    return shAPIBean;
+  }
 }

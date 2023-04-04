@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,26 @@
  */
 package com.viglet.shio.api.provider.exchange;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.viglet.shio.api.ShJsonView;
+import com.viglet.shio.bean.provider.exchange.ShExchangeProviderInstanceBean;
+import com.viglet.shio.persistence.model.folder.ShFolder;
+import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
+import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderInstance;
+import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderVendor;
+import com.viglet.shio.persistence.model.system.ShConfigVar;
+import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
+import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderInstanceRepository;
+import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderVendorRepository;
+import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
+import com.viglet.shio.property.ShConfigProperties;
+import com.viglet.shio.provider.exchange.ShExchangeProvider;
+import com.viglet.shio.provider.exchange.ShExchangeProviderFolder;
+import com.viglet.shio.provider.exchange.ShExchangeProviderPost;
+import com.viglet.shio.utils.ShConfigVarUtils;
+import com.viglet.shio.utils.ShStaticFileUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -46,273 +65,263 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.viglet.shio.api.ShJsonView;
-import com.viglet.shio.bean.provider.exchange.ShExchangeProviderInstanceBean;
-import com.viglet.shio.persistence.model.folder.ShFolder;
-import com.viglet.shio.persistence.model.post.impl.ShPostImpl;
-import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderInstance;
-import com.viglet.shio.persistence.model.provider.exchange.ShExchangeProviderVendor;
-import com.viglet.shio.persistence.model.system.ShConfigVar;
-import com.viglet.shio.persistence.repository.folder.ShFolderRepository;
-import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderInstanceRepository;
-import com.viglet.shio.persistence.repository.provider.exchange.ShExchangeProviderVendorRepository;
-import com.viglet.shio.persistence.repository.system.ShConfigVarRepository;
-import com.viglet.shio.property.ShConfigProperties;
-import com.viglet.shio.provider.exchange.ShExchangeProvider;
-import com.viglet.shio.provider.exchange.ShExchangeProviderFolder;
-import com.viglet.shio.provider.exchange.ShExchangeProviderPost;
-import com.viglet.shio.utils.ShConfigVarUtils;
-import com.viglet.shio.utils.ShStaticFileUtils;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 /**
  * @author Alexandre Oliveira
  */
 @RestController
 @RequestMapping("/api/v2/provider/exchange")
-@Tag( name = "Exchange Provider", description = "Exchange Provider API")
+@Tag(name = "Exchange Provider", description = "Exchange Provider API")
 public class ShExchangeProviderAPI {
-	private static final Log logger = LogFactory.getLog(ShExchangeProviderAPI.class);
+  private static final Log logger = LogFactory.getLog(ShExchangeProviderAPI.class);
 
-	@Autowired
-	private ShConfigProperties shConfigProperties;
-	@Autowired
-	private ShFolderRepository shFolderRepository;
-	@Autowired
-	private ShStaticFileUtils shStaticFileUtils;
-	@Autowired
-	private ShConfigVarUtils shConfigVarUtils;
-	@Autowired
-	private ShExchangeProviderInstanceRepository shExchangeProviderInstanceRepository;
-	@Autowired
-	private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
-	@Autowired
-	private ShConfigVarRepository shConfigVarRepository;
+  @Autowired private ShConfigProperties shConfigProperties;
+  @Autowired private ShFolderRepository shFolderRepository;
+  @Autowired private ShStaticFileUtils shStaticFileUtils;
+  @Autowired private ShConfigVarUtils shConfigVarUtils;
+  @Autowired private ShExchangeProviderInstanceRepository shExchangeProviderInstanceRepository;
+  @Autowired private ShExchangeProviderVendorRepository shExchangeProviderVendorRepository;
+  @Autowired private ShConfigVarRepository shConfigVarRepository;
 
-	private ShExchangeProvider shExchangeProvider;
+  private ShExchangeProvider shExchangeProvider;
 
-	@GetMapping("/vendor")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public List<ShExchangeProviderVendor> shExchangeProviderVendorListItem() {
-		return shExchangeProviderVendorRepository.findAll();
-	}
+  @GetMapping("/vendor")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public List<ShExchangeProviderVendor> shExchangeProviderVendorListItem() {
+    return shExchangeProviderVendorRepository.findAll();
+  }
 
-	@GetMapping
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public List<ShExchangeProviderInstance> shExchangeProviderInstanceListItem() {
-		return shExchangeProviderInstanceRepository.findAll();
-	}
+  @GetMapping
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public List<ShExchangeProviderInstance> shExchangeProviderInstanceListItem() {
+    return shExchangeProviderInstanceRepository.findAll();
+  }
 
-	@GetMapping("/{id}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShExchangeProviderInstanceBean shExchangeProviderEdit(@PathVariable String id) {
-		ShExchangeProviderInstance shExchangeProviderInstance = shExchangeProviderInstanceRepository.findById(id)
-				.orElse(null);
-		ShExchangeProviderInstanceBean shExchangeProviderInstanceBean = new ShExchangeProviderInstanceBean();
-		if (shExchangeProviderInstance != null) {
-			shExchangeProviderInstanceBean = new ShExchangeProviderInstanceBean();
-			shExchangeProviderInstanceBean.setId(shExchangeProviderInstance.getId());
-			shExchangeProviderInstanceBean.setName(shExchangeProviderInstance.getName());
-			shExchangeProviderInstanceBean.setDescription(shExchangeProviderInstance.getDescription());
-			shExchangeProviderInstanceBean.setVendor(shExchangeProviderInstance.getVendor());
-			shExchangeProviderInstanceBean.setEnabled(shExchangeProviderInstance.getEnabled());
+  @GetMapping("/{id}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShExchangeProviderInstanceBean shExchangeProviderEdit(@PathVariable String id) {
+    ShExchangeProviderInstance shExchangeProviderInstance =
+        shExchangeProviderInstanceRepository.findById(id).orElse(null);
+    ShExchangeProviderInstanceBean shExchangeProviderInstanceBean =
+        new ShExchangeProviderInstanceBean();
+    if (shExchangeProviderInstance != null) {
+      shExchangeProviderInstanceBean = new ShExchangeProviderInstanceBean();
+      shExchangeProviderInstanceBean.setId(shExchangeProviderInstance.getId());
+      shExchangeProviderInstanceBean.setName(shExchangeProviderInstance.getName());
+      shExchangeProviderInstanceBean.setDescription(shExchangeProviderInstance.getDescription());
+      shExchangeProviderInstanceBean.setVendor(shExchangeProviderInstance.getVendor());
+      shExchangeProviderInstanceBean.setEnabled(shExchangeProviderInstance.getEnabled());
 
-			String providerInstancePath = String.format(shConfigProperties.getExchange(),
-					shExchangeProviderInstance.getId());
+      String providerInstancePath =
+          String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
 
-			List<ShConfigVar> shConfigVars = shConfigVarRepository.findByPath(providerInstancePath);
+      List<ShConfigVar> shConfigVars = shConfigVarRepository.findByPath(providerInstancePath);
 
-			for (ShConfigVar shConfigVar : shConfigVars) {
-				shExchangeProviderInstanceBean.getProperties().put(shConfigVar.getName(), shConfigVar.getValue());
-			}
-		}
+      for (ShConfigVar shConfigVar : shConfigVars) {
+        shExchangeProviderInstanceBean
+            .getProperties()
+            .put(shConfigVar.getName(), shConfigVar.getValue());
+      }
+    }
 
-		return shExchangeProviderInstanceBean;
-	}
+    return shExchangeProviderInstanceBean;
+  }
 
-	@PostMapping
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShExchangeProviderInstanceBean shExchangeProviderInstanceAdd(
-			@RequestBody ShExchangeProviderInstanceBean shExchangeProviderInstanceBean) {
-		ShExchangeProviderInstance shExchangeProviderInstance = new ShExchangeProviderInstance();
+  @PostMapping
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShExchangeProviderInstanceBean shExchangeProviderInstanceAdd(
+      @RequestBody ShExchangeProviderInstanceBean shExchangeProviderInstanceBean) {
+    ShExchangeProviderInstance shExchangeProviderInstance = new ShExchangeProviderInstance();
 
-		shExchangeProviderInstance.setName(shExchangeProviderInstanceBean.getName());
-		shExchangeProviderInstance.setDescription(shExchangeProviderInstanceBean.getDescription());
-		shExchangeProviderInstance.setVendor(shExchangeProviderInstanceBean.getVendor());
-		shExchangeProviderInstance.setEnabled(shExchangeProviderInstanceBean.getEnabled());
-		shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
+    shExchangeProviderInstance.setName(shExchangeProviderInstanceBean.getName());
+    shExchangeProviderInstance.setDescription(shExchangeProviderInstanceBean.getDescription());
+    shExchangeProviderInstance.setVendor(shExchangeProviderInstanceBean.getVendor());
+    shExchangeProviderInstance.setEnabled(shExchangeProviderInstanceBean.getEnabled());
+    shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
 
-		for (Entry<String, String> propertyEntry : shExchangeProviderInstanceBean.getProperties().entrySet()) {
-			String providerInstancePath = String.format(shConfigProperties.getExchange(),
-					shExchangeProviderInstance.getId());
+    for (Entry<String, String> propertyEntry :
+        shExchangeProviderInstanceBean.getProperties().entrySet()) {
+      String providerInstancePath =
+          String.format(shConfigProperties.getExchange(), shExchangeProviderInstance.getId());
 
-			ShConfigVar shConfigVar = shConfigVarRepository.findByPathAndName(providerInstancePath,
-					propertyEntry.getKey());
+      ShConfigVar shConfigVar =
+          shConfigVarRepository.findByPathAndName(providerInstancePath, propertyEntry.getKey());
 
-			if (shConfigVar != null) {
-				shConfigVar.setValue(propertyEntry.getValue());
-			} else {
-				shConfigVar = new ShConfigVar();
-				shConfigVar.setPath(providerInstancePath);
-				shConfigVar.setName(propertyEntry.getKey());
-				shConfigVar.setValue(propertyEntry.getValue());
-			}
-			shConfigVarRepository.saveAndFlush(shConfigVar);
-		}
+      if (shConfigVar != null) {
+        shConfigVar.setValue(propertyEntry.getValue());
+      } else {
+        shConfigVar = new ShConfigVar();
+        shConfigVar.setPath(providerInstancePath);
+        shConfigVar.setName(propertyEntry.getKey());
+        shConfigVar.setValue(propertyEntry.getValue());
+      }
+      shConfigVarRepository.saveAndFlush(shConfigVar);
+    }
 
-		shExchangeProviderInstanceBean.setId(shExchangeProviderInstance.getId());
+    shExchangeProviderInstanceBean.setId(shExchangeProviderInstance.getId());
 
-		return shExchangeProviderInstanceBean;
-	}
+    return shExchangeProviderInstanceBean;
+  }
 
-	@PutMapping("/{id}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShExchangeProviderInstanceBean shExchangeProviderInstanceUpdate(@PathVariable String id,
-			@RequestBody ShExchangeProviderInstanceBean shExchangeProviderInstanceBean) {
-		Optional<ShExchangeProviderInstance> shExchangeProviderInstanceOptional = shExchangeProviderInstanceRepository
-				.findById(id);
-		if (shExchangeProviderInstanceOptional.isPresent()) {
-			ShExchangeProviderInstance shExchangeProviderInstanceEdit = shExchangeProviderInstanceOptional.get();
-			shExchangeProviderInstanceEdit.setName(shExchangeProviderInstanceBean.getName());
-			shExchangeProviderInstanceEdit.setDescription(shExchangeProviderInstanceBean.getDescription());
-			shExchangeProviderInstanceEdit.setVendor(shExchangeProviderInstanceBean.getVendor());
-			shExchangeProviderInstanceEdit.setEnabled(shExchangeProviderInstanceBean.getEnabled());
-			shExchangeProviderInstanceRepository.save(shExchangeProviderInstanceEdit);
+  @PutMapping("/{id}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShExchangeProviderInstanceBean shExchangeProviderInstanceUpdate(
+      @PathVariable String id,
+      @RequestBody ShExchangeProviderInstanceBean shExchangeProviderInstanceBean) {
+    Optional<ShExchangeProviderInstance> shExchangeProviderInstanceOptional =
+        shExchangeProviderInstanceRepository.findById(id);
+    if (shExchangeProviderInstanceOptional.isPresent()) {
+      ShExchangeProviderInstance shExchangeProviderInstanceEdit =
+          shExchangeProviderInstanceOptional.get();
+      shExchangeProviderInstanceEdit.setName(shExchangeProviderInstanceBean.getName());
+      shExchangeProviderInstanceEdit.setDescription(
+          shExchangeProviderInstanceBean.getDescription());
+      shExchangeProviderInstanceEdit.setVendor(shExchangeProviderInstanceBean.getVendor());
+      shExchangeProviderInstanceEdit.setEnabled(shExchangeProviderInstanceBean.getEnabled());
+      shExchangeProviderInstanceRepository.save(shExchangeProviderInstanceEdit);
 
-			for (Entry<String, String> propertyEntry : shExchangeProviderInstanceBean.getProperties().entrySet()) {
-				String providerInstancePath = String.format(shConfigProperties.getExchange(),
-						shExchangeProviderInstanceEdit.getId());
+      for (Entry<String, String> propertyEntry :
+          shExchangeProviderInstanceBean.getProperties().entrySet()) {
+        String providerInstancePath =
+            String.format(shConfigProperties.getExchange(), shExchangeProviderInstanceEdit.getId());
 
-				ShConfigVar shConfigVar = shConfigVarRepository.findByPathAndName(providerInstancePath,
-						propertyEntry.getKey());
+        ShConfigVar shConfigVar =
+            shConfigVarRepository.findByPathAndName(providerInstancePath, propertyEntry.getKey());
 
-				if (shConfigVar != null) {
-					shConfigVar.setValue(propertyEntry.getValue());
-				} else {
-					shConfigVar = new ShConfigVar();
-					shConfigVar.setPath(providerInstancePath);
-					shConfigVar.setName(propertyEntry.getKey());
-					shConfigVar.setValue(propertyEntry.getKey());
-				}
-				shConfigVarRepository.saveAndFlush(shConfigVar);
-			}
+        if (shConfigVar != null) {
+          shConfigVar.setValue(propertyEntry.getValue());
+        } else {
+          shConfigVar = new ShConfigVar();
+          shConfigVar.setPath(providerInstancePath);
+          shConfigVar.setName(propertyEntry.getKey());
+          shConfigVar.setValue(propertyEntry.getKey());
+        }
+        shConfigVarRepository.saveAndFlush(shConfigVar);
+      }
 
-			return shExchangeProviderInstanceBean;
-		}
+      return shExchangeProviderInstanceBean;
+    }
 
-		return null;
+    return null;
+  }
 
-	}
+  @DeleteMapping("/{id}")
+  @Transactional
+  public boolean shExchangeProviderInstanceDelete(@PathVariable String id) {
+    Optional<ShExchangeProviderInstance> shExchangeProviderInstance =
+        shExchangeProviderInstanceRepository.findById(id);
+    if (shExchangeProviderInstance.isPresent()) {
+      String providerInstancePath = String.format(shConfigProperties.getExchange(), id);
+      shConfigVarRepository.deleteByPath(providerInstancePath);
+      shExchangeProviderInstanceRepository.delete(id);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-	@DeleteMapping("/{id}")
-	@Transactional
-	public boolean shExchangeProviderInstanceDelete(@PathVariable String id) {
-		Optional<ShExchangeProviderInstance> shExchangeProviderInstance = shExchangeProviderInstanceRepository
-				.findById(id);
-		if (shExchangeProviderInstance.isPresent()) {
-			String providerInstancePath = String.format(shConfigProperties.getExchange(), id);
-			shConfigVarRepository.deleteByPath(providerInstancePath);
-			shExchangeProviderInstanceRepository.delete(id);
-			return true;
-		} else {
-			return false;
-		}
-	}
+  @GetMapping("/model")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShExchangeProviderInstanceBean shExchangeProviderInstanceStructure() {
+    return new ShExchangeProviderInstanceBean();
+  }
 
-	@GetMapping("/model")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShExchangeProviderInstanceBean shExchangeProviderInstanceStructure() {
-		return new ShExchangeProviderInstanceBean();
+  @Operation(summary = "Sort Exchange Provider")
+  @PutMapping("/sort")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public Map<String, Integer> shExchangeProviderInstanceSort(
+      @RequestBody Map<String, Integer> objectOrder) {
 
-	}
+    for (Entry<String, Integer> objectOrderItem : objectOrder.entrySet()) {
+      int shObjectOrder = objectOrderItem.getValue();
+      String shExchangeProviderId = objectOrderItem.getKey();
+      Optional<ShExchangeProviderInstance> shExchangeProviderInstanceOptional =
+          shExchangeProviderInstanceRepository.findById(shExchangeProviderId);
+      if (shExchangeProviderInstanceOptional.isPresent()) {
+        ShExchangeProviderInstance shExchangeProviderInstance =
+            shExchangeProviderInstanceOptional.get();
+        shExchangeProviderInstance.setPosition(shObjectOrder);
+        shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
+      }
+    }
+    return objectOrder;
+  }
 
-	@Operation(summary = "Sort Exchange Provider")
-	@PutMapping("/sort")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public Map<String, Integer> shExchangeProviderInstanceSort(@RequestBody Map<String, Integer> objectOrder) {
+  private void initProvider(String providerInstanceId) {
+    ShExchangeProviderInstance shExchangeProviderInstance =
+        shExchangeProviderInstanceRepository.findById(providerInstanceId).orElse(null);
+    if (shExchangeProviderInstance != null) {
+      Map<String, String> variables =
+          shConfigVarUtils.getVariablesFromPath(
+              String.format(shConfigProperties.getExchange(), providerInstanceId));
 
-		for (Entry<String, Integer> objectOrderItem : objectOrder.entrySet()) {
-			int shObjectOrder = objectOrderItem.getValue();
-			String shExchangeProviderId = objectOrderItem.getKey();
-			Optional<ShExchangeProviderInstance> shExchangeProviderInstanceOptional = shExchangeProviderInstanceRepository
-					.findById(shExchangeProviderId);
-			if (shExchangeProviderInstanceOptional.isPresent()) {
-				ShExchangeProviderInstance shExchangeProviderInstance = shExchangeProviderInstanceOptional.get();
-				shExchangeProviderInstance.setPosition(shObjectOrder);
-				shExchangeProviderInstanceRepository.save(shExchangeProviderInstance);
+      try {
 
-			}
-		}
-		return objectOrder;
+        shExchangeProvider =
+            (ShExchangeProvider)
+                Class.forName(shExchangeProviderInstance.getVendor().getClassName())
+                    .getDeclaredConstructor()
+                    .newInstance();
 
-	}
+      } catch (IllegalArgumentException
+          | InvocationTargetException
+          | NoSuchMethodException
+          | SecurityException
+          | InstantiationException
+          | IllegalAccessException
+          | ClassNotFoundException e) {
+        logger.error("initProvider: ", e);
+      }
+      shExchangeProvider.init(variables);
+    }
+  }
 
-	private void initProvider(String providerInstanceId) {
-		ShExchangeProviderInstance shExchangeProviderInstance = shExchangeProviderInstanceRepository
-				.findById(providerInstanceId).orElse(null);
-		if (shExchangeProviderInstance != null) {
-			Map<String, String> variables = shConfigVarUtils
-					.getVariablesFromPath(String.format(shConfigProperties.getExchange(), providerInstanceId));
+  @PostMapping("/{providerInstanceId}/import/{providerItemId}/to/{folderId}")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShPostImpl shExchangeProviderImportItem(
+      @PathVariable String folderId,
+      @PathVariable String providerInstanceId,
+      @PathVariable String providerItemId,
+      Principal principal) {
 
-			try {
+    this.initProvider(providerInstanceId);
 
-				shExchangeProvider = (ShExchangeProvider) Class
-						.forName(shExchangeProviderInstance.getVendor().getClassName()).getDeclaredConstructor()
-						.newInstance();
+    ShExchangeProviderPost shExchangeProviderPost =
+        shExchangeProvider.getObject(providerItemId, false);
 
-			} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-					| InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-				logger.error("initProvider: ", e);
-			}
-			shExchangeProvider.init(variables);
-		}
-	}
+    String fileName = shExchangeProviderPost.getTitle();
+    InputStream is = shExchangeProvider.getDownload(providerItemId);
 
-	@PostMapping("/{providerInstanceId}/import/{providerItemId}/to/{folderId}")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShPostImpl shExchangeProviderImportItem(@PathVariable String folderId,
-			@PathVariable String providerInstanceId, @PathVariable String providerItemId, Principal principal) {
+    try {
 
-		this.initProvider(providerInstanceId);
+      MultipartFile file = new MockMultipartFile(fileName, IOUtils.toByteArray(is));
 
-		ShExchangeProviderPost shExchangeProviderPost = shExchangeProvider.getObject(providerItemId, false);
+      ShFolder shFolder = shFolderRepository.findById(folderId).orElse(null);
+      if (shFolder != null) {
+        TikaConfig config = TikaConfig.getDefaultConfig();
+        String mediaType = new Tika().detect(file.getInputStream());
+        MimeType mimeType = config.getMimeRepository().forName(mediaType);
+        String extension = mimeType.getExtension();
+        if (!StringUtils.isEmpty(extension)) {
+          String fileWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+          String fileNameFormatted = String.format("%s%s", fileWithoutExtension, extension);
+          fileName = fileNameFormatted;
+        }
+        return shStaticFileUtils.createFilePost(file, fileName, shFolder, principal, true);
+      }
+    } catch (IOException | MimeTypeException e) {
+      logger.error(e);
+    }
+    return null;
+  }
 
-		String fileName = shExchangeProviderPost.getTitle();
-		InputStream is = shExchangeProvider.getDownload(providerItemId);
+  @GetMapping("/{providerInstanceId}/{id}/list")
+  @JsonView({ShJsonView.ShJsonViewObject.class})
+  public ShExchangeProviderFolder shExchangeProviderListItem(
+      @PathVariable String providerInstanceId, @PathVariable String id) {
+    this.initProvider(providerInstanceId);
 
-		try {
-
-			MultipartFile file = new MockMultipartFile(fileName, IOUtils.toByteArray(is));
-
-			ShFolder shFolder = shFolderRepository.findById(folderId).orElse(null);
-			if (shFolder != null) {
-				TikaConfig config = TikaConfig.getDefaultConfig();
-				String mediaType = new Tika().detect(file.getInputStream());
-				MimeType mimeType = config.getMimeRepository().forName(mediaType);
-				String extension = mimeType.getExtension();
-				if (!StringUtils.isEmpty(extension)) {
-					String fileWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
-					String fileNameFormatted = String.format("%s%s", fileWithoutExtension, extension);
-					fileName = fileNameFormatted;
-				}
-				return shStaticFileUtils.createFilePost(file, fileName, shFolder, principal, true);
-			}
-		} catch (IOException | MimeTypeException e) {
-			logger.error(e);
-		}
-		return null;
-	}
-
-	@GetMapping("/{providerInstanceId}/{id}/list")
-	@JsonView({ ShJsonView.ShJsonViewObject.class })
-	public ShExchangeProviderFolder shExchangeProviderListItem(@PathVariable String providerInstanceId,
-			@PathVariable String id) {
-		this.initProvider(providerInstanceId);
-
-		return id.equals("_root") ? shExchangeProvider.getRootFolder() : shExchangeProvider.getFolder(id);
-
-	}
+    return id.equals("_root")
+        ? shExchangeProvider.getRootFolder()
+        : shExchangeProvider.getFolder(id);
+  }
 }

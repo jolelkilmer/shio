@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com> 
- * 
+ * Copyright (C) 2016-2018 Alexandre Oliveira <alexandre.oliveira@viglet.com>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -33,27 +33,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 class ShHistoryAPITest {
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+  @Autowired private WebApplicationContext webApplicationContext;
 
-	private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	@BeforeAll
-	void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	}
+  @BeforeAll
+  void setup() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+  }
 
-	@Test
-	void shHistoryList() throws Exception {
-		mockMvc.perform(get("/api/v2/history")).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
-
-	}
-
+  @Test
+  void shHistoryList() throws Exception {
+    mockMvc
+        .perform(get("/api/v2/history"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"));
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,68 +16,68 @@
  */
 package com.viglet.shio.graphql.playground;
 
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertySource;
 
-import java.util.*;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 /**
-* @author Alexandre Oliveira
-* @since 0.3.7
-*/
+ * @author Alexandre Oliveira
+ * @since 0.3.7
+ */
 class ShPropertyGroupReader {
 
-    private Environment environment;
-    private String prefix;
-    private Properties props;
+  private Environment environment;
+  private String prefix;
+  private Properties props;
 
-    ShPropertyGroupReader(Environment environment, String prefix) {
-        this.environment = Objects.requireNonNull(environment);
-        this.prefix = Optional.ofNullable(prefix).orElse(StringUtils.EMPTY);
+  ShPropertyGroupReader(Environment environment, String prefix) {
+    this.environment = Objects.requireNonNull(environment);
+    this.prefix = Optional.ofNullable(prefix).orElse(StringUtils.EMPTY);
+  }
+
+  Properties load() {
+    if (props == null) {
+      props = new Properties();
+      loadProps();
     }
+    return props;
+  }
 
-    Properties load() {
-        if (props == null) {
-            props = new Properties();
-            loadProps();
-        }
-        return props;
-    }
-
-    private void loadProps() {
-        streamOfPropertySources().forEach(propertySource ->
+  private void loadProps() {
+    streamOfPropertySources()
+        .forEach(
+            propertySource ->
                 Arrays.stream(propertySource.getPropertyNames())
-                        .filter(this::isWanted)
-                        .forEach(key -> add(propertySource, key)));
-    }
+                    .filter(this::isWanted)
+                    .forEach(key -> add(propertySource, key)));
+  }
 
-    private Stream<EnumerablePropertySource<?>> streamOfPropertySources() {
-        if (environment instanceof ConfigurableEnvironment configurableEnvironment) {
-            Iterator<PropertySource<?>> iterator = configurableEnvironment.getPropertySources().iterator();
-            Iterable<PropertySource<?>> iterable = () -> iterator;
-            return StreamSupport.stream(iterable.spliterator(), false)
-                    .filter(EnumerablePropertySource.class::isInstance)
-                    .map(EnumerablePropertySource.class::cast);
-        }
-        return Stream.empty();
+  private Stream<EnumerablePropertySource<?>> streamOfPropertySources() {
+    if (environment instanceof ConfigurableEnvironment configurableEnvironment) {
+      Iterator<PropertySource<?>> iterator =
+          configurableEnvironment.getPropertySources().iterator();
+      Iterable<PropertySource<?>> iterable = () -> iterator;
+      return StreamSupport.stream(iterable.spliterator(), false)
+          .filter(EnumerablePropertySource.class::isInstance)
+          .map(EnumerablePropertySource.class::cast);
     }
+    return Stream.empty();
+  }
 
-    private String withoutPrefix(String key) {
-        return key.replace(prefix, StringUtils.EMPTY);
-    }
+  private String withoutPrefix(String key) {
+    return key.replace(prefix, StringUtils.EMPTY);
+  }
 
-    private boolean isWanted(String key) {
-        return key.startsWith(prefix);
-    }
+  private boolean isWanted(String key) {
+    return key.startsWith(prefix);
+  }
 
-    private Object add(EnumerablePropertySource<?> propertySource, String key) {
-        return props.put(withoutPrefix(key), propertySource.getProperty(key));
-    }
-
+  private Object add(EnumerablePropertySource<?> propertySource, String key) {
+    return props.put(withoutPrefix(key), propertySource.getProperty(key));
+  }
 }
-

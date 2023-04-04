@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,74 +17,68 @@
 package com.viglet.shio.persistence.model.auth;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * The persistent class for the ShRole database table.
- * 
+ *
  * @author Alexandre Oliveira
  */
 @Entity
 @Table(name = "shRole")
 @NamedQuery(name = "ShRole.findAll", query = "SELECT r FROM ShRole r")
 public class ShRole implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
-	@GeneratedValue(generator = "UUID")
+  @Id
+  @GenericGenerator(name = "UUID", strategy = "com.viglet.shio.jpa.ShUUIDGenerator")
+  @GeneratedValue(generator = "UUID")
+  @Column(name = "id", updatable = false, nullable = false)
+  private String id;
 
-	@Column(name = "id", updatable = false, nullable = false)
-	private String id;
+  @Column(name = "name", nullable = false, length = 50)
+  private String name;
 
+  @Column(nullable = true, length = 255)
+  private String description;
 
-	@Column(name = "name", nullable = false, length = 50)
-	private String name;
+  @ManyToMany private Set<ShGroup> shGroups = new HashSet<>();
 
-	@Column(nullable = true, length = 255)
-	private String description;
+  public String getId() {
+    return id;
+  }
 
-	@ManyToMany
-	private Set<ShGroup> shGroups = new HashSet<>();
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public String getId() {
-		return id;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public Set<ShGroup> getShGroups() {
+    return this.shGroups;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	public Set<ShGroup> getShGroups() {
-		return this.shGroups;
-	}
-
-	public void setShGroups(Set<ShGroup> shGroups) {
-		this.shGroups.clear();
-		if (shGroups != null) {
-			this.shGroups.addAll(shGroups);
-		}
-	}
-
+  public void setShGroups(Set<ShGroup> shGroups) {
+    this.shGroups.clear();
+    if (shGroups != null) {
+      this.shGroups.addAll(shGroups);
+    }
+  }
 }

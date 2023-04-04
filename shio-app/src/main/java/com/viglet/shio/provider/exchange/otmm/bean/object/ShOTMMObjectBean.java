@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,298 +16,296 @@
  */
 package com.viglet.shio.provider.exchange.otmm.bean.object;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.viglet.shio.provider.exchange.otmm.bean.assets.ShOTMMAssetContentInfoBean;
 import com.viglet.shio.provider.exchange.otmm.bean.permission.ShOTMMAccessControlDescriptorBean;
+import java.util.Date;
 
 /**
  * @author Alexandre Oliveira
- * 
  * @since 0.3.7
  */
 public abstract class ShOTMMObjectBean {
 
-	@JsonProperty("access_control_descriptor")
-	private ShOTMMAccessControlDescriptorBean accessControlDescriptor;
+  @JsonProperty("access_control_descriptor")
+  private ShOTMMAccessControlDescriptorBean accessControlDescriptor;
 
-	@JsonProperty("asset_content_info")
-	private ShOTMMAssetContentInfoBean assetContentInfo;
+  @JsonProperty("asset_content_info")
+  private ShOTMMAssetContentInfoBean assetContentInfo;
 
-	@JsonProperty("asset_id")
-	private String assetId;
+  @JsonProperty("asset_id")
+  private String assetId;
 
-	@JsonProperty("asset_state")
-	private String assetState;
-	
-	@JsonProperty("asset_state_last_update_date")
-	private Date assetStateLastUpdateDate;
-	
-	@JsonProperty("asset_state_user_id")
-	private String assetStateUserId;
+  @JsonProperty("asset_state")
+  private String assetState;
 
-	@JsonProperty("checked_out")
-	private boolean checkedOut;
-	
-	@JsonProperty("content_editable")
-	private boolean contentEditable;
-	
-	@JsonProperty("content_state")
-	private String contentState;
-	
-	@JsonProperty("content_type")
-	private String contentType;
+  @JsonProperty("asset_state_last_update_date")
+  private Date assetStateLastUpdateDate;
 
-	@JsonProperty("creator_id")
-	private String creatorId;
-	
-	@JsonProperty("date_imported")
-	private Date dateImported;
-	
-	@JsonProperty("date_last_updated")
-	private Date dateLastUpdated;
-	
-	private boolean deleted;
+  @JsonProperty("asset_state_user_id")
+  private String assetStateUserId;
 
-	private boolean expired;
-	
-	@JsonProperty("import_job_id")
-	private int importJobId;
-	
-	@JsonProperty("import_user_name")
-	private String importUserName;
-	
-	@JsonProperty("latest_version")
-	private boolean latestVersion;
-	
-	@JsonProperty("legacy_model_id")
-	private int legacyModelId;
-	
-	private boolean locked;
-	
-	@JsonProperty("metadata_model_id")
-	private String metadataModelId;
+  @JsonProperty("checked_out")
+  private boolean checkedOut;
 
-	@JsonProperty("metadata_state_user_name")
-	private String metadataStateUserName;
-	
-	private String name;
-		
-	@JsonProperty("original_asset_id")
-	private String originalAssetId;
-	
-	@JsonProperty("subscribed_to")
-	private boolean subscribedTo;
-	
-	private int version;
+  @JsonProperty("content_editable")
+  private boolean contentEditable;
 
-	public ShOTMMAccessControlDescriptorBean getAccessControlDescriptor() {
-		return accessControlDescriptor;
-	}
+  @JsonProperty("content_state")
+  private String contentState;
 
-	public void setAccessControlDescriptor(ShOTMMAccessControlDescriptorBean accessControlDescriptor) {
-		this.accessControlDescriptor = accessControlDescriptor;
-	}
+  @JsonProperty("content_type")
+  private String contentType;
 
-	public ShOTMMAssetContentInfoBean getAssetContentInfo() {
-		return assetContentInfo;
-	}
+  @JsonProperty("creator_id")
+  private String creatorId;
 
-	public void setAssetContentInfo(ShOTMMAssetContentInfoBean assetContentInfo) {
-		this.assetContentInfo = assetContentInfo;
-	}
+  @JsonProperty("date_imported")
+  private Date dateImported;
 
-	public String getAssetId() {
-		return assetId;
-	}
+  @JsonProperty("date_last_updated")
+  private Date dateLastUpdated;
 
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
-	}
+  private boolean deleted;
 
-	public String getAssetState() {
-		return assetState;
-	}
+  private boolean expired;
 
-	public void setAssetState(String assetState) {
-		this.assetState = assetState;
-	}
+  @JsonProperty("import_job_id")
+  private int importJobId;
 
-	public Date getAssetStateLastUpdateDate() {
-		return assetStateLastUpdateDate;
-	}
+  @JsonProperty("import_user_name")
+  private String importUserName;
 
-	public void setAssetStateLastUpdateDate(Date assetStateLastUpdateDate) {
-		this.assetStateLastUpdateDate = assetStateLastUpdateDate;
-	}
+  @JsonProperty("latest_version")
+  private boolean latestVersion;
 
-	public String getAssetStateUserId() {
-		return assetStateUserId;
-	}
+  @JsonProperty("legacy_model_id")
+  private int legacyModelId;
 
-	public void setAssetStateUserId(String assetStateUserId) {
-		this.assetStateUserId = assetStateUserId;
-	}
+  private boolean locked;
 
-	public boolean isCheckedOut() {
-		return checkedOut;
-	}
+  @JsonProperty("metadata_model_id")
+  private String metadataModelId;
 
-	public void setCheckedOut(boolean checkedOut) {
-		this.checkedOut = checkedOut;
-	}
+  @JsonProperty("metadata_state_user_name")
+  private String metadataStateUserName;
 
-	public boolean isContentEditable() {
-		return contentEditable;
-	}
+  private String name;
 
-	public void setContentEditable(boolean contentEditable) {
-		this.contentEditable = contentEditable;
-	}
+  @JsonProperty("original_asset_id")
+  private String originalAssetId;
 
-	public String getContentState() {
-		return contentState;
-	}
+  @JsonProperty("subscribed_to")
+  private boolean subscribedTo;
 
-	public void setContentState(String contentState) {
-		this.contentState = contentState;
-	}
+  private int version;
 
-	public String getContentType() {
-		return contentType;
-	}
+  public ShOTMMAccessControlDescriptorBean getAccessControlDescriptor() {
+    return accessControlDescriptor;
+  }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+  public void setAccessControlDescriptor(
+      ShOTMMAccessControlDescriptorBean accessControlDescriptor) {
+    this.accessControlDescriptor = accessControlDescriptor;
+  }
 
-	public String getCreatorId() {
-		return creatorId;
-	}
+  public ShOTMMAssetContentInfoBean getAssetContentInfo() {
+    return assetContentInfo;
+  }
 
-	public void setCreatorId(String creatorId) {
-		this.creatorId = creatorId;
-	}
+  public void setAssetContentInfo(ShOTMMAssetContentInfoBean assetContentInfo) {
+    this.assetContentInfo = assetContentInfo;
+  }
 
-	public Date getDateImported() {
-		return dateImported;
-	}
+  public String getAssetId() {
+    return assetId;
+  }
 
-	public void setDateImported(Date dateImported) {
-		this.dateImported = dateImported;
-	}
+  public void setAssetId(String assetId) {
+    this.assetId = assetId;
+  }
 
-	public Date getDateLastUpdated() {
-		return dateLastUpdated;
-	}
+  public String getAssetState() {
+    return assetState;
+  }
 
-	public void setDateLastUpdated(Date dateLastUpdated) {
-		this.dateLastUpdated = dateLastUpdated;
-	}
+  public void setAssetState(String assetState) {
+    this.assetState = assetState;
+  }
 
-	public boolean isDeleted() {
-		return deleted;
-	}
+  public Date getAssetStateLastUpdateDate() {
+    return assetStateLastUpdateDate;
+  }
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
+  public void setAssetStateLastUpdateDate(Date assetStateLastUpdateDate) {
+    this.assetStateLastUpdateDate = assetStateLastUpdateDate;
+  }
 
-	public boolean isExpired() {
-		return expired;
-	}
+  public String getAssetStateUserId() {
+    return assetStateUserId;
+  }
 
-	public void setExpired(boolean expired) {
-		this.expired = expired;
-	}
+  public void setAssetStateUserId(String assetStateUserId) {
+    this.assetStateUserId = assetStateUserId;
+  }
 
-	public int getImportJobId() {
-		return importJobId;
-	}
+  public boolean isCheckedOut() {
+    return checkedOut;
+  }
 
-	public void setImportJobId(int importJobId) {
-		this.importJobId = importJobId;
-	}
+  public void setCheckedOut(boolean checkedOut) {
+    this.checkedOut = checkedOut;
+  }
 
-	public String getImportUserName() {
-		return importUserName;
-	}
+  public boolean isContentEditable() {
+    return contentEditable;
+  }
 
-	public void setImportUserName(String importUserName) {
-		this.importUserName = importUserName;
-	}
+  public void setContentEditable(boolean contentEditable) {
+    this.contentEditable = contentEditable;
+  }
 
-	public boolean isLatestVersion() {
-		return latestVersion;
-	}
+  public String getContentState() {
+    return contentState;
+  }
 
-	public void setLatestVersion(boolean latestVersion) {
-		this.latestVersion = latestVersion;
-	}
+  public void setContentState(String contentState) {
+    this.contentState = contentState;
+  }
 
-	public int getLegacyModelId() {
-		return legacyModelId;
-	}
+  public String getContentType() {
+    return contentType;
+  }
 
-	public void setLegacyModelId(int legacyModelId) {
-		this.legacyModelId = legacyModelId;
-	}
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
 
-	public boolean isLocked() {
-		return locked;
-	}
+  public String getCreatorId() {
+    return creatorId;
+  }
 
-	public void setLocked(boolean locked) {
-		this.locked = locked;
-	}
+  public void setCreatorId(String creatorId) {
+    this.creatorId = creatorId;
+  }
 
-	public String getMetadataModelId() {
-		return metadataModelId;
-	}
+  public Date getDateImported() {
+    return dateImported;
+  }
 
-	public void setMetadataModelId(String metadataModelId) {
-		this.metadataModelId = metadataModelId;
-	}
+  public void setDateImported(Date dateImported) {
+    this.dateImported = dateImported;
+  }
 
-	public String getMetadataStateUserName() {
-		return metadataStateUserName;
-	}
+  public Date getDateLastUpdated() {
+    return dateLastUpdated;
+  }
 
-	public void setMetadataStateUserName(String metadataStateUserName) {
-		this.metadataStateUserName = metadataStateUserName;
-	}
+  public void setDateLastUpdated(Date dateLastUpdated) {
+    this.dateLastUpdated = dateLastUpdated;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public boolean isDeleted() {
+    return deleted;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
+  }
 
-	public String getOriginalAssetId() {
-		return originalAssetId;
-	}
+  public boolean isExpired() {
+    return expired;
+  }
 
-	public void setOriginalAssetId(String originalAssetId) {
-		this.originalAssetId = originalAssetId;
-	}
+  public void setExpired(boolean expired) {
+    this.expired = expired;
+  }
 
-	public boolean isSubscribedTo() {
-		return subscribedTo;
-	}
+  public int getImportJobId() {
+    return importJobId;
+  }
 
-	public void setSubscribedTo(boolean subscribedTo) {
-		this.subscribedTo = subscribedTo;
-	}
+  public void setImportJobId(int importJobId) {
+    this.importJobId = importJobId;
+  }
 
-	public int getVersion() {
-		return version;
-	}
+  public String getImportUserName() {
+    return importUserName;
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  public void setImportUserName(String importUserName) {
+    this.importUserName = importUserName;
+  }
 
+  public boolean isLatestVersion() {
+    return latestVersion;
+  }
+
+  public void setLatestVersion(boolean latestVersion) {
+    this.latestVersion = latestVersion;
+  }
+
+  public int getLegacyModelId() {
+    return legacyModelId;
+  }
+
+  public void setLegacyModelId(int legacyModelId) {
+    this.legacyModelId = legacyModelId;
+  }
+
+  public boolean isLocked() {
+    return locked;
+  }
+
+  public void setLocked(boolean locked) {
+    this.locked = locked;
+  }
+
+  public String getMetadataModelId() {
+    return metadataModelId;
+  }
+
+  public void setMetadataModelId(String metadataModelId) {
+    this.metadataModelId = metadataModelId;
+  }
+
+  public String getMetadataStateUserName() {
+    return metadataStateUserName;
+  }
+
+  public void setMetadataStateUserName(String metadataStateUserName) {
+    this.metadataStateUserName = metadataStateUserName;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getOriginalAssetId() {
+    return originalAssetId;
+  }
+
+  public void setOriginalAssetId(String originalAssetId) {
+    this.originalAssetId = originalAssetId;
+  }
+
+  public boolean isSubscribedTo() {
+    return subscribedTo;
+  }
+
+  public void setSubscribedTo(boolean subscribedTo) {
+    this.subscribedTo = subscribedTo;
+  }
+
+  public int getVersion() {
+    return version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2016-2020 the original author or authors. 
- * 
+ * Copyright (C) 2016-2020 the original author or authors.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,27 +26,31 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("shio.config")
 public class ShConfigProperties {
-	private String system = "none";
-	private String auth = "none";
-	private String exchange = "none";
-	
-	public String getSystem() {
-		return system;
-	}
-	public void setSystem(String system) {
-		this.system = system;
-	}
-	public String getAuth() {
-		return auth;
-	}
-	public void setAuth(String auth) {
-		this.auth = auth;
-	}
-	public String getExchange() {
-		return exchange;
-	}
-	public void setExchange(String exchange) {
-		this.exchange = exchange;
-	}
+  private String system = "none";
+  private String auth = "none";
+  private String exchange = "none";
 
+  public String getSystem() {
+    return system;
+  }
+
+  public void setSystem(String system) {
+    this.system = system;
+  }
+
+  public String getAuth() {
+    return auth;
+  }
+
+  public void setAuth(String auth) {
+    this.auth = auth;
+  }
+
+  public String getExchange() {
+    return exchange;
+  }
+
+  public void setExchange(String exchange) {
+    this.exchange = exchange;
+  }
 }
